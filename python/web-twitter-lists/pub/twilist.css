@@ -1,0 +1,45 @@
+body, html { height: 100%; margin:0; padding:0; }
+body {
+	background:-moz-linear-gradient(top, #ccc, #333);
+	background:-webkit-gradient( linear, left top, left bottom, color-stop( 0, rgba(128,128,128,1) ), color-stop( 1, rgba(0,0,0,.9)));
+	height: 100%;
+}
+
+section { overflow:auto; }
+#et0r { display:none; }
+tr:empty, td:empty, th:empty { display:none; }
+
+table {
+	float:left;
+	background:white;
+	margin:1em; padding:1em .5em;
+	border-radius:0  0 .5em 1.5em;
+}
+table caption {
+	text-align:left;
+	background:inherit;
+	opacity:.5;
+	padding:.33em;
+	font-size:.77em;
+	font-weight:bold;
+	border-radius:.5em 1em 0 0;
+}
+thead th {
+	font-size:.77em;
+	text-align:right;
+	padding-right:1em;
+	border-radius:0 .5em .5em 0;
+	background:-moz-linear-gradient(right, rgba(0,0,0,.2), rgba(255,255,255,0));
+	background:-webkit-gradient( linear, right top, left top, color-stop( 0, rgba(0,0,0,.3) ), color-stop( 1, rgba(255,255,255,0) ) );
+}
+tbody img {
+	height:2em
+}
+h1 { margin:0; padding:0; }
+#oauth { overflow:hidden; background:rgba(0,0,0,.1); border-radius:25px; position:absolute; display:block; top:0; left:0; width:400px; left:50%; top:50%; margin-top:-150px; margin-left:-190px; }
+#oauth div { width:360px; margin:20px; position:relative; text-align:center;}
+#oauth input { display:block; width:100%; border:0; }
+#oauth div :nth-child(2) { font-size:5em; font-weight:bold; border-radius:15px 15px 0 0; text-align:center; }
+#oauth div :nth-child(3) { font-size:2em; font-weight:bold; border-radius:0 0 15px 15px; }
+#oauth img { cursor:pointer; }
+#oauth { display:none; }
