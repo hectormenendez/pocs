@@ -9,11 +9,12 @@ url = (
 	'/action/(.*)','action'
 )
 
+render = web.template.render('html')
+
 class index:
 
 	def GET(self, uri):
 		#if not uri: uri = 'World'
-		render = web.template.render('html')
 		users = model.user()
 		return render.index(users.all())
 
@@ -30,22 +31,31 @@ class action:
 		# method must exist & be actually a method
 		if not hasattr(self, uri) or not callable(getattr(self, uri)):
 			return web.badrequest()
-		self.auth =  model.auth() # make sure you don't overwrite variables, dumbass.
+		# make sure you don't overwrite variables, dumbass.
+		self.auth =  model.auth()
 		data = web.input()
 		return eval('self.'+ uri)(data)
 
-	def login(self, data):
-		pass
+	def getall(self, data):
+		if not data.user: return web.badrequest()
+		lista = model.lista().getall(data.user)
+		#if not lista: return web.badrequest()
+		return render.lists(data.user, lista)
+
+	def kill(self,data):
+		if not data.sess: return web.badrequest()
+		return self.auth.kill(data.sess)
 
 	""" Request Twitter Access """
 	def request(self, data):
-		web.header('Content-Type', 'application/json');
-		return self.auth.request();
+		if not data.sess: web.badrequest()
+		web.header('Content-Type', 'application/json')
+		return self.auth.request(data.sess)
 
 	""" Register USER """
 	def signin(self, data):
 		if not data.token or not data.sess: return web.badrequest()
-		return self.auth.signin(data.sess, data.token);
+		return self.auth.signin(data.sess, data.token)
 
 	""" Unregister USER """
 	def signout(self, data):

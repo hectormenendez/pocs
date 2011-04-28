@@ -1,12 +1,14 @@
+
 body, html { height: 100%; margin:0; padding:0; }
 body {
 	background:-moz-linear-gradient(top, #ccc, #333);
 	background:-webkit-gradient( linear, left top, left bottom, color-stop( 0, rgba(128,128,128,1) ), color-stop( 1, rgba(0,0,0,.9)));
+	background-attachment:fixed;
 	height: 100%;
 }
 
 section { overflow:auto; }
-#et0r { display:none; }
+
 tr:empty, td:empty, th:empty { display:none; }
 
 table {
@@ -36,9 +38,18 @@ tbody img {
 	height:2em
 }
 
-td:hover { background:rgba(0,0,0,.1); cursor:pointer; border-radius:.5em; }
 
-h1 { margin:0; padding:0; }
+td:hover {
+	background:rgba(0,0,0,.1);
+	cursor:pointer;
+	border-radius:.5em;
+}
+
+h1 {
+	margin:0; padding:0;
+}
+
+
 #oauth { overflow:hidden; background:rgba(0,0,0,.1); border-radius:25px; position:absolute; display:block; top:0; left:0; width:400px; left:50%; top:50%; margin-top:-150px; margin-left:-190px; }
 #oauth div { width:360px; margin:20px; position:relative; text-align:center;}
 #oauth input { display:block; width:100%; border:0; }
@@ -46,3 +57,8 @@ h1 { margin:0; padding:0; }
 #oauth div :nth-child(3) { font-size:2em; font-weight:bold; border-radius:0 0 15px 15px; }
 #oauth img { cursor:pointer; }
 #oauth { display:none; }
+
+.members { display:none; }
+
+#users tr.add input:first-child { visibility:hidden; }
+#loading { display:none; position:absolute; bottom:2em; right:2em; background:rgba(255,255,255,.5); padding:1em; border-radius:1em; }

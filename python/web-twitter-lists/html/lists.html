@@ -1,13 +1,27 @@
-$def with (lists)
-<table id="lists">
+$def with (user, lists)
+<table class="lists">
 		<caption>Listas:</caption>
-		<thead><tr><th>@et0r</th></tr></thead>
+		<thead><tr><th>@$user</th></tr></thead>
 		<tbody>
-				<tr><td>/mengana</td></tr>
-				<tr><td>/perengana</td></tr>
-				<tr><td>
-						<input name="listname">
-						<input value="Add" type="submit">
-				</td></tr>
+			<tr><td>
+					<input name="listname">
+					<input value="Add" type="submit">
+			</td></tr>
+		$for lista in lists:
+			<tr class="$lista['id']"><td>/$lista['name']</td></tr>
 		</tbody>
 </table>
+$for lista in lists:
+	<table id="$lista['id']" class="members">
+		<caption>Miembros:</caption>
+		<thead><tr><th colspan="2">@$user/$lista['name']</th></tr></thead>
+		<tbody>
+			<tr><td colspan="2">
+				<input name="followname">
+				<input value="Add" type="submit">
+			</td></tr>
+		$for member in lista['members']:
+			<!--$member  -->
+			<tr id="$member[0]"><td>@$member[1]</td></tr>
+		</tbody>
+	</table>

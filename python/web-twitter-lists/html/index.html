@@ -11,53 +11,15 @@ $def with (users)
 
 <body>
 
-<section>
+<section id="content">
 	<div id="__main__">
 		<table id="users">
 			<caption>Usuarios:</caption>
-			<thead><tr><th>Nick</th></tr></thead>
+			<thead><tr><th><input value="Add" type="submit"></th></tr></thead>
 			<tbody>
+				<tr><td></td></tr>
 				$for user in users:
 					<tr><td>@$user</td></tr>
-
-				<tr class="add"><td>
-						<input name="username">
-						<input value="Add" type="submit">
-				</td></tr>
-			</tbody>
-		</table>
-	</div>
-	<div id="et0r">
-
-		<table id="lists">
-			<caption>Listas:</caption>
-			<thead><tr><th>@et0r</th></tr></thead>
-			<tbody>
-				<tr><td>/mengana</td></tr>
-				<tr><td>/perengana</td></tr>
-				<tr><td>
-					<input name="listname">
-					<input value="Add" type="submit">
-				</td></tr>
-			</tbody>
-		</table>
-
-		<table id="followed">
-			<caption>Miembros:</caption>
-			<thead><tr><th colspan="2">@et0r/mengana</th></tr></thead>
-			<tbody>
-				<tr>
-					<td width="1"><img src="http://a2.twimg.com/profile_images/1236693018/163411_492579596730_509036730_6326536_4368893_n.jpg" height="33"></td>
-					<td>@et0r</td>
-				</tr>
-				<tr>
-					<td width="1"><img src="http://a2.twimg.com/profile_images/1236693018/163411_492579596730_509036730_6326536_4368893_n.jpg" height="33"></td>
-					<td>@et0r</td>
-				</tr>
-				<tr><td colspan="2">
-					<input name="followname">
-					<input value="Add" type="submit">
-				</td></tr>
 			</tbody>
 		</table>
 	</div>
@@ -72,6 +34,8 @@ $def with (users)
 		<input value="OK" type="submit">
    </div>
 </section>
+
+<section id="loading"><h1>loading...</h1></section>
 
 </body>
 
