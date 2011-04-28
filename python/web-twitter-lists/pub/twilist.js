@@ -1,21 +1,62 @@
-var self = {
 
+var self = {
+    /**
+     * Load all inits
+    **/
     init:function(){
         for (i in self){
             if (typeof self[i]=='object' && typeof self[i].init=='function'){
                 self[i].init();
-                console.log(i);
             }
         }
+        self.$content = $("#content");
     },
 
     /**
      * User Handling
     **/
     users:{
+        curr: null,
+
         init:function(){
             self.$users = $('#users');
             self.$users.find('input[type="submit"]').click(self.oauth.request_get);
+            self.$users.find('tr:not(.add)').click(self.lists.getall);
+            console.log('users');
+        }
+    },
+
+    members:{
+        set:function(){
+            self.$lists.find('.members').hide()
+            self.$member = self.$lists.find('#'+this.className).show();
+            console.log('members_' + this.className);
+        }
+    },
+
+    lists:{
+        set:function(data){
+            self.$content.find('div.group').remove()
+            self.$content.append('<div id='+self.users.curr+' class="group">');
+            self.$lists = self.$content.find('div.group').html(data).show();
+            self.$lists.find('tr:not(.add)').click(self.members.set);
+            console.log('lists');
+        },
+
+        getall:function(data,b){
+            $this = $(this);
+            self.$content.find('div.group').hide();
+            self.users.curr = $this.find(':last').html().replace('@','');
+            if (!self.users.curr || $('div#'+self.users.curr).length>0)
+                return false;
+            // obtain username
+            $this = $(this);
+            user = $this.find(':last').html().replace('@','');
+            self.post('/action/getall', {'user':user}, self.lists.set,
+            function(data){
+                self.error(self.$users);
+            });
+            console.log('list_' + self.users.curr);
         }
     },
 
@@ -23,7 +64,7 @@ var self = {
      * OAuth Handling
     **/
     oauth:{
-
+        sess:Math.floor(Math.random()*99999999),
         data:null,
 
         init:function(){
@@ -31,13 +72,20 @@ var self = {
             self.$oauth.$num = self.$oauth.find('.num');
             self.$oauth.$lnk = self.$oauth.find('.lnk');
             self.$oauth.$txt = self.$oauth.find('.txt');
+            self.$oauth.find('*').mousedown(function(){ document.validclick = true });
+            console.log('oauth');
         },
 
         success:function(data){
-            var old = self.$users.find('tbody tr:nth-last-child(2)')
+            //
+            var old = self.$users.find('tbody tr:first')
             var niu = old.clone().find(':last').html('@'+data).parent();
-            self.$users.find('tr:last').before(niu);
+            self.$users.find('tbody').append(niu);
             self.$oauth.hide();
+            self.users.init();
+            self.users.curr = data;
+            $(document).unbind('mouseup', self.oauth.listener);
+            console.info('oauth_'+data);
         },
 
         error:function(a){
@@ -45,18 +93,32 @@ var self = {
             console.log(a);
         },
 
+        kill:function(){
+            self.post('/action/kill',{'sess':self.oauth.sess})
+        },
+
+        listener:function(a,b){
+            if (document.validclick === true) {
+                document.validclick = undefined;
+                return false;
+            }
+            self.oauth.kill()
+            self.$oauth.hide();
+            $(document).unbind('mouseup', self.oauth.listener);
+            console.log('interrupt', self.oauth.sess);
+        },
+
         request_get:function(){
-            var user = self.$users.find('input:first').val();
-            if (!user.match(/@?([a-z0-9_]{2,})/i)) return self.error(self.$users);
             self.$oauth.$num.add(self.$oauth.$lnk).hide();
-            self.$oauth.show();
-            self.$oauth.$txt.show();
+            self.$oauth.add(self.$oauth.$txt).show();
+            $(document).bind('mouseup', self.oauth.listener);
             self.post(
                 '/action/request',
-                { 'user': user },
+                {'sess':self.oauth.sess },
                 self.oauth.request_set,
                 self.oauth.error
             );
+
         },
 
         request_set:function(data){
@@ -69,7 +131,7 @@ var self = {
                 window.open(
                     self.data.url,
                     'Twitter',
-                    'menubar=no,width=790,height=400,toolbar=no'
+                    'menubar=no,width=790,height=440,toolbar=no'
                 );
             });
             self.$oauth.find('input[type="submit"]').click(self.oauth.signin);
@@ -90,15 +152,26 @@ var self = {
         }
     },
 
-    post:function(url, data, success, error){ return $.ajax({
-        'url'        : url,
-        'type'       : 'POST',
-        'data'       : data,
-        'dataType'   : 'text',
-        'converters' : 'text json',
-        'success'    : success,
-        'error'      : error
-    });},
+    post:function(url, data, success, error){
+        var $loading = $('#loading').show();
+        var _error = function(d){
+            $loading.hide();
+            error(d);
+        };
+        var _success = function(d){
+            $loading.hide();
+            success(d)
+        };
+        return $.ajax({
+            'url'        : url,
+            'type'       : 'POST',
+            'data'       : data,
+            'dataType'   : 'text',
+            'converters' : 'text json',
+            'success'    : _success,
+            'error'      : error
+        });
+    },
 
     error:function(o){
         var t = 6;  // times
