@@ -44,6 +44,10 @@ class auth(object):
 		}
 		self.oauth = False
 
+	def __del__(self):
+		self.db.handle.commit()
+		self.db.cursor.close()
+
 
 	def request(self):
 		"""
@@ -57,8 +61,6 @@ class auth(object):
 		sess =  random.randint(1,99999999)
 		sql = 'INSERT INTO session (id,key,secret) VALUES (?,?,?)'
 		self.db.cursor.execute(sql, (sess, self.tkn['key'], self.tkn['pwd']))
-		self.db.handle.commit()
-		self.db.cursor.close()
 		return json.dumps({ 'sess' : sess, 'url' : url })
 
 
@@ -82,8 +84,8 @@ class auth(object):
 		# store them in database for later use
 		sql = 'INSERT INTO user (name,key,secret) VALUES(?,?,?)'
 		self.db.cursor.execute(sql,(usr.screen_name, self.usr['key'], self.usr['pwd']))
-		self.db.handle.commit()
-		self.db.cursor.close()
+		# remove session from database
+		self.db.cursor.execute('DELETE FROM session WHERE id=?', [int(sess)])
 		return usr.screen_name
 
 	def signout(self, user):
@@ -91,6 +93,5 @@ class auth(object):
 		Removes user from DB
 		"""
 		self.db.cursor.execute('DELETE FROM user WHERE name=?', [user])
-		self.db.handle.commit()
-		self.db.cursor.close()
 		return user
+

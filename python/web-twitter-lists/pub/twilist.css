@@ -35,6 +35,9 @@ thead th {
 tbody img {
 	height:2em
 }
+
+td:hover { background:rgba(0,0,0,.1); cursor:pointer; border-radius:.5em; }
+
 h1 { margin:0; padding:0; }
 #oauth { overflow:hidden; background:rgba(0,0,0,.1); border-radius:25px; position:absolute; display:block; top:0; left:0; width:400px; left:50%; top:50%; margin-top:-150px; margin-left:-190px; }
 #oauth div { width:360px; margin:20px; position:relative; text-align:center;}
