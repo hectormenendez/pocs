@@ -34,7 +34,10 @@ class action:
 		data = web.input()
 		return eval('self.'+ uri)(data)
 
-	""" Obtain auth URL """
+	def login(self, data):
+		pass
+
+	""" Request Twitter Access """
 	def request(self, data):
 		web.header('Content-Type', 'application/json');
 		return self.auth.request();
