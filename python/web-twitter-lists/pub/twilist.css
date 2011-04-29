@@ -16,6 +16,7 @@ table {
 	background:white;
 	margin:1em; padding:1em .5em;
 	border-radius:0  0 .5em 1.5em;
+	border-collapse:separate;
 }
 table caption {
 	text-align:left;
@@ -24,9 +25,13 @@ table caption {
 	padding:.33em;
 	font-size:.77em;
 	font-weight:bold;
-	border-radius:.5em 1em 0 0;
+	border-radius:.33em 1em 0 0;
 }
+
+td { padding:.5em 1em }
+
 thead th {
+	padding:.5em;
 	font-size:.77em;
 	text-align:right;
 	padding-right:1em;
@@ -61,4 +66,6 @@ h1 {
 .members { display:none; }
 
 #users tr.add input:first-child { visibility:hidden; }
+#users thead th { background:none; }
+
 #loading { display:none; position:absolute; bottom:2em; right:2em; background:rgba(255,255,255,.5); padding:1em; border-radius:1em; }
