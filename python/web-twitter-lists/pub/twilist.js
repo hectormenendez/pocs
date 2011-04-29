@@ -90,7 +90,7 @@ var self = {
 
         error:function(a){
             alert('Hubo un Error con la autorización.');
-            console.log(a);
+            location.reload();
         },
 
         kill:function(){
