@@ -2,7 +2,7 @@
 Twilist
 =======
 
-List Management for Twitter
+A non-finished List Management for Twitter
 ---------------------------
 
 A self-contained server providing basic multi-user list-management for Twitter.
@@ -38,3 +38,7 @@ ToDo
 ----
 - List members adding.
 - List members deletion.
+
+Known Bugs
+----------
+- if the list is erased from twitter, the user appears cannot load lists again.
