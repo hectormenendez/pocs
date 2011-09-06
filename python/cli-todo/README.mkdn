@@ -1,0 +1,23 @@
+# minimal TODO manager CLI
+#### v1.0
+
+I've spent hours and hours looking for a good time-management sollution and I've found great pieces of software, but to be honest I always endup creating accounts and never using them, why? 'cause I tend to forget the name of the service, or sometimes the frontend has so many options that my lazyness triggers on.
+
+Long story short: Pen and paper has always came to the rescue and has proven to be the most effective way of tracking TODOs for me, but since my writing is getting worse by the day, I decided it was time to find some minimalistic piece of software that mimics that precisely, just a plain old list of todos written on a sheet of paper.
+
+Again, nothing was minimalistic enough, everything involved some kind of learning curve, and since I'm getting old and lazy, I decided to make the simplest piece of software in the history of human kind.
+
+This is a very similar approach to "todo.txt cli" but instead of a global database, it adds a local database to the current working dir A-LA git.
+
+
+## Dependencies
+- baker
+
+## Installation
+- Clone the source and just add a link to your /usr/local/bin directory.
+
+## Usage
+    todo add "<string>" // adds a todo
+    todo ls             // shows todo list
+    todo rm <id>        // deletes a todo
+    todo reset          // removes .todo folder from current path [if any]
