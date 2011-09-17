@@ -10,6 +10,7 @@ import sqlite3
 import os
 import datetime
 import shutil
+import sys
 
 PATH = os.getcwd() + '/.todo/'
 
@@ -45,8 +46,10 @@ def add(text):
     Adds an item.
     """
     date = datetime.datetime.now().strftime("%Y/%b/%d %H:%M").upper()
-    cur = db.execute("INSERT INTO 'todo' ('date','text') VALUES (?,?)", (date, text,))
-    print "Added item #%d" % cur.lastrowid
+    sql = "INSERT INTO 'todo' ('date','text') VALUES (?,?)"
+    cur = db.execute(sql, (date, text,))
+    print "\nAdded item #%d" % cur.lastrowid
+    ls()
 
 
 @baker.command
@@ -55,10 +58,17 @@ def rm(id):
     Removes an item by ID.
     """
     cur = db.execute("DELETE FROM 'todo' WHERE id=?", (id,))
+    print " "
     if cur.rowcount is 0:
         print "ID did not exist."
-    else:
-        print "Deleted #%s" % id
+        sys.exit(1)
+    print "Deleted #%s" % id
+    db.execute(
+    """ UPDATE sqlite_sequence
+           SET seq  = (SELECT id FROM todo ORDER BY id LIMIT 1)
+         WHERE name = 'todo'
+    """)
+    ls()
 
 
 @baker.command
