@@ -1,7 +1,9 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 
 @author Hector Menendez <h@cun.mx>
+@updated 2011/SEP/17 06:30
 @created 2011/SEP/06 04:12
 
 """
@@ -47,7 +49,7 @@ def add(text):
     """
     date = datetime.datetime.now().strftime("%Y/%b/%d %H:%M").upper()
     sql = "INSERT INTO 'todo' ('date','text') VALUES (?,?)"
-    cur = db.execute(sql, (date, text,))
+    cur = db.execute(sql, (date, text.decode('utf-8'),))
     print "\nAdded item #%d" % cur.lastrowid
     ls()
 
