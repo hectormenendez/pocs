@@ -34,8 +34,8 @@ if (isset($_POST['count'])){
 <body>
 <!-- BODY -->
 <audio id="audio">
-	<source src="/inc/veah_sibaja.ogg" type="audio/ogg" />
-	<source src="/inc/veah_sibaja.mp3" type="audio/mpeg" />
+	<source src="/inc/claroqueno.ogg" type="audio/ogg" />
+	<source src="/inc/claroqueno.mp3" type="audio/mpeg" />
 	Tu navegador no soporta audio HTML5.
 </audio>
 

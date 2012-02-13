@@ -25,7 +25,7 @@ $(document).ready(function(){
 		toPause = setTimeout(function(){
 			$image.attr('class', 'norm');
 			$image.bind('mousedown', fnDown);
-		}, 500);
+		}, 800);
 
 		$count.html(parseInt($count.html(),10)+1);
 
