@@ -12,7 +12,7 @@ reddit.setIsLogging     false
 reddit.setDispatchMode 'limited'
 
 # Configuration
-limit  = 100
+limit  = 10
 timer  = 120  # seconds
 
 # Global vars
@@ -21,18 +21,29 @@ posts      = []
 latest     = null
 isFetching = false
 
+Number::fill = -> "0#{this}".slice(-2)
+
+timestamp = ->
+	date = new Date()
+	fill = (val)-> "0#{val}".slice -2
+	return [
+		[date.getFullYear(),(date.getMonth()+1).fill(), date.getDate().fill()].join('-')
+		[date.getHours().fill(), date.getMinutes().fill(),date.getSeconds().fill()].join(':')
+	].join ' '
+
 fetch = ->
 	if latest
-		process.stdout.write "\nRequesting: #{limit} posts before '#{latest}'.\n"
+		process.stdout.write "\n#{timestamp()} [REQ] #{limit} posts before '#{latest}'."
 	else
-		process.stdout.write "\nRequesting latest #{limit} posts."
+		process.stdout.write "\n#{timestamp()} [REQ] Latest #{limit} posts."
 	reddit._get '/new.json',
 		limit  : limit
 		before : if latest then latest else undefined,
+		after  : null
 		(error, data)->
 			throw error if error?
 			data = data.res.body.data
-			process.stdout.write "\nGot: #{data.children.length} posts. (#{data.before}-#{data.after})\n"
+			process.stdout.write "\n#{timestamp()} [RES] #{data.children.length} posts. [#{data.after} - #{data.before}]"
 
 			return if not data.children.length
 
@@ -68,7 +79,7 @@ show = ->
 		if error?
 			process.stdout.write message + "\n"
 			process.exit 2
-		process.stdout.write "Growling: #{JSON.stringify(post)}\n"
+		process.stdout.write "\n#{timestamp()} [PUT] #{JSON.stringify(post)}"
 		seen.unshift post
 		# just keep the latest 100 posts
 		seen.slice 0,limit
