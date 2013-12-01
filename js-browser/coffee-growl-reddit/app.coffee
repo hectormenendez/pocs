@@ -13,7 +13,7 @@ reddit.setDispatchMode 'limited'
 
 # Configuration
 limit  = 100
-timer  = 60 * 5  # seconds
+timer  = 120  # seconds
 
 # Global vars
 posts      = []
@@ -21,25 +21,30 @@ latest     = null
 isFetching = false
 
 fetch = ->
-	console.info "Requesting: #{limit} posts after '#{latest}'."
+	if latest
+		process.stdout.write "\nRequesting: #{limit} posts before '#{latest}'.\n"
+	else
+		process.stdout.write "\nRequesting latest #{limit} posts."
 	reddit._get '/new.json',
 		limit  : limit
 		before : if latest then latest else undefined,
 		(error, data)->
 			throw error if error?
 			data = data.res.body.data
-			console.info "Got: #{data.children.length} posts. (#{data.before}-#{data.after})"
+			process.stdout.write "\nGot: #{data.children.length} posts. (#{data.before}-#{data.after})\n"
 
-			if data.children.length
-				tmp  = []
-				tmp.push (
-					id    : p.data.name
-					title : p.data.title
-					url   : p.data.url
-				) for p in data.children
+			return if not data.children.length
 
-				latest = tmp[0].id
-				posts  = posts.concat tmp.reverse()
+			tmp  = []
+			tmp.push (
+				id    : p.data.name
+				title : p.data.subreddit.replace(/[\"\']/g,'´')
+				cont  : p.data.title.replace(/[\"\']/g,'´')
+				url   : p.data.url
+			) for p in data.children
+
+			latest = tmp[0].id
+			posts  = posts.concat tmp.reverse()
 
 			if not isFetching
 				setInterval fetch, timer * 1000
@@ -52,15 +57,17 @@ show = ->
 	return if not (post = posts.shift())
 	command = [
 		'growlnotify',
-		'-m', "\"#{post.title}\"",
-		'--image', './reddit.png'
+		'-m', "\"#{post.cont}\"",
+		"\"#{post.title}\"",
+		'--image', './reddit.png',
 		'--url' , "\"#{post.url}\""
 	]
+
 	Exec command.join(' '), (error, message)->
 		if error?
 			process.stdout.write message + "\n"
 			process.exit 2
-		process.stdout.write "#{JSON.stringify(post)}"
+		process.stdout.write "Growling: #{JSON.stringify(post)}\n"
 
 # Login and start fetching.
 
