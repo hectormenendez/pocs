@@ -1,6 +1,6 @@
 # Node libs
 Exec = require('child_process').exec
-
+HTTP = require 'http'
 # NPM libs
 Reddit = require 'reddit-api'
 
@@ -16,6 +16,7 @@ limit  = 100
 timer  = 120  # seconds
 
 # Global vars
+seen       = []
 posts      = []
 latest     = null
 isFetching = false
@@ -68,9 +69,23 @@ show = ->
 			process.stdout.write message + "\n"
 			process.exit 2
 		process.stdout.write "Growling: #{JSON.stringify(post)}\n"
+		seen.unshift post
+		# just keep the latest 100 posts
+		seen.slice 0,limit
 
 # Login and start fetching.
-
 reddit.login auth.user, auth.pass, (error, hash)->
 	throw error if error?
 	fetch()
+
+# Initialize web server
+server = HTTP.createServer (request, response)->
+	response.writeHead 200, "Content-Type": "text/html"
+	html = "<html><head><title>gReddit</title></head><body><ul>"
+	for post in seen
+		html += "<li>#{post.title} <a href='#{post.url}'>#{post.cont}</a></li>"
+	html += "</ul></body></html>"
+	response.end html
+
+server.listen(9999)
+process.stdout.write "\nServer running on localhost:9999\n"
