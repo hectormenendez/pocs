@@ -1,0 +1,14 @@
+{
+  "name": "reddit",
+  "version": "0.0.0",
+  "description": "A simple reddit client.",
+  "main": "app.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hector Menendez (@et0r)",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "reddit-api": "0.0.24"
+  }
+}
