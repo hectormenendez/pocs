@@ -1,0 +1,37 @@
+.list-card-labels .card-label {
+	height        : auto          !important;
+	width         : auto          !important;
+	text-shadow   : none          !important;
+	line-height   : 2.00em        !important;
+	font-size     : 0.53em        !important;
+	letter-spacing: 0.05em        !important;
+	padding       : 0.00em 0.66em !important;
+	text-overflow : initial       !important;
+
+	border-bottom-left-radius  : 0.4em !important;
+	border-bottom-right-radius : 0.4em !important;
+}
+
+.card-label-yellow { background: #FA0 !important; }
+.card-label-orange { background: #F60 !important; }
+.card-label-red    { background: #C00 !important; }
+
+.list-card-labels  .card-label-blue,
+.list-card-labels  .card-label-yellow,
+.list-card-labels  .card-label-red,
+.list-card-labels  .card-label-purple { color: rgba(255,255,255,1) !important; }
+.list-card-labels  .card-label-orange { color: rgba(255,255,255,1) !important; }
+.list-card-labels  .card-label-green  { color: rgba(255,255,255,1) !important; }
+.list-card-labels  .card-label-yellow { color: rgba(255,255,255,1) !important; }
+
+.badge-hash {
+	background    : #AAA;
+	color         : white;
+	padding-left  : 0.33em;
+	padding-right : 0.33em;
+	border-radius : 0.25em;
+}
+
+.badge-hash-bug  { background: #F36; }
+.badge-hash-plan { background: #9C3; }
+.badge-hash-task { background: #39F; }
