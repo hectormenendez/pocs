@@ -24,14 +24,23 @@
 .list-card-labels  .card-label-green  { color: rgba(255,255,255,1) !important; }
 .list-card-labels  .card-label-yellow { color: rgba(255,255,255,1) !important; }
 
-.badge-hash {
+.badge-whom .badge-text {
+	text-transform: lowercase;
+	color         : #444;
+}
+
+
+.badge-hash .badge-text {
 	background    : #AAA;
 	color         : white;
 	padding-left  : 0.33em;
 	padding-right : 0.33em;
 	border-radius : 0.25em;
+	text-transform: uppercase;
 }
 
-.badge-hash-bug  { background: #F36; }
-.badge-hash-plan { background: #9C3; }
-.badge-hash-task { background: #39F; }
+.badge-hash-bug  .badge-text { background: #F36; }
+.badge-hash-plan .badge-text { background: #9C3; }
+.badge-hash-task .badge-text { background: #39F; }
+
+
