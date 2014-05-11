@@ -1,0 +1,19 @@
+{
+	"name"        : "Trellum",
+	"version"     : "0.1.0",
+	"description" : "A simple chrome extension to improve your trello experience.",
+
+	"content_scripts": [{
+		"js"      : ["jquery-2.1.1.min.js","trellum.js"],
+		"css"     : ["trellum.css"],
+		"matches" : ["https://trello.com/*"],
+		"run_at"  : "document_end"
+	}],
+
+   "icons": {
+      "128": "icon.png"
+   },
+
+   "permissions"      : ["storage"],
+   "manifest_version" : 2
+}

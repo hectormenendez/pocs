@@ -1,0 +1,28 @@
+{
+  "name": "trellum",
+  "version": "0.1.0",
+  "description": "A simple chrome extension to improve your trello experience.",
+  "main": "trellum/trellum-ready.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chrome",
+    "trello",
+    "scrum",
+    "extension"
+  ],
+  "author": "Hector Menendez @et0r",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "grunt-contrib-build-crx": "^0.5.1",
+    "grunt-contrib-clean": "^0.4.1",
+    "grunt-contrib-coffee": "^0.10.1",
+    "grunt-contrib-copy": "^0.4.1",
+    "grunt-contrib-stylus": "^0.15.1",
+    "grunt-contrib-uglify": "^0.4.0",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}
