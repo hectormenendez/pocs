@@ -10,6 +10,9 @@ trellum.log = ->
 	console.log.apply console, args
 
 
+trellum.onchange = -> null
+trellum.card     = -> null
+
 trellum.title = ($card, replacements=[])->
 	$title  = $card.find  '.list-card-title'
 	$short  = $title.find '.card-short-id'
@@ -27,27 +30,19 @@ trellum.watch = ->
 	triggers = []
 	timeout  = null
 
-	$('body *').each ->
-		return unless (names = $(this).attr 'class')
-		names = names.split(' ').filter (x) -> x.indexOf('js-') isnt -1
-		return unless names.length
-		names.map (x)->
-			if triggers.indexOf(x) is -1 and trellum.config.exclude.indexOf(x) is -1
-				triggers.push(x)
-
-	trellum.log 'triggers', triggers
-
 	observer = new window.MutationObserver (mutations)->
 		$.each mutations, (i, mutation)->
 			$(mutation.target).each ->
 				$target = $ this
-				trigger = triggers.filter (x)->
-					x = x.replace('.', '').trim()
-					return x.length and $target.hasClass x
+				classes = $target.attr 'class'
+				return unless classes
 
-				return unless trigger.length
+				classes = classes.split(' ').filter (x)->
+					x.indexOf('js-') is 0 and trellum.config.exclude.indexOf(x) is -1
+
+				return unless classes.length
 				clearTimeout timeout if timeout
-				timeout = setTimeout trellum.onUpdate, 500, $target, trigger[0]
+				timeout = setTimeout trellum.onupdate, 500, $target, classes
 
 	observer.observe document.body,
 		childList     : true
@@ -55,17 +50,17 @@ trellum.watch = ->
 		attributes    : false
 		subtree       : true
 
-	trellum.onUpdate()
+	trellum.onupdate()
 
 
-trellum.onUpdate = ($e=false, trigger=false)->
-	trellum.log 'onUpdate' + (if trigger then "» trigger: #{trigger}" else '.')
+trellum.onupdate = ($e=false, triggers=[])->
+	trellum.log 'onupdate » triggers »', triggers
 
 	# if called manually apply to every card on the board
 
-	if not $e
+	if not $e or triggers.indexOf('js-board-list') isnt -1
 		$cards = $('#board .list-card')
-	else if trigger is 'js-num-cards'
+	else if triggers.indexOf('js-num-cards') isnt -1
 		$cards = $e.parentsUntil('.list').parent().find('.list-card')
 	else
 		$cards = $e.closest('.list-card', '.list-card').add $e.find('.list-card')
@@ -75,7 +70,7 @@ trellum.onUpdate = ($e=false, trigger=false)->
 
 	$cards.each (i, card)->
 		$card  = $ card
-		isEdit = trigger is 'js-card-name' and $overlay.is ':visible'
+		isEdit = triggers.indexOf('js-card-name') isnt -1 and $overlay.is ':visible'
 
 		if $card.data('trellum')
 			$card.removeData 'trellum'
@@ -93,6 +88,8 @@ trellum.onUpdate = ($e=false, trigger=false)->
 		if isEdit or not $card.data 'trellum-title'
 			$card.data 'trellum-title', $title.clone().children().remove().end().text()
 
-		trellum.onTweak.apply this,[$card]
+		trellum.card.apply this,[$card]
 
 		$card.data 'trellum', true
+
+	trellum.onchange.apply this, [$e, $cards, triggers]

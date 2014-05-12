@@ -1,7 +1,7 @@
 {
   "name": "trellum",
   "version": "0.1.0",
-  "description": "A simple chrome extension to improve your trello experience.",
+  "description": "Improve your SCRUM trello experience.",
   "main": "trellum/trellum-ready.coffee",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

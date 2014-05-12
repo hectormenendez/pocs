@@ -1,8 +1,10 @@
 trellum.config.debug   = true
 trellum.config.exclude = ['js-hide-on-sending','js-sidebar-list-actions','js-phrase']
 
+trellum.onchange = ($element, $cards, trigger)->
+	trellum.log 'onchange »', arguments
 
-trellum.onTweak = ($card)->
+trellum.card = ($card)->
 
 	$badge  = $card.find  '.badges'
 
