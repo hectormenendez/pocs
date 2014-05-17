@@ -11,7 +11,7 @@ trellum.lib.whom = (data, $container, id)->
 			.append($sp2)
 		$container.prepend $div
 
-	trellum.log("#{id} » whom:", data) if data.length
+	trellum.trace("lib » whom » #{id}", data) if data.length
 
 
 trellum.lib.hash = (data, $container, id)->
@@ -23,4 +23,4 @@ trellum.lib.hash = (data, $container, id)->
 			.attr('title', hash).append($lbl)
 		$container.prepend $div
 
-	trellum.log("#{id} » hash:", data) if data.length
+	trellum.trace("lib » hash » #{id}", data) if data.length

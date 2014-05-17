@@ -1,3 +1,5 @@
 Trellum
 *.sublime-workspace
 node_modules
+*.crx
+*.pem
