@@ -29,13 +29,15 @@ trellum.card = ($card)->
 	$badge  = $card.find  '.badges'
 
 	id     = $card.data 'trellum-id'
-	rxHash = /\#[\-A-Za-z0-9]+/g
+	rxHash = /()\#[\-A-Za-z0-9]+/g
 	rxWhom = /\@[\-A-Za-z0-9]+/g
+	rxTime = /[\[\(]((?:[1-9][0-9]*|0\.5)(?:x[1-9][0-9]*)?)[\]\)]/g
 
-	title  = trellum.title $card, [rxWhom, rxHash]
+	title  = trellum.title $card, [rxWhom, rxHash, rxTime]
 
 	trellum.lib.whom(title.match(rxWhom) or [], $badge, id)
 	trellum.lib.hash(title.match(rxHash) or [], $badge, id)
+	trellum.lib.time(title.match(rxTime) or [], $badge, id)
 
 $(document).ready ->
 	trellum.log 'Ready.'

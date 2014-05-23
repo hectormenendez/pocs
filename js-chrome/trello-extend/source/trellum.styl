@@ -1,3 +1,13 @@
+@keyframes blink-bg
+	0%    { background: #C33; }
+	50%   { background: none; }
+	100%  { background: #C33; }
+
+@keyframes blink-fg
+	0%    { color: #FFF; }
+	50%   { color: #C33; }
+	100%  { color: #FFF; }
+
 .list-card-labels
 
 	.card-label
@@ -12,11 +22,56 @@
 		border-bottom-left-radius  : 0.4em         !important
 		border-bottom-right-radius : 0.4em         !important
 
+.badge-time
+
+	border-radius : 0.25em
+	padding-left  : 0.33em
+	padding-right : 0.33em
+
+	&.badge-time-error
+	&.badge-time-blink
+	&.badge-time-show
+	&.badge-time-info
+	&.badge-time-warn
+		color: #FFF
+
+		.badge-icon
+		.badge-text
+			color : inherit
+
+	&.badge-time-warn
+		background: orange
+
+	&.badge-time-show
+		background: none
+		color     : #C33
+
+	&.badge-time-error
+		background: #C00
+
+	&.badge-time-info
+		background: #2A2
+
+	&.badge-time-halt
+	&.badge-time-halt .badge-icon
+	&.badge-time-halt .badge-text
+		-webkit-animation-direction       : normal
+		-webkit-animation-duration        : 2s
+		-webkit-animation-iteration-count : infinite
+		-webkit-animation-timing-function : ease
+
+	&.badge-time-halt
+		-webkit-animation-name : blink-bg
+
+		& .badge-icon
+		& .badge-text
+			-webkit-animation-name : blink-fg
+
 .badge-whom
 
 	.badge-text
 		text-transform : lowercase
-		color          : #444
+		color          : #999
 
 .badge-hash
 
