@@ -53,9 +53,10 @@ Config.lint = {
 };
 
 Config.babel = {
-	optional      : ['runtime', 'asyncToGenerator'],
+	optional      : ['runtime'],
 	sourceMap     : ['both'],
 	blacklist     : ['strict'], // removes use strict
+	stage         : 1,
 	sourceMapName : '.map',
 	sourceRoot    : Dir.src,
 	comments      : false
