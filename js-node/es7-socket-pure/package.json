@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A tiny wrapper for Node's sockets, written in ES7.",
   "main": "build/index.js",
-  "keywords": [],
+  "keywords": ["socket", "wrapper","net","minimal","socket.io","gikmx","et0r","etor"],
   "author": "Héctor Menéndez <etor@gik.mx> (http://gik.mx)",
   "license": "MIT",
   "scripts": {
@@ -31,5 +31,13 @@
   },
   "dependencies": {
     "babel-runtime": "^5.0.8"
-  }
+  },
+  "repository":{
+    "type":"git",
+    "url":"https://github.com/gikmx/tiny-socket.git"
+  },
+  "bugs":{
+    "url":"https://github.com/gikmx/tiny-socket/issues"
+  },
+  "homepage": "https://github.com/gikmx/tiny-socket"
 }
