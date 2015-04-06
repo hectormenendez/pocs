@@ -101,12 +101,12 @@ Gulp.task('lint', ['lint-self'], ()=>
 		.pipe(Lint.failOnError())
 );
 
-Gulp.task('test', ['lint-test'], ()=>
+Gulp.task('test', ['lint-test', 'build'], ()=>
 	Gulp.src(Route.test)
 		.pipe(Mocha(Config.mocha))
 );
 
-Gulp.task('build', ['clean', 'lint', 'test'], function(){
+Gulp.task('build', ['clean', 'lint'], function(){
 	return Gulp.src(Route.src)
 		.pipe(SrcSup())
 		.pipe(Source.init())
@@ -115,7 +115,7 @@ Gulp.task('build', ['clean', 'lint', 'test'], function(){
 		.pipe(Gulp.dest(Dir.build));
 });
 
-Gulp.task('watch', ['build'], function(){
+Gulp.task('watch', ['test'], function(){
 
 	let firstrun = true;
 
@@ -124,10 +124,10 @@ Gulp.task('watch', ['build'], function(){
 	};
 
 	Watch(Route.src.concat(Route.test).concat([__filename]), function(){
-		let gulp = Gulp.start('build');
+		let gulp = Gulp.start('test');
 		if (!firstrun) return;
 		gulp.on('task_stop', function(e){
-			if (e.task !== 'build') return;
+			if (e.task !== 'test') return;
 			firstrun = false;
 			onBuild();
 		});
