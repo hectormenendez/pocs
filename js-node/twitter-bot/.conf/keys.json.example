@@ -1,0 +1,15 @@
+[
+	{
+		"type" : "allow",
+		"name" : "node",
+		"keys" : "node | nodejs | node.js | node js",
+		"regx" : "node[\\s\\.]*(?:js)?"
+	},
+	{
+		"type" : "deny",
+		"name" : "job",
+		"keys" : "job | jobs",
+		"regx" : "jobs?"
+	},
+
+]
