@@ -6,6 +6,7 @@
 	},
 	"globals":{
 		"it"       : true,
+		"xit"      : true,
 		"describe" : true,
 		"expect"   : true
 	},
