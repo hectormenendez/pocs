@@ -1,0 +1,6 @@
+node_modules
+*.sublime-workspace
+build/
+*.log
+.conf/bot.json
+.conf/keys.json

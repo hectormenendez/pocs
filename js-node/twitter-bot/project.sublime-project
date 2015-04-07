@@ -1,0 +1,10 @@
+{
+	"folders":
+	[
+		{
+			"file_exclude_patterns"   :["*.sublime-*", "gulpfile.js"],
+			"folder_exclude_patterns" :["build", "node_modules", "coverage"],
+			"path": "."
+		}
+	]
+}
