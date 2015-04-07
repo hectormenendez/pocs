@@ -1,6 +1,6 @@
 {
   "name": "tiny-socket",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A tiny wrapper for Node's sockets, written in ES7.",
   "main": "build/index.js",
   "keywords": ["socket", "wrapper","net","minimal","socket.io","gikmx","et0r","etor"],
