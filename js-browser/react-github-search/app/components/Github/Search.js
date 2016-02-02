@@ -1,43 +1,49 @@
-var React = require('react');
-var Router = require('react-router');
+'use strict';
 
-module.exports = React.createClass({
+import React  from 'react';
+import {Referencer} from 'helpers';
 
-	mixins: [Router.History],
+function onSubmit(e){
+	// don't allow the form to be sent
+	e.preventDefault();
+	// store the search input's value and make sure it has something before triggering
+	const value = this.search.value;
+	if (!value.length) return false;
+	// make sure the input is reset and trigger the callback
+	this.search.value = '';
+	this.props.onSubmit(value);
+}
 
-	handleSubmit: function(){
-		var username = this.ref_username.value;
-		this.ref_username.value = '';
-		// react history mixin
-		this.history.pushState(null, '/profile/' + username);
-	},
+export default class GithubSearch extends React.Component {
 
-	getRef:function(ref){
-		this.ref_username = ref;
-	},
+	static propTypes = {
+		onSubmit: React.PropTypes.func.isRequired
+	};
 
-	render:function(){
-		console.log('Github»Search»render');
+	render() {
 		return(
+			<form
+				className = 'form-inline pull-xs-right'
+				onSubmit  = {onSubmit.bind(this)}>
 
-			<div className='col-sm-12'>
-				<form onSubmit={this.handleSubmit}>
-					<div className='form-group col-sm-7'>
-						<input
-							type      = 'text'
-							className = 'form-control'
-							ref       = {this.getRef}/>
-					</div>
-					<div className='form-group col-sm-5'>
+				<div className='input-group'>
+					<input
+						type         = 'text'
+						className    = 'form-control'
+						placeholder  = 'Search'
+						data-refname = 'search'
+						ref          = {Referencer.bind(this)}
+					/>
+					<span className='input-group-btn'>
+
 						<button
-							type      = 'submit'
-							className = 'btn btn-block btn-primary'>
-							Search Github
+							className ='btn btn-success'
+							type      ='submit'>
+							Search
 						</button>
-					</div>
-				</form>
-			</div>
+					</span>
+				</div>
+			</form>
 		)
 	}
-
-});
+}

@@ -1,39 +1,65 @@
-var React = require('react');
+'use strict';
 
-module.exports = React.createClass({
+'use strict';
 
-	propTypes: {
-		username : React.PropTypes.string.isRequired,
-		repos    : React.PropTypes.array.isRequired
-	},
+import React from 'react';
+import {Github} from 'helpers';
 
-	render: function(){
-		console.log('Repos»render', this.props);
+export default class GithubRepos extends React.Component {
 
-		var repos = this.props.repos.map((repo, i)=> {
-			return (
-				<li className='list-group-item' key={i}>
-					{repo.html_url &&
-						<h4>
-							<a href={repo.html_url}>{repo.name}</a>
-						</h4>
-					}
+	static propTypes = {
+		user  : React.PropTypes.string.isRequired
+	};
 
-					{repo.description &&
-						<p>{repo.description}</p>
-					}
-				</li>
-			)
+	constructor(props){
+		super(props);
+		this.state = { repos: [] };
+		this.handleInit = this.handleInit.bind(this);
+	}
+
+	componentWillReceiveProps(props){
+		this.handleInit(props.user);
+	}
+
+	componentDidMount(){
+		this.handleInit(this.props.user);
+	}
+
+	componentWillUnmount(){
+		this.setState({ repos: [] });
+	}
+
+	handleInit(user){
+		this.setState({ repos: [] });
+		(new Github(user)).getRepos().then(res => {
+			this.setState({ repos: res.data})
 		});
+	}
+
+	render(){
+
+		const {user}  = this.props;
+		const {repos} = this.state;
 
 		return (
 			<div>
-				<h3> Repos</h3>
+				<h3>Repos</h3>
 				<ul className='list-group'>
-					{repos}
+					{repos.map((repo, i)=> (
+						<li className='list-group-item' key={i}>
+
+							{repo.html_url &&
+								<h4>
+									<a href={repo.html_url}>{repo.name}</a>
+								</h4>}
+
+							{repo.description &&
+								<p>{repo.description}</p>}
+
+						</li>
+					))}
 				</ul>
 			</div>
 		)
-
 	}
-});
+}
