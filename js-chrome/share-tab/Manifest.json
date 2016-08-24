@@ -10,5 +10,7 @@
         "default_title": "xare v0.0.1",
         "default_popup": "lib/popup.html"
     },
-    "permissions":[]
+    "permissions":[
+        "activeTab"
+    ]
 }
