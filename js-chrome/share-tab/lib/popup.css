@@ -1,19 +1,16 @@
 @import 'https://fonts.googleapis.com/css?family=Roboto';
+@import '../node_modules/reset-css/reset.css';
 
 html, body {
-    margin:0;
-    padding:0;
     font-size: 16px;
-}
-
-html * {
     font-family: 'Roboto', sans-serif;
+    border:0;
 }
 
 main {
-    background:red;
-    width:320px;
-    padding: 1em;
+    background : #ececec;
+    width      : 320px;
+    padding    : 1em;
 }
 
 section {
@@ -25,5 +22,15 @@ section:last-of-type {
 }
 
 input[type="text"]{
-    width: 100%;
+    width       : 100%;
+    font-family : inherit;
+    font-size   : 1rem;
+    padding     : 0.4rem 0.5rem;
+    box-sizing  : border-box;
+    border: 1px solid LightGray;
+}
+
+input[type="text"]:focus {
+    border:1px solid DodgerBlue;
+    outline:none;
 }
