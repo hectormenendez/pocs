@@ -1,0 +1,29 @@
+@import 'https://fonts.googleapis.com/css?family=Roboto';
+
+html, body {
+    margin:0;
+    padding:0;
+    font-size: 16px;
+}
+
+html * {
+    font-family: 'Roboto', sans-serif;
+}
+
+main {
+    background:red;
+    width:320px;
+    padding: 1em;
+}
+
+section {
+    margin-bottom: 1em;
+}
+
+section:last-of-type {
+    margin-bottom:0
+}
+
+input[type="text"]{
+    width: 100%;
+}
