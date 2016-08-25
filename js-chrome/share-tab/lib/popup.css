@@ -68,6 +68,12 @@ main button {
     padding-left  : 1rem;
     padding-right : 1rem;
 }
+
+main button.error {
+    background: tomato;
+    color: white;
+}
+
 /* ------------------------------------------------------------------------------ aside */
 
 aside {
