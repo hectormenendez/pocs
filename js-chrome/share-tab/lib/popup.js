@@ -56,6 +56,7 @@ const setup$ = data$.switchMap(data => {
         xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
         xhr.onreadystatechange = ()=> xhr.readyState == 4 && window.close();
         xhr.send(JSON.stringify({
+            url    : data.url,
             title  : domTitle.value,
             kwords : domKwords.value,
             image  : img.src
