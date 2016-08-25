@@ -4,8 +4,8 @@
   "description": "A chrome extension",
   "main": "lib/popup.html",
   "dependencies": {
-    "reset-css": "^2.0.20160720",
-    "rxjs": "^5.0.0-beta.11"
+    "@reactivex/rxjs": "^5.0.0-beta.11",
+    "reset-css": "^2.0.20160720"
   },
   "devDependencies": {},
   "scripts": {
