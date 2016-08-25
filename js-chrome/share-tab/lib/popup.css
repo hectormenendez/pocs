@@ -5,32 +5,120 @@ html, body {
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
     border:0;
+    background : #ececec;
+    width: 560px;
+    overflow:hidden;
 }
+
+main, aside, main > *, aside > * {
+    display: block;
+    position: relative;
+}
+
+main *, aside * {
+    box-sizing  : border-box;
+}
+
+/*---------------------------------------------------------------------------------main*/
 
 main {
-    background : #ececec;
     width      : 320px;
-    padding    : 1em;
+    padding    : 1rem;
+    float:left;
+}
+main h6 {
+    color: #999;
+    font-weight:bold;
+    font-size: 0.8rem;
+    margin-bottom: 0.2rem;
+    line-height: 0.8rem:
 }
 
-section {
+main section {
     margin-bottom: 1em;
 }
 
-section:last-of-type {
+main section:last-of-type {
     margin-bottom:0
 }
 
-input[type="text"]{
+main section#actions {
+    text-align: right;
+}
+
+main input[type="text"]{
     width       : 100%;
     font-family : inherit;
     font-size   : 1rem;
     padding     : 0.4rem 0.5rem;
-    box-sizing  : border-box;
     border: 1px solid LightGray;
 }
 
-input[type="text"]:focus {
+main input[type="text"]:focus {
     border:1px solid DodgerBlue;
     outline:none;
+}
+
+main button {
+    height        : 2rem;
+    font-weight   : bold;
+    background    : #666;
+    color         : white;
+    border        : 0;
+    padding-left  : 1rem;
+    padding-right : 1rem;
+}
+/* ------------------------------------------------------------------------------ aside */
+
+aside {
+    width: 175px;
+    padding: 1em;
+    float:left;
+}
+
+aside section#images img {
+    width: 100%;
+    height: auto;
+    border: 0;
+    display: none;
+}
+
+aside section#images img.curr {
+    display:block;
+    border: 1px solid LightGray;
+}
+
+aside nav {
+    position: absolute;
+    width: 100%;
+    bottom:0;
+    left:0;
+    height: 2rem;
+}
+
+aside nav div {
+    position    : absolute;
+    width       : 2rem;
+    height      : 2rem;
+    line-height : 1.8rem;
+    overflow    : hidden;
+    text-align  : center;
+    font-size   : 2rem;
+    color       : white;
+    font-weight : bold;
+    background  : #666;
+    bottom      : 1rem;
+    cursor      : pointer;
+}
+
+aside nav div:hover {
+    background: #888;
+}
+
+aside nav div.rgt {
+    right: 1rem;
+}
+
+aside nav div.lft {
+    left: 1rem;
 }
