@@ -1,16 +1,19 @@
 {
-    "manifest_version":2,
+    "manifest_version": 2,
     "name": "xare",
     "version": "0.0.1",
     "description": "A chrome extension",
+    "background": {
+        "scripts": ["lib/background.js"]
+    },
     "icons": {
         "128": "static/icon.png"
     },
-    "browser_action":{
+    "browser_action": {
         "default_title": "xare v0.0.1",
         "default_popup": "lib/popup.html"
     },
-    "permissions":[
-        "activeTab"
+    "permissions": [
+        "tabs"
     ]
 }
