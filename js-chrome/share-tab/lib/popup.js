@@ -18,12 +18,14 @@ let domTitle, domKwords, domImgBtn, domShrBtn;
 const setup$ = data$.switchMap(data => {
     domTitle = document.querySelector('input[name=title]');
     domKwords = document.querySelector('input[name=kwords]');
+    domUrl    = document.querySelector('input[name=url]');
     domImages = document.querySelector('section#images');
     domImgBtn = document.querySelectorAll('aside nav div');
     domShrBtn = document.querySelector('main button');
     // Assignations
     domTitle.value = data.title;
     domKwords.value = data.kwords;
+    domUrl.value = data.url;
     const images = data.images.map((image, i) => {
         const domImage = document.createElement('img');
         domImage.src = image.src;
@@ -56,7 +58,7 @@ const setup$ = data$.switchMap(data => {
         xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
         xhr.onreadystatechange = ()=> xhr.readyState == 4 && window.close();
         xhr.send(JSON.stringify({
-            url    : data.url,
+            url    : domUrl.value,
             title  : domTitle.value,
             kwords : domKwords.value,
             image  : img.src

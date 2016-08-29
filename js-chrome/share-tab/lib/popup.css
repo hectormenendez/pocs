@@ -53,7 +53,9 @@ main input[type="text"]{
     padding     : 0.4rem 0.5rem;
     border: 1px solid LightGray;
 }
-
+main input[disabled] {
+    background: LightGray;
+}
 main input[type="text"]:focus {
     border:1px solid DodgerBlue;
     outline:none;
