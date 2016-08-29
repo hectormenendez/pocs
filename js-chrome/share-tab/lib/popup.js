@@ -26,14 +26,20 @@ const setup$ = data$.switchMap(data => {
     domTitle.value = data.title;
     domKwords.value = data.kwords;
     domUrl.value = data.url;
-    const images = data.images.map((image, i) => {
-        const domImage = document.createElement('img');
-        domImage.src = image.src;
-        if (!i) domImage.classList.add('curr');
-        domImage.id = `image-${i}`;
-        domImages.appendChild(domImage);
-        return domImage;
-    });
+    const images = data.images
+        .sort((a, b) => {
+            const A = a.width * a.height;
+            const B = b.width * b.height;
+            return A > B? -1 : (A < B? 1 : 0);
+        })
+        .map((image, i) => {
+            const domImage = document.createElement('img');
+            domImage.src = image.src;
+            if (!i) domImage.classList.add('curr');
+            domImage.id = `image-${i}`;
+            domImages.appendChild(domImage);
+            return domImage;
+        });
     // Events
     const ImgBtn$ = $.fromEvent(domImgBtn, 'click').do(e => {
         const dir = e.srcElement.className == 'lft'? -1 : +1;
@@ -47,7 +53,6 @@ const setup$ = data$.switchMap(data => {
     });
     // TODO: obtain the current values and make the call
     const ShrBtn$ = $.fromEvent(domShrBtn, 'click').do(e => {
-        console.info(domTitle, domKwords);
         if (!domTitle.value.length || !domKwords.value.length) {
             domShrBtn.classList.add('error');
             return setTimeout(() => domShrBtn.classList.remove('error'), 2000);
