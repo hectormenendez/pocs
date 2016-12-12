@@ -1,0 +1,57 @@
+#!/usr/bin/env osascript
+
+-- Juniper Network Connect manipulation script
+-- Author: Héctor Menéndez <hmenendez-ext@technisys.com>
+
+on run fileName
+
+	set the clipboard to ""
+
+	set _pin to "20160816"
+	set _usr to "TECHRSO"
+	set _url to "https://teletrabajo.b-enlinea.com/dana-na/auth/url_9/welcome.cgi"
+
+	-- Get the Token from the SecureID Application
+
+	activate application "SecurID"
+	tell application "SecurID"
+		activate
+		tell application "System Events"
+			keystroke _pin
+			key code 36 -- enter
+			delay 0.75
+			key code 48 -- tab
+			key code 49
+		end tell
+	end tell
+
+	delay 0.5
+	quit application "SecurID"
+	set _pwd to the clipboard
+
+
+	-- Set All the values where they belong
+	activate application "Network Connect"
+	tell application "Network Connect"
+		-- Disconnect the current connection (if exist)
+		if connected then
+			do shell script "./vpn-dns-disable"
+			delay 0.75
+			sign out
+			delay 5
+		end if
+		connect to _url
+		delay 5
+		tell application "System Events"
+			keystroke _usr
+			key code 48
+			keystroke _pwd
+			click button "Sign In" of group 17 of UI element 1 of scroll area 1 of window "Network Connect" of application process "Network Connect" of application "System Events"
+			delay 10
+			do shell script "./vpn-dns-enable"
+			delay 1
+			return
+		end tell
+	end tell
+
+end run

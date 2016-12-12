@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+sudo scutil << EOL
+get State:/Network/Service/net.juniper.ncproxyd.main/DNS
+d.show
+quit
+EOL
