@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Restore DNS by setting global service to point google servers
+sudo scutil << EOL
+get State:/Network/Service/net.juniper.ncproxyd.main/DNS
+d.init
+set State:/Network/Service/net.juniper.ncproxyd.main/DNS
+d.show
+quit
+EOL

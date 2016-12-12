@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Set a fallback DNS Server for the VPN
+sudo scutil << EOL
+get State:/Network/Service/net.juniper.ncproxyd.main/DNS
+d.init
+d.add SearchDomains * cb.bbvabancomer.com.mx
+d.add ServerAddresses * 150.100.228.41 150.100.229.51
+set State:/Network/Service/net.juniper.ncproxyd.main/DNS
+d.show
+quit
+EOL
