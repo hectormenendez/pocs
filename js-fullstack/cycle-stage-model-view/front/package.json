@@ -4,8 +4,17 @@
   "description": "A simple money manager",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Héctor Menéndez <etor@gik.mx>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@cycle/dom": "^14.3.0",
+    "@cycle/xstream-run": "^4.2.0",
+    "xstream": "^9.3.0"
+  },
+  "devDependencies": {
+    "webpack": "^2.2.0",
+    "webpack-dev-server": "^2.2.0"
+  }
 }
