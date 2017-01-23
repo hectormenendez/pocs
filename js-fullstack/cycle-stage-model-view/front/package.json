@@ -4,7 +4,8 @@
   "description": "A simple money manager",
   "main": "index.js",
   "scripts": {
-    "start": "webpack"
+    "start": "node ./webpack.devsrv.js",
+    "build": "rimraf out/bundle.js && NODE_ENV=production webpack"
   },
   "author": "Héctor Menéndez <etor@gik.mx>",
   "license": "UNLICENSED",
@@ -14,6 +15,11 @@
     "xstream": "^9.3.0"
   },
   "devDependencies": {
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-latest": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "rimraf": "^2.5.4",
     "webpack": "^2.2.0",
     "webpack-dev-server": "^2.2.0"
   }
