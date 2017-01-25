@@ -45,7 +45,7 @@ module.exports = { entry, plugins,
         loaders: [{
             test    : /\.jsx?$/,
             loaders : ['babel-loader'],
-            exclude : '/node_modules/'
+            exclude : /node_modules/
         }],
     },
 
