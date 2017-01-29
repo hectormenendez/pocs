@@ -1,11 +1,12 @@
 @import '../index.css';
 
-body {
-    background-color: lightblue
-}
+:local(.root){
+    lost-utility: clearfix;
+    height: 100%;
+    background-color: var(--color-black);
 
-:local(.box){
-    background-color : white;
-    color            : var(--color-blue);
-    border           : 0.4rem solid deeppink;
+    & div {
+        lost-column: 1/2;
+        background-color: var(--color-blue);
+    }
 }
