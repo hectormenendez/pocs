@@ -1,4 +1,5 @@
 .git
+out
 node_modules
-out/bundle.js
 .tern-port
+*.log

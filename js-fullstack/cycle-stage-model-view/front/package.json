@@ -5,25 +5,34 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./webpack.devsrv.js",
-    "build": "rimraf out/bundle.js && NODE_ENV=production webpack"
+    "build": "rimraf out && NODE_ENV=production webpack"
   },
   "author": "Héctor Menéndez <etor@gik.mx>",
   "license": "UNLICENSED",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "@cycle/dom": "^14.3.0",
     "@cycle/http": "^11.3.0",
+    "@cycle/isolate": "^1.4.0",
     "@cycle/xstream-run": "^4.2.0",
-    "xstream": "^9.3.0"
-  },
-  "devDependencies": {
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-react-jsx": "^6.22.0",
     "babel-preset-latest": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
+    "css-loader": "^0.26.1",
+    "cycle-restart": "0.0.14",
+    "extract-text-webpack-plugin": "^2.0.0-rc.2",
+    "html-webpack-plugin": "^2.28.0",
+    "postcss": "^5.2.11",
+    "postcss-cssnext": "^2.9.0",
+    "postcss-import": "^9.1.0",
+    "postcss-loader": "^1.2.2",
     "rimraf": "^2.5.4",
     "snabbdom-jsx": "^0.3.1",
+    "style-loader": "^0.13.1",
     "webpack": "^2.2.0",
-    "webpack-dev-server": "^2.2.0"
+    "webpack-dev-server": "^2.2.0",
+    "xstream": "^9.3.0"
   }
 }

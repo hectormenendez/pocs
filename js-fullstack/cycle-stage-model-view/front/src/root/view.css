@@ -1,0 +1,11 @@
+@import '../index.css';
+
+body {
+    background-color: lightblue
+}
+
+:local(.box){
+    background-color : white;
+    color            : var(--color-blue);
+    border           : 0.4rem solid deeppink;
+}
