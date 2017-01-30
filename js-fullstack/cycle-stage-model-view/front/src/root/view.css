@@ -1,12 +1,12 @@
-@import '../index.css';
+/* @import '../index.css'; */
 
-:local(.root){
-    lost-utility: clearfix;
-    height: 100%;
-    background-color: var(--color-black);
+/* :local(.root){ */
+/*     lost-utility: clearfix; */
+/*     height: 100%; */
+/*     background-color: var(--color-black); */
 
-    & div {
-        lost-column: 1/2;
-        background-color: var(--color-blue);
-    }
-}
+/*     & div { */
+/*         lost-column: 1/2; */
+/*         background-color: var(--color-blue); */
+/*     } */
+/* } */

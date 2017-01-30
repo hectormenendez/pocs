@@ -1,3 +1,3 @@
-export default sources => {
+export default function(sources) {
     return {}
 }

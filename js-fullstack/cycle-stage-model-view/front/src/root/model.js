@@ -1,6 +1,6 @@
 import $ from 'xstream';
 
-export default intent => {
+export default function(sources) {
 
     return $.of(null)
 }
