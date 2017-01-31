@@ -1,11 +1,42 @@
 {
   "name": "@gik/money.back",
-  "version": "0.0.1",
   "description": "The backend for the money app.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "0.0.0",
+  "homepage": "",
+  "main": "src/",
+  "keywords": [ "feathers" ],
+  "license": "MIT",
+  "repository": {},
+  "author": {},
+  "contributors": [],
+  "bugs": {},
+  "engines": {
+    "node": ">= 0.12.0"
   },
-  "author": "",
-  "license": "ISC"
+  "scripts": {
+    "test": "npm run jshint && npm run mocha",
+    "jshint": "jshint src/. test/. --config",
+    "start": "node src/",
+    "mocha": "mocha test/ --recursive",
+    "feathers":"feathers"
+  },
+  "dependencies": {
+    "compression": "^1.6.2",
+    "cors": "^2.8.1",
+    "feathers": "^2.0.3",
+    "feathers-configuration": "^0.3.3",
+    "feathers-errors": "^2.5.0",
+    "feathers-hooks": "^1.7.1",
+    "feathers-nedb": "^2.6.0",
+    "feathers-socketio": "^1.4.2",
+    "nedb": "^1.8.0",
+    "serve-favicon": "^2.3.2",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.4",
+    "mocha": "^3.2.0",
+    "request": "^2.79.0",
+    "feathers-cli": "^1.2.7"
+  }
 }
