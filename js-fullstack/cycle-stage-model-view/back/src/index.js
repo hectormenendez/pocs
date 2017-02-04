@@ -7,6 +7,7 @@ const Cors           = require('cors');
 const Feathers       = require('feathers');
 const FeathersConf   = require('feathers-configuration');
 const FeathersHooks  = require('feathers-hooks');
+const FeathersRest   = require('feathers-rest');
 const FeathersSocket = require('feathers-socketio');
 
 const Middleware = require('./middleware');
@@ -33,6 +34,7 @@ app
     .use('/', Feathers.static(conf.public))
     // Configure Feathers
     .configure(FeathersHooks())
+    .configure(FeathersRest())
     .configure(FeathersSocket())
     .configure(Services)
     .configure(Middleware)

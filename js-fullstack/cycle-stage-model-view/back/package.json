@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "homepage": "",
   "main": "src/",
-  "keywords": [ "feathers" ],
+  "keywords": [
+    "feathers"
+  ],
   "license": "MIT",
   "repository": {},
   "author": {},
@@ -18,7 +20,7 @@
     "jshint": "jshint src/. test/. --config",
     "start": "node src/",
     "mocha": "mocha test/ --recursive",
-    "feathers":"feathers"
+    "feathers": "feathers"
   },
   "dependencies": {
     "compression": "^1.6.2",
@@ -28,6 +30,7 @@
     "feathers-errors": "^2.5.0",
     "feathers-hooks": "^1.7.1",
     "feathers-nedb": "^2.6.0",
+    "feathers-rest": "^1.6.0",
     "feathers-socketio": "^1.4.2",
     "nedb": "^1.8.0",
     "serve-favicon": "^2.3.2",

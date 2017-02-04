@@ -1,6 +1,6 @@
-'use strict';
-
+const Users = require('./users');
 
 module.exports = function() {
-  const app = this;
+  const App = this;
+  App.configure(Users);
 };
