@@ -12,7 +12,6 @@
   "dependencies": {},
   "devDependencies": {
     "@cycle/dom": "^14.3.0",
-    "@cycle/http": "^11.3.0",
     "@cycle/isolate": "^1.4.0",
     "@cycle/xstream-run": "^4.2.0",
     "babel-core": "^6.22.1",
@@ -21,6 +20,7 @@
     "babel-preset-latest": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
     "css-loader": "^0.26.1",
+    "cyclic-router": "^3.0.1",
     "extract-text-webpack-plugin": "^2.0.0-rc.2",
     "feathers-client": "^1.9.0",
     "html-webpack-plugin": "^2.28.0",
@@ -33,6 +33,7 @@
     "snabbdom-jsx": "^0.3.1",
     "socket.io-client": "^1.7.2",
     "style-loader": "^0.13.1",
+    "switch-path": "^1.2.0",
     "webpack": "^2.2.0",
     "webpack-dev-server": "^2.2.0",
     "xstream": "^9.3.0"
