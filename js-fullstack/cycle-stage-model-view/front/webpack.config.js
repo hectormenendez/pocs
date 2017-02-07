@@ -111,7 +111,11 @@ module.exports = { entry, plugins,
 
     module: {loaders},
 
-    devtool: 'source-map'
+    devtool: 'source-map',
+
+    node : {
+        __filename: true,
+        __dirname : true
+    }
 
 }
-// loader  : 'style!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
