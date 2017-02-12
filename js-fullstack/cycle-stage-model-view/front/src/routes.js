@@ -1,7 +1,9 @@
-import MVI from './helpers/mvi';
+// import MVI from './helpers/mvi';
+import Root from './pages/root';
+import Todo from './pages/todo';
 
 export default ({
 
-    '/': MVI('root', 'pages')
+    '/': Todo,
 
 })
