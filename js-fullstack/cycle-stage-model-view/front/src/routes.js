@@ -1,9 +1,9 @@
-// import MVI from './helpers/mvi';
-import Root from './pages/root';
-import Todo from './pages/todo';
+import Root from './pages/examples/router';
+import Todo from './pages/examples/todo';
 
 export default ({
 
-    '/': Todo,
+    '/'     : Root,
+    '/todo' : Todo
 
 })
