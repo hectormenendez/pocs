@@ -1,7 +1,6 @@
 import $ from 'xstream';
 
-export default function Model(intent, source){
-    const vnode = {};
+export default function Model({ intent }){
 
     const added$ = intent.add$
         .map(intent => todos => todos.concat({ text: intent.payload, done:false }));
@@ -15,10 +14,12 @@ export default function Model(intent, source){
     const deleted$ = intent.delete$
         .map(intent => todos => todos.filter((todo,i) => i !== intent.payload));
 
-    return {
-        state$: $
-            .merge(added$, toggled$, deleted$)
-            .fold((todos, fn) => fn(todos), [])
-            .debug()
-    }
+    const state$ = $
+        .merge(added$, toggled$, deleted$)
+        .fold((todos, fn) => fn(todos), [])
+        // .debug()
+
+    const vnode$ = $.of({});
+
+    return { state$, vnode$ }
 }

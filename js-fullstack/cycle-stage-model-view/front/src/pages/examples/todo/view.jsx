@@ -1,4 +1,3 @@
-import $ from 'xstream';
 import {html as Html} from 'snabbdom-jsx';
 
 export default state => <section>
@@ -17,4 +16,6 @@ export default state => <section>
             <button> x </button>
         </li>) }
     </ul>
+    <hr/>
+    <a href="/">Home</a>
 </section>

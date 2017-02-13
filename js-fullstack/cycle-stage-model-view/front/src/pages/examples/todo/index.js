@@ -6,11 +6,17 @@ import View  from './view.jsx';
 
 export function main(sources){
 
-    const { intent, sink }  = Stage(sources);
-    const { state$, vnode } = Model(intent, sources);
-    const vtree$ = state$.map(state => View(state));
+    const stage = Stage(sources);
+    const sink  = stage.sink || {};
+    if (stage.sink) delete stage.sink;
 
-    return Object.assign({ DOM: vtree$ }, sink || {});
+    const { state$, vnode$ } = Model(stage);
+
+    const vtree$ = vnode$
+        .map(vnode => state$.map(state => View(state, vnode)))
+        .flatten();
+
+    return Object.assign({ state$, DOM: vtree$ }, sink);
 }
 
 export default sources => Isolate(main)(sources);

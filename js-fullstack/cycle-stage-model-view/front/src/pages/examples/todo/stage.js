@@ -26,5 +26,16 @@ export default function Stage(source){
             return { type: 'delete', payload };
         })
 
-    return { intent, sink: null };
+    intent.click$ = source.DOM
+        .select('a')
+        .events('click')
+        .map(e => {
+            e.preventDefault();
+            return e.target.getAttribute('href');
+        });
+
+    const sink = {};
+    sink.Router = intent.click$;
+
+    return { intent, sink };
 }

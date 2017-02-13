@@ -1,20 +1,23 @@
 import $ from 'xstream';
 
-export default function Intent(source){
+import Static from '../../../components/examples/static';
 
-    const target = {};
-    target.link  = source.DOM.select('a');
+export default function Stage(source){
+
+    const component = {};
+    component.static = props => Static(Object.assign({ props: $.of(props) }, source));
 
     const intent = {};
-    intent.linkClicked$ = target.link.events('click')
+    intent.linkClicked$ = source.DOM
+        .select('a')
+        .events('click')
         .map(e => {
             e.preventDefault();
             return e.target.getAttribute('href');
-        })
-        .debug()
+        });
 
     const sink = {};
     sink.Router = intent.linkClicked$;
 
-    return { intent, sink };
+    return { intent, sink, component };
 }
