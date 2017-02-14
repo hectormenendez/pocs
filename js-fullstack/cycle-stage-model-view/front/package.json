@@ -30,6 +30,7 @@
     "postcss-cssnext": "^2.9.0",
     "postcss-import": "^9.1.0",
     "postcss-loader": "^1.2.2",
+    "postcss-normalize": "^0.3.0",
     "rimraf": "^2.5.4",
     "snabbdom-jsx": "^0.3.1",
     "socket.io-client": "^1.7.2",
