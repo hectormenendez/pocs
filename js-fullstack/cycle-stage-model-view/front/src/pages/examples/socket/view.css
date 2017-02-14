@@ -1,0 +1,93 @@
+:global {
+    @lost flexbox flex;
+    @lost gutter 1em;
+}
+
+:root {
+    --container {
+        /* lost-utility : edit; */
+        lost-column     : 1;
+        border-bottom   : 1px solid #EEE;
+        padding-top     : 0.5rem;
+        padding-bottom  : 0.5rem;
+    }
+
+    --line {
+        line-height : 1rem;
+        padding     : 0.25rem 0.5rem;
+        box-sizing  : border-box;
+    }
+}
+
+:local(.socket) {
+    lost-center: 320px;
+
+    & header {
+        @apply --container;
+
+        & h1 {
+            text-align: center;
+            font-size : 1.5rem;
+            margin    : 0;
+        }
+    }
+
+    & form {
+        @apply --container;
+        & label {
+            @apply --line;
+            display     : flex;
+            lost-column : 1;
+        }
+        & input {
+            @apply --line;
+            border      : 1px solid #AAA;
+            background  : #EEE;
+            lost-column : 2/3;
+        }
+        & button {
+            @apply --line;
+            border      : 1px solid #AAA;
+            background  : #CCC;
+            text-align  : center;
+            lost-column : 1/3;
+        }
+    }
+
+    & table {
+        @apply --container;
+
+        & th,
+        & td {
+            background: #EEE;
+
+            &:nth-of-type(2){
+                width      : 1rem;
+                text-align : center;
+            }
+        }
+
+        & th {
+            @apply --line;
+            background: #666;
+            color     : #EEE;
+            font-weight : normal;
+
+            &:nth-of-type(1){
+                text-align: left;
+            }
+        }
+
+        & td {
+            @apply --line;
+        }
+    }
+
+    & footer {
+        @apply --container;
+
+        & a {
+            @apply --line;
+        }
+    }
+}
