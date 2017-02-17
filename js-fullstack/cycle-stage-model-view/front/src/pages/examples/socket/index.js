@@ -7,8 +7,7 @@ import View  from './view.jsx';
 export function main(sources){
 
     const stage = Stage(sources);
-    const sink = stage.sink || {};
-    if (stage.sink) delete stage.sink;
+    stage.sink  = stage.sink || {};
 
     const { state$, vnode$ } = Model(stage);
 
@@ -16,7 +15,7 @@ export function main(sources){
         .map(vnode => state$.map(state => View(state, vnode)))
         .flatten();
 
-    return Object.assign({ state$, DOM: vtree$ }, sink);
+    return Object.assign({ state$, DOM: vtree$ }, stage.sink);
 }
 
 export default sources => Isolate(main)(sources);

@@ -5,11 +5,17 @@ export default state => <section className={Style.socket}>
     <header>
         <h1>Socket User Management</h1>
     </header>
-
     <form>
         <label>Create User</label>
-        <input type="text" placeholder="Name" />
-        <button> ok </button>
+        <input
+            type        = "text"
+            placeholder = "Name"
+            value       = {state.user}/>
+        <button
+            type     = "submit"
+            disabled = {!state.user.length}>
+            OK
+        </button>
     </form>
 
     <table>
@@ -20,10 +26,12 @@ export default state => <section className={Style.socket}>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td> Hector </td>
-                <td> <button>x</button> </td>
-            </tr>
+            { state.users.map(user => <tr>
+                <td> {user.name} </td>
+                <td>
+                    <button attrs-data-id={user._id}>x</button>
+                </td>
+            </tr> )}
         </tbody>
     </table>
 
