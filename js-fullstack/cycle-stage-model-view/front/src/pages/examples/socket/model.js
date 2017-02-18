@@ -1,31 +1,36 @@
 import $ from 'xstream';
 
-export default function Model({ intent, sink }){
+export default function Model({ intent, data, sink }){
 
-
-    // sink.Feathers =  intent.formSubmit$
-    //     .map(user => ({ type: 'create', data: {user} }));
     const state = {
-        user  : '',
-        users : []
+        user             : '',
+        users            : [],
+        creationDisabled : false
     };
 
-    const user$ = intent.inputUser$
-        .map(user => ({ user }))
-
-    const users$ = intent.fetchUsers$
+    // whenever user data arrives
+    const users$ = data.users$
         .map(users => ({users}))
 
-    const formSubmitted$ = intent.formSubmit$
+    // when the input for user creation is greater than 4 chars
+    const userTyped$ = intent.userInput$
+        .map(user => ({ user }))
+
+    // reset the input form whenever the form is submitted
+    const userSubmitted$ = intent.userSubmit$
         .map(user => ({ user: '' }));
 
     const state$ = $
         .merge(
-            user$,
             users$,
+            userTyped$,
+            userSubmitted$
         )
         .fold((state, cur) => Object.assign(state, cur), state)
-        .drop(1)
+        .map(state => ({
+            ...state,
+            creationDisabled: !(state.user.length > 3)
+        }))
         .debug();
 
     return { vnode$: $.of({}) , state$ }

@@ -2,8 +2,10 @@ import $ from 'xstream';
 
 export default function Stage(source){
 
-    const intent = {};
-    intent.clickHome$ = source.DOM
+    const intent = {}; // --------------------------------------------------------: Intent
+
+    // Link on the bottom, user wants to go back to home.
+    intent.goHome$ = source.DOM
         .select('a')
         .events('click')
         .map(e => {
@@ -11,13 +13,14 @@ export default function Stage(source){
             return e.target.getAttribute('href');
         });
 
-    intent.inputUser$ = source.DOM
+    // User types a username
+    intent.userInput$ = source.DOM
         .select('form input')
         .events('keyup')
         .map(e => e.target.value);
 
-
-    intent.formSubmit$ = source.DOM
+    // Users submits the 'create user' form
+    intent.userSubmit$ = source.DOM
         .select('form')
         .events('submit')
         .map(e => {
@@ -25,23 +28,32 @@ export default function Stage(source){
             return e.target.querySelector('input').value;
         })
 
-    intent.fetchUsers$ = source.Feathers
+    const data = {}; // ------------------------------------------------------------: Data
+
+    // data form all the users available
+    data.users$ = source.Feathers
         .select({ service: 'users', method: 'find' })
         .map(response => response.data)
 
-    const sink = {};
+    const sink = {}; // -----------------------------------------------------------: Sinks
 
-    // Handles route clicking
-    sink.Router = intent.clickHome$;
+    const feathers = {};
 
-    const fetchUsers$ = $.of({
+    feathers.users$ = $.of({
         service: 'users',
         method : 'find',
         args   : [ { query: { $limit: Infinity } } ]
     });
 
     // Handles communication with the socket API
-    sink.Feathers =  $.merge(fetchUsers$);
+    sink.Feathers =  $
+        .merge(feathers.users$);
 
-    return { intent, sink };
+    // Handles route clicking
+    sink.Router = $
+        .merge(intent.goHome$);
+
+    // -----------------------------------------------------------------------------------
+
+    return { intent, sink, data };
 }

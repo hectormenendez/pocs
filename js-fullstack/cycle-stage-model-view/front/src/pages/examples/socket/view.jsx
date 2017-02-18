@@ -13,7 +13,7 @@ export default state => <section className={Style.socket}>
             value       = {state.user}/>
         <button
             type     = "submit"
-            disabled = {!state.user.length}>
+            disabled = {state.creationDisabled}>
             OK
         </button>
     </form>
