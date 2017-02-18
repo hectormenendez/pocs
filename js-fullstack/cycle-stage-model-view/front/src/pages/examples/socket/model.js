@@ -8,9 +8,20 @@ export default function Model({ intent, data, sink }){
         creationDisabled : false
     };
 
-    // whenever user data arrives
+    // Operations done to the user array
+    const userOp = {};
+
+    userOp.delete$ = data.userDeleted$
+        .map(_id => users => users.filter(user => user._id  !== _id))
+
     const users$ = data.users$
-        .map(users => ({users}))
+        .map(users => $
+            .merge(userOp.delete$)
+            .startWith(null)
+            .fold((users, op) => op? op(users) : users, users)
+        )
+        .flatten()
+        .map(users => ({ users }))
 
     // when the input for user creation is greater than 4 chars
     const userTyped$ = intent.userInput$
@@ -24,14 +35,14 @@ export default function Model({ intent, data, sink }){
         .merge(
             users$,
             userTyped$,
-            userSubmitted$
+            userSubmitted$,
+            data.userDeleted$
         )
         .fold((state, cur) => Object.assign(state, cur), state)
         .map(state => ({
             ...state,
             creationDisabled: !(state.user.length > 3)
         }))
-        .debug();
 
     return { vnode$: $.of({}) , state$ }
 }
