@@ -1,0 +1,8 @@
+[submodule "front"]
+	path = front
+	url = ../money.front
+	branch = master
+[submodule "back"]
+	path = back
+	url = ../money.back
+	branch = master
