@@ -14,9 +14,15 @@ export default function Model({ intent, data, sink }){
     userOp.delete$ = data.userDeleted$
         .map(_id => users => users.filter(user => user._id  !== _id))
 
+    userOp.create$ = data.userCreated$
+        .map(user => users => [user].concat(users));
+
     const users$ = data.users$
         .map(users => $
-            .merge(userOp.delete$)
+            .merge(
+                userOp.delete$,
+                userOp.create$,
+            )
             .startWith(null)
             .fold((users, op) => op? op(users) : users, users)
         )

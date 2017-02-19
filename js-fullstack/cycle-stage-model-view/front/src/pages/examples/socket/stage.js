@@ -25,8 +25,8 @@ export default function Stage(source){
         .events('submit')
         .map(e => {
             e.preventDefault();
-            return e.target.querySelector('input').value;
-        })
+            return { name: e.target.querySelector('input').value  }
+        });
 
     // User intends to delete an specific user
     intent.userDelete$ = source.DOM
@@ -46,6 +46,9 @@ export default function Stage(source){
         .select({ service: 'users', method: 'remove' })
         .map(response => response._id)
 
+    data.userCreated$ = source.Feathers
+        .select({ service: 'users', method: 'create' })
+
     const sink = {}; // -----------------------------------------------------------: Sinks
 
     const feathers = {};
@@ -56,10 +59,17 @@ export default function Stage(source){
         args   : [ { query: { $limit: Infinity } } ]
     });
 
-    feathers.deleteUser$ = intent.userDelete$
+    feathers.userDelete$ = intent.userDelete$
         .map(user => ({
             service: 'users',
             method : 'remove',
+            args   : [ user ]
+        }));
+
+    feathers.userCreate$ = intent.userSubmit$
+        .map(user => ({
+            service: 'users',
+            method : 'create',
             args   : [ user ]
         }));
 
@@ -67,7 +77,8 @@ export default function Stage(source){
     sink.Feathers =  $
         .merge(
             feathers.users$,
-            feathers.deleteUser$
+            feathers.userDelete$,
+            feathers.userCreate$,
         );
 
     // Handles route clicking
