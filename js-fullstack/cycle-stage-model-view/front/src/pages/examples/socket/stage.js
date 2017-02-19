@@ -43,11 +43,12 @@ export default function Stage(source){
 
     // User was deleted from database
     data.userDeleted$ = source.Feathers
-        .select({ service: 'users', method: 'remove' })
+        .on({ service: 'users', method: 'removed' })
         .map(response => response._id)
 
+    // User was created on database
     data.userCreated$ = source.Feathers
-        .select({ service: 'users', method: 'create' })
+        .on({ service: 'users', method: 'created' })
 
     const sink = {}; // -----------------------------------------------------------: Sinks
 
@@ -75,11 +76,7 @@ export default function Stage(source){
 
     // Handles communication with the socket API
     sink.Feathers =  $
-        .merge(
-            feathers.users$,
-            feathers.userDelete$,
-            feathers.userCreate$,
-        );
+        .merge(...Object.keys(feathers).map(k => feathers[k]))
 
     // Handles route clicking
     sink.Router = $

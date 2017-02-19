@@ -2,53 +2,48 @@ import $ from 'xstream';
 
 export default function Model({ intent, data, sink }){
 
-    const state = {
+    // The initial state
+    const initial = {
         user             : '',
         users            : [],
         creationDisabled : false
     };
 
     // Operations done to the user array
-    const userOp = {};
+    const usersmod = {
+        delete$: data.userDeleted$
+            .map(_id => users => users.filter(user => user._id  !== _id)),
+        create$: data.userCreated$
+            .map(user => users => [user].concat(users)),
+    };
 
-    userOp.delete$ = data.userDeleted$
-        .map(_id => users => users.filter(user => user._id  !== _id))
+    const state = {};
 
-    userOp.create$ = data.userCreated$
-        .map(user => users => [user].concat(users));
-
-    const users$ = data.users$
+    // fetch all users, then apply operators to modify the original array.
+    state.users$ = data.users$
         .map(users => $
-            .merge(
-                userOp.delete$,
-                userOp.create$,
-            )
-            .startWith(null)
-            .fold((users, op) => op? op(users) : users, users)
+            .merge(...Object.keys(usersmod).map(k => usersmod[k]))
+            .fold((users, mod) => mod? mod(users) : users, users)
         )
         .flatten()
         .map(users => ({ users }))
 
-    // when the input for user creation is greater than 4 chars
-    const userTyped$ = intent.userInput$
+    // when the input for user creation changes
+    state.userInput$ = intent.userInput$
         .map(user => ({ user }))
 
-    // reset the input form whenever the form is submitted
-    const userSubmitted$ = intent.userSubmit$
+    // reset the input whenever the form is submitted
+    state.userSubmit$ = intent.userSubmit$
         .map(user => ({ user: '' }));
 
     const state$ = $
-        .merge(
-            users$,
-            userTyped$,
-            userSubmitted$,
-            data.userDeleted$
-        )
-        .fold((state, cur) => Object.assign(state, cur), state)
+        .merge(...Object.keys(state).map(k => state[k]))
+        .fold((state, cur) => Object.assign(state, cur), initial)
+        // Post operations to state
         .map(state => ({
             ...state,
             creationDisabled: !(state.user.length > 3)
-        }))
+        }));
 
     return { vnode$: $.of({}) , state$ }
 }
