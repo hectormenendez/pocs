@@ -36,6 +36,17 @@ export default function (socket){
             })
         };
 
+        // Handles sources (remote events) selection.
+        const on = event => {
+            Validate(event, { service:[String], method: [String] });
+            const service = app.service(event.service);
+            return $.create({
+                stop  : () => {},
+                start : listener => service
+                    .on(event.method, response => listener.next(response))
+            });
+        };
+
         // The sink stream that will handle the event queue
         sink$
             .map(sink => {
@@ -53,6 +64,6 @@ export default function (socket){
             .addListener({ error, next })
 
         // The source stream that will handle the intents
-        return { app, select };
+        return { app, select, on };
     };
 }
