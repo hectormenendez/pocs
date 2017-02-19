@@ -25,8 +25,8 @@ function main(sources){
 
     return {
         DOM      : page$.map(page => page.DOM).flatten(),
-        Router   : page$.map(page => page.Router || $.never()).flatten(),
-        Feathers : page$.map(page => page.Feathers).flatten()
+        Router   : page$.map(page => page.Router   || $.never()).flatten(),
+        Feathers : page$.map(page => page.Feathers || $.never()).flatten(),
     }
 }
 
