@@ -1,13 +1,13 @@
 {
   "name": "@gik/money.back",
-  "description": "The backend for the money app.",
-  "version": "0.0.0",
+  "description": "The backend for @gik/money.front",
+  "version": "0.0.1",
   "homepage": "",
   "main": "src/",
   "keywords": [
     "feathers"
   ],
-  "license": "MIT",
+  "license": "UNLICENSED",
   "repository": {},
   "author": {},
   "contributors": [],
