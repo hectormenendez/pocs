@@ -8,14 +8,14 @@ import SwitchPath from 'switch-path';
 import SocketIO   from 'socket.io-client';
 
 import FeatherDriver from './drivers/feathers';
-import Routes        from './routes'
+import Routes$        from './routes'
 
 const socket = SocketIO('http://localhost:3030', { path:'/ws/' });
 
-function main(sources){
+function main(routes, sources){
 
     const page$ = sources.Router
-        .define(Routes)
+        .define(routes)
         .map(router => {
             const component = router.value;
             const obj = { Router: sources.Router.path(router.path) };
@@ -30,8 +30,12 @@ function main(sources){
     }
 }
 
-Run(main, {
-    DOM      : DomDriver(document.getElementsByTagName('main')[0]),
-    Feathers : FeatherDriver(socket),
-    Router   : RouterDriver(History(), SwitchPath)
-});
+function onReady(routes){
+    Run(main.bind(null, routes), {
+        DOM      : DomDriver(document.getElementsByTagName('main')[0]),
+        Feathers : FeatherDriver(socket),
+        Router   : RouterDriver(History(), SwitchPath)
+    });
+}
+
+Routes$.addListener({ next: onReady });
