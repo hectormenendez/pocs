@@ -6,7 +6,7 @@ Common.isProduction = process.env.NODE_ENV === 'production';
 
 const server = Common.server = {};
 server.schema = 'http';
-server.host   = 'localhost';
+server.host   = '0.0.0.0';
 server.port   = 8080;
 
 const path           = Common.path = {};
