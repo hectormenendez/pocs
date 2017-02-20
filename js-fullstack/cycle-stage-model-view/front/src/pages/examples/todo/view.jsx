@@ -17,5 +17,5 @@ export default state => <section>
         </li>) }
     </ul>
     <hr/>
-    <a href="/">Home</a>
+    <a href="/examples">Home</a>
 </section>

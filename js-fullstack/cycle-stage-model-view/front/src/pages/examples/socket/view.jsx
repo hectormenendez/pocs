@@ -36,6 +36,6 @@ export default state => <section className={Style.socket}>
     </table>
 
     <footer>
-        <a href="/">Home</a>
+        <a href="/examples/">Home</a>
     </footer>
 </section>

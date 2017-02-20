@@ -1,7 +1,7 @@
-import Router from './helpers/router';
+import {Router} from './helpers/smv';
 
 export default Router({
-    '/'                : 'pages/home',
+    '/'                : 'pages/examples/router',
     '/examples/'       : 'pages/examples/router',
     '/examples/todo'   : 'pages/examples/todo',
     '/examples/bmi'    : 'pages/examples/bmi',
