@@ -8,6 +8,6 @@ export default function View(state, {SliderWeight, SliderHeight}) {
         <SliderWeight/>
         <h3>Your BMI is: <i style={ {color:'red'} }>{state.bmi}</i></h3>
         <hr/>
-        <a href="/">Home</a>
+        <a href="/examples">Home</a>
     </section>
 }

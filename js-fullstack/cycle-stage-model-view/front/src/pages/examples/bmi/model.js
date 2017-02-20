@@ -1,7 +1,5 @@
 import $ from 'xstream';
 
-import CreateComponentStream from '../../../helpers/component';
-
 function CalculateBMI ({ height, weight }){
     height = height * 0.01;
     return Math.round(weight / Math.pow(height, 2));
@@ -12,13 +10,8 @@ export default function Model({ intent, component }){
     const initial  = {};
     initial.weight = 80;
     initial.height = 165;
-    initial.bmi    = CalculateBMI({
-        height: initial.height,
-        weight: initial.weight
-    });
 
-    const sliderWeight = {};
-    sliderWeight.component = component.slider({
+    const sliderWeight$ = component.slider({
         unit  : 'kg',
         type  : 'Weight',
         min   : 40,
@@ -26,15 +19,7 @@ export default function Model({ intent, component }){
         value : initial.weight
     });
 
-    sliderWeight.state$ = sliderWeight.component.state$
-        .map(state => ({ weight: state.value }))
-        .startWith({ weight: initial.weight });
-
-    sliderWeight.vnode$ = sliderWeight.component.DOM
-        .map(vnode => ({ SliderWeight: () => vnode }));
-
-    const sliderHeight = {};
-    sliderHeight.component = component.slider({
+    const sliderHeight$ = component.slider({
         unit  : 'cm',
         type  : 'Height',
         min   : 140,
@@ -42,29 +27,40 @@ export default function Model({ intent, component }){
         value : initial.height
     })
 
-    sliderHeight.state$ = sliderHeight.component.state$
-        .map(state => ({ height: state.value }))
-        .startWith({ height: initial.height });
+    const stateWeight$ = sliderWeight$
+        .map(component => component.state$)
+        .flatten()
+        .map(state => ({ weight: state.value }));
 
-    sliderHeight.vnode$ = sliderHeight.component.DOM
+    const stateHeight$ = sliderHeight$
+        .map(component => component.state$)
+        .flatten()
+        .map(state => ({ height: state.value }));
+
+    const state$ = $
+        .merge(stateHeight$, stateWeight$)
+        .fold((state, cur) => Object.assign(state, cur), initial)
+        // Calculate BMI
+        .map(state => ({
+            ...state,
+            bmi: CalculateBMI({ height: state.height, weight: state.weight })
+        }));
+
+    const vnodeWeight$ = sliderWeight$
+        .map(component => component.DOM)
+        .flatten()
+        .map(vnode => ({ SliderWeight: () => vnode }));
+
+    const vnodeHeight$ = sliderHeight$
+        .map(component => component.DOM)
+        .flatten()
         .map(vnode => ({ SliderHeight: () => vnode }));
 
     const vnode$ = $
-        .combine(sliderHeight.vnode$, sliderWeight.vnode$)
+        .combine(vnodeHeight$, vnodeWeight$)
         .map(([sliderHeight, sliderWeight]) => {
             return Object.assign({}, sliderHeight, sliderWeight);
-        })
-
-    const state$ = $
-        .merge(sliderWeight.state$, sliderHeight.state$)
-        .fold((state, curr) => Object.assign(state, curr), { bmi: initial.bmi })
-        .map(state => {
-            state.bmi = CalculateBMI({
-                height: state.height,
-                weight: state.weight
-            });
-            return state;
         });
 
-    return { vnode$, state$ }
+    return { state$, vnode$ };
 }

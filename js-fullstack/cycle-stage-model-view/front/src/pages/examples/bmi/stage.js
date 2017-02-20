@@ -1,11 +1,11 @@
 import $ from 'xstream';
 
-import Slider from '../../../components/examples/slider';
+import {Component} from '../../../helpers/smv';
 
 export default function Stage(source){
 
     const component = {};
-    component.slider = props => Slider(Object.assign({ props: $.of(props) }, source));
+    component.slider = Component({ source, path: 'components/examples/slider' });
 
     const intent  = {};
     intent.click$ = source.DOM
