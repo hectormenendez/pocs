@@ -4,7 +4,12 @@ export default function Model({ intent, component }){
 
     const navigation = {};
 
-    navigation.component$ = component.navigation({ hola: 'mundo' });
+    navigation.component$ = component.navigation({
+        title: 'Money',
+        opts : [
+            { title: 'Test', href:'/hola/mundo' },
+        ]
+    });
 
     navigation.state$ = navigation.component$
         .map(component => component.state$)
