@@ -5,7 +5,7 @@ export default state => <section>
     <nav role="navigation" className={Style.navigation}>
 
         {/* Title bar */}
-        <h1>Money</h1>
+        <h1>{state.title}</h1>
 
         {/* Hamburguer Icon */}
         <input type="checkbox"/>
@@ -17,9 +17,9 @@ export default state => <section>
 
         {/* The actual menu */}
         <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Home</a></li>
+            {state.opts.map(opt => <li>
+                <a href={opt.href}>{opt.title}</a>
+            </li>)}
         </ul>
     </nav>
 </section>
