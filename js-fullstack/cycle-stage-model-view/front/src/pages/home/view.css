@@ -1,155 +1,47 @@
-:root {
-    --navigation-size        : 2.5rem;
-    --navigation-color-fg    : #dcdcdc;
-    --navigation-color-bg    : #4d4e4e;
-    --navigation-cont-scale  : 0.7;
-    --navigation-cont-size   : calc(var(--navigation-size) * var(--navigation-cont-scale));
-    --navigation-cont-margin : calc(var(--navigation-size) * ((1 - var(--navigation-cont-scale)) / 2));
-    --navigation-icon-space  : calc(var(--navigation-cont-size) / 7.0);
-}
-
-:local .navigation {
-    position    : relative;
-    user-select : none;
-    background: var(--navigation-color-bg);
-
-    /**
-     * TITLE BAR
-     * This defines the height for the whole navbar
-     */
-    & > h1 {
-        display: inline-block;
-        line-height : var(--navigation-cont-size);
-        margin      : var(--navigation-cont-margin);
-        margin-left : calc(1.5 * var(--navigation-cont-margin));
-        color       : var(--navigation-color-fg);
-
-        font-size: var(--navigation-cont-size);
-        text-shadow: 2px 2px 0 color(var(--navigation-color-bg) blackness(90%))
-    }
-
-    /**
-     * THE UNCHECKED HAMBURGUER ICON
-     * The tipical icon, prepared for transitioning into an "x"
-     */
-    & > aside {
-        position : absolute;
-        z-index  : 0;
-        right    : 0;
-        top      : 0;
-        width        : var(--navigation-cont-size);
-        height       : var(--navigation-cont-size);
-        margin       : var(--navigation-cont-margin);
-        margin-right : calc(1.5 * var(--navigation-cont-margin));
-
-        & > span {
-            z-index  : 1;
-            display  : block;
-            position : relative;
-            width            : 100%;
-            height           : var(--navigation-icon-space);
-            border-radius    : calc(var(--navigation-icon-space) / 2);
-            background       : var(--navigation-color-fg);
-            transform-origin : 0 calc(var(--navigation-icon-space) / 2);
-            transition       :
-                transform  0.5s  cubic-bezier(0.77, 0.2, 0.05, 1.0),
-                background 0.5s  cubic-bezier(0.77, 0.2, 0.05, 1.0),
-                opacity    0.55s ease;
-
-            &:not(:nth-of-type(2)) {
-                margin: var(--navigation-icon-space) 0;
-            }
-        }
-    }
-
-    /**
-     * THE UNCHECKED MENU
-     * The hidden menu, prepared to transition into screen
-     */
-    & > ul {
-        display  : block;
-        position : absolute;
-        right    : -100%;
-        overflow                  : hidden;
-        list-style                : none;
-        margin                    : 0;
-        width                     : 50%;
-        padding                   : var(--navigation-cont-margin) 0;
-        border-bottom-left-radius : var(--navigation-cont-margin);
-        background                : color(var(--navigation-color-bg) lightness(33%));
-        transition                : right 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
-        box-shadow                :
-            var(--navigation-cont-margin)
-            var(--navigation-cont-margin)
-            var(--navigation-cont-margin)
-            color(var(--navigation-color-bg) alpha(50%) blackness(80%));
-        border-top :
-            1px solid color(var(--navigation-color-bg) lightness(40%));
-
-        & > li,
-        & > li > a {
-            display: block;
-            line-height: var(--navigation-cont-size);
-        }
-
-        & > li > a {
-            padding-left: calc(var(--navigation-cont-margin) * 2);
-            text-decoration: none;
-            color     : var(--navigation-color-fg);
-
-            &:hover {
-                background: var(--navigation-color-fg);
-                color     : var(--navigation-color-bg);
-            }
-        }
-    }
-
-    /**
-     * TRIGGER CHECKBOX
-     * Used to trigger the "checked" state so we can show/hide the menu
-     */
-    & > input {
-        z-index  : 1;
-        display  : block;
-        position : absolute;
-        right    : 0;
-        top      : 0;
-        opacity :  0;
-        width   :  var(--navigation-size);
-        height  :  var(--navigation-size);
-
-        /**
-         * THE CHECKED HAMBURGUER ICON
-         * The transitions needed for the hamburguer icon to convert into an "x"
-         */
-        &:checked ~ aside > span {
-            &:nth-of-type(1){
-                transform:
-                    rotate(45deg)
-                    translate(
-                        calc(var(--navigation-icon-space) /  2),
-                        calc(var(--navigation-icon-space) * -1)
-                    );
-            }
-            &:nth-of-type(2){
-                opacity: 0;
-            }
-            &:nth-of-type(3){
-                transform:
-                    rotate(-45deg)
-                    translate(
-                        calc(var(--navigation-icon-space) /2),
-                        var(--navigation-icon-space)
-                    );
-            }
-        }
-
-        /**
-         * THE CHECKED MENU
-         * The menu showing in all its glory.
-         */
-        &:checked ~ ul {
-            right: 0;
-        }
+:global {
+    .tester {
+        background: red;
     }
 }
+
+:local {
+    .tester {
+        color: blue;
+    }
+}
+/* :local .table { */
+
+    /* table { */
+    /*     @extend */
+    /*         .c-text, */
+    /*         .c-table, */
+    /*         .c-table--striped; */
+
+    /*     & caption { */
+    /*         @extend .c-table__caption; */
+    /*     } */
+
+    /*     & thead { */
+    /*         @extend .c-table__head; */
+
+    /*     } */
+
+    /*     & thead > tr { */
+    /*         @extend .c-table__row, .c-table__row--heading; */
+    /*     } */
+
+    /*     & tbody { */
+    /*         @extend .c-table__body; */
+    /*     } */
+
+    /*     & tr { */
+    /*         @extend .c-table__row; */
+    /*     } */
+
+    /*     & th, */
+    /*     & td { */
+    /*         @extend .c-table__cell; */
+    /*     } */
+    /* } */
+/* } */
+

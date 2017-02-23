@@ -9,9 +9,11 @@
 }
 
 :local .navigation {
-    position    : relative;
-    user-select : none;
-    background: var(--navigation-color-bg);
+    & {
+        position    : relative;
+        user-select : none;
+        background: var(--navigation-color-bg);
+    }
 
     /**
      * TITLE BAR
