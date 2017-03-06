@@ -2,6 +2,9 @@ const Html = require('html-webpack-plugin');
 
 module.exports = conf => ({
 
+    // Defines the target environment for compilation.
+    target: 'web',
+
     // The context is an absolute string to a directory containing the entry files
     context: conf.path('src'),
 
@@ -35,13 +38,13 @@ module.exports = conf => ({
             {
                 test    : /\.html$/,
                 loader  : 'html-loader',
-                exclude : /node_modules/
+                include : [ conf.path('src/index.html') ]
             },
             // Always apply babel transformations
             {
                 test    : /\.jsx?$/,
                 loader  : 'babel-loader',
-                exclude : /node_modules/,
+                include : [ conf.path('src') ],
                 query   : {
                     cacheDirectory: true
                 }
