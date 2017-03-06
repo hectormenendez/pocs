@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node webpack.server",
     "build": "rimraf out &&  node webpack.build",
-    "nodemon": "nodemon"
+    "nodemon": "nodemon",
+    "postcss-debug": "nodemon -x 'postcss-debug -c ./postcss.debug.js `find ./src -type f -name *.css`'"
   },
   "author": "Héctor Menéndez <etor@gik.mx>",
   "license": "UNLICENSED",
@@ -34,7 +35,7 @@
     "nodemon": "^1.11.0",
     "postcss": "^5.2.11",
     "postcss-cssnext": "^2.9.0",
-    "postcss-extend": "^1.0.5",
+    "postcss-debug": "^0.4.2",
     "postcss-global-import": "^1.0.0",
     "postcss-import": "^9.1.0",
     "postcss-inherit": "^4.0.3",
