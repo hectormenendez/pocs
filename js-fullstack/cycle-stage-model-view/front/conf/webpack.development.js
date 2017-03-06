@@ -23,9 +23,9 @@ module.exports = conf => ({
     module: {
         rules: [
             {
-                test: /\.css$/,
-                exclude: /node_modules/,
-                use : [
+                test    : /\.css$/,
+                include : [ conf.path('src') ],
+                use     : [
                     // Inlines styles
                     {
                         loader  : 'style-loader',
@@ -42,7 +42,7 @@ module.exports = conf => ({
                             import: true,
                             url   : true,
                             // Use local modules
-                            modules        : true,
+                            modules : true,
                             localIdentName : '[path][name]__[local]',
                             // source-mapping and minification
                             sourceMap: true,
