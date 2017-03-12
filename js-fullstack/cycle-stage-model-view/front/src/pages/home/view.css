@@ -1,47 +1,43 @@
-:global {
-    .tester {
-        background: red;
-    }
+/* @import '../../ui'; */
+@global-import 'blaze/dist/components.tables.min.css';
+/* @global-import 'blaze/dist/components.buttons.min.css'; */
+
+:root {
 }
 
-:local {
-    .tester {
-        color: blue;
+:local .ui-table {
+    overflow:hidden;
+    background: blue;
+
+    & > table {
+        @inherit .c-table;
+
+        & > thead {
+            @inherit .c-table__head;
+
+            & > tr {
+                @inherit .c-table__row;
+                background: red;
+
+                & > th {
+                    @inherit .c-table__cell;
+                }
+            }
+
+        }
+
+        & > tbody {
+            @inherit .c-table__body;
+
+            & > tr {
+                @inherit .c-table__row;
+
+                & > td {
+                    background: orange;
+                    @inherit .c-table__cell;
+                }
+            }
+
+        }
     }
 }
-/* :local .table { */
-
-    /* table { */
-    /*     @extend */
-    /*         .c-text, */
-    /*         .c-table, */
-    /*         .c-table--striped; */
-
-    /*     & caption { */
-    /*         @extend .c-table__caption; */
-    /*     } */
-
-    /*     & thead { */
-    /*         @extend .c-table__head; */
-
-    /*     } */
-
-    /*     & thead > tr { */
-    /*         @extend .c-table__row, .c-table__row--heading; */
-    /*     } */
-
-    /*     & tbody { */
-    /*         @extend .c-table__body; */
-    /*     } */
-
-    /*     & tr { */
-    /*         @extend .c-table__row; */
-    /*     } */
-
-    /*     & th, */
-    /*     & td { */
-    /*         @extend .c-table__cell; */
-    /*     } */
-    /* } */
-/* } */
-

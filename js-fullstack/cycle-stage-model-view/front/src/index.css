@@ -1,8 +1,5 @@
-/* @import 'normalize.css'; */
+@import 'normalize.css';
 
-:global {
-
-    & body {
-        background: deeppink;
-    }
+body {
+    background: deeppink;
 }
