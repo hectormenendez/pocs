@@ -1,9 +1,9 @@
-# Node.JS baseline
+# Ejemplo de aplicación Node
 
 Simple ejemplo de una aplicación node con pruebas unitarias y lectura de argumentos
 desde la linea de comandos.
 
-### Instalacción
+### Instalación
 
 #### Node
 ```bash
