@@ -22,13 +22,22 @@ export default function SMV(path){
         .last()
         .map(({Stage, Model, View}) => sources => {
             function main (sources){
+                // Set the stage using the sources.
                 const stage = Stage(sources);
-                stage.sink  = stage.sink || {};
-                const { state$, vnode$ } = Model(stage);
-                const vtree$ = state$
-                    .map(state => vnode$.map(vnode => View(state, vnode)))
+                // Model data using the stage, obtaining the sinks.
+                // Note: Sinks can alse be set on stage
+                //       (but would be overriden by the ones returned by the model)
+                const sinks = Object.assign(stage.sink || {}, Model(stage))
+                // A state sink must always exist.
+                const {State} = sinks;
+                if (!State) throw new Error('Expecting a State Stream');
+                // Generate the view once the State has been resolved.
+                // if a DOM sink is sent, then resolve it first and then generate.
+                if (!sinks.DOM) sinks.DOM = $.of(null);
+                const DOM = State
+                    .map(state => sinks.DOM.map(vtree => View(state, vtree)))
                     .flatten();
-                return Object.assign({ DOM: vtree$, state$ }, stage.sink);
+                return { ...sinks, DOM };
             }
             return Isolate(main)(sources);
         });
