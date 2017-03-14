@@ -7,13 +7,13 @@ export default function Model({intent, component}){
     xtatic.vnode$ = xtatic.component.DOM
         .map(vnode => ({ Static: () => vnode }));
 
-    const vnode$ = $
+    const DOM = $
         .combine(xtatic.vnode$)
         .map(([Static]) => {
             return Object.assign({}, Static);
         });
 
-    const state$ = $.of(null);
+    const State = $.of(null);
 
-    return { state$, vnode$ };
+    return { State, DOM };
 }

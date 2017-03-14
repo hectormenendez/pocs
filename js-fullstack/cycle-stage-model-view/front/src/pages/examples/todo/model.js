@@ -14,12 +14,12 @@ export default function Model({ intent }){
     const deleted$ = intent.delete$
         .map(intent => todos => todos.filter((todo,i) => i !== intent.payload));
 
-    const state$ = $
+    const State = $
         .merge(added$, toggled$, deleted$)
         .fold((todos, fn) => fn(todos), [])
         // .debug()
 
-    const vnode$ = $.of({});
 
-    return { state$, vnode$ }
+    return { State }
 }
+

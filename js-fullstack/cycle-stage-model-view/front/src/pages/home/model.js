@@ -1,28 +1,41 @@
 import $ from 'xstream';
 
-export default function Model({ intent, component }){
+export default function Model({ intent, component, sink }){
 
-    const navigation = {};
+    const initial = {};
 
-    navigation.component$ = component.navigation({
+    const navigation$ = component.navigation({
         title: 'Money',
-        opts : [
-            { title: 'Test', href:'/hola/mundo' },
+        items: [
+            { title: 'router', href:'#/examples/router' },
+            { title: 'bmi', href:'#/examples/bmi' },
+            { title: 'socket', href:'#/examples/socket' },
+            { title: 'todo', href:'#/examples/todo' },
+            { title: 'Hola', href:'http://google.com' },
         ]
     });
 
-    navigation.state$ = navigation.component$
-        .map(component => component.state$)
+    // Prepare the navigation component sinks
+    const navigation = {};
+    navigation.State = navigation$
+        .map(component => component.State)
         .flatten()
         .map(state => ({ navigation: state }));
 
-    navigation.vnode$ = navigation.component$
+    navigation.DOM = navigation$
         .map(component => component.DOM)
         .flatten()
-        .map(vnode => ({ Navigation: () => vnode }));
+        .map(vtree => ({ Navigation: () => vtree }));
 
-    const state$ = navigation.state$.startWith({});
-    const vnode$ = navigation.vnode$;
+    navigation.Router = navigation$
+        .map(component => component.Router)
+        .flatten()
 
-    return { state$, vnode$ }
+    // navigation.Router.subscribe({ error: e => {}, next: router => { debugger } });
+    // Return the sinks
+    return {
+        State: $.merge($.of(initial), navigation.State),
+        DOM: navigation.DOM,
+        Router: $.merge(sink.Router, navigation.Router),
+    }
 }

@@ -17,8 +17,8 @@ export default state => <section>
 
         {/* The actual menu */}
         <ul>
-            {state.opts.map(opt => <li>
-                <a href={opt.href}>{opt.title}</a>
+            {state.items.map(item => <li>
+                <a href={item.href}>{item.title}</a>
             </li>)}
         </ul>
     </nav>

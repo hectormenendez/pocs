@@ -11,7 +11,7 @@ export default function Model({ intent, props$ }){
         max  : 100,
     };
 
-    const state$ = props$
+    const State = props$
         // Props validation,
         .debug(props => Validate(props, {
             value: [Number],
@@ -25,5 +25,5 @@ export default function Model({ intent, props$ }){
         )
         .flatten()
 
-    return { state$, vnode$: $.of(null) };
+    return { State };
 }

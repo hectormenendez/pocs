@@ -37,7 +37,7 @@ export default function Model({ intent, component }){
         .flatten()
         .map(state => ({ height: state.value }));
 
-    const state$ = $
+    const State = $
         .merge(stateHeight$, stateWeight$)
         .fold((state, cur) => Object.assign(state, cur), initial)
         // Calculate BMI
@@ -56,11 +56,11 @@ export default function Model({ intent, component }){
         .flatten()
         .map(vnode => ({ SliderHeight: () => vnode }));
 
-    const vnode$ = $
+    const DOM  = $
         .combine(vnodeHeight$, vnodeWeight$)
         .map(([sliderHeight, sliderWeight]) => {
             return Object.assign({}, sliderHeight, sliderWeight);
         });
 
-    return { state$, vnode$ };
+    return { State, DOM  };
 }

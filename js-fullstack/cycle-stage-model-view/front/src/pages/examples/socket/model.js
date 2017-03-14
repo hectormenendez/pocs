@@ -36,7 +36,7 @@ export default function Model({ intent, data, sink }){
     state.userSubmit$ = intent.userSubmit$
         .map(user => ({ user: '' }));
 
-    const state$ = $
+    const State = $
         .merge(...Object.keys(state).map(k => state[k]))
         .fold((state, cur) => Object.assign(state, cur), initial)
         // Post operations to state
@@ -45,5 +45,5 @@ export default function Model({ intent, data, sink }){
             creationDisabled: !(state.user.length > 3)
         }));
 
-    return { vnode$: $.of({}) , state$ }
+    return { State }
 }
