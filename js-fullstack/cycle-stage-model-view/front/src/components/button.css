@@ -1,0 +1,28 @@
+@global-import 'blaze/dist/components.buttons.min.css';
+
+:root {
+    /* Buttons */
+    --ui-button {
+        @inherit
+            .c-button,
+            .c-button--block;
+
+        /* Enabled */
+        &:not(:disabled){
+            &:hover { @inherit .c-button:not(:disabled):hover; }
+            &:focus { @inherit .c-button:not(:disabled):focus; }
+            &:active { @inherit .c-button:not(:disabled):active; }
+        }
+
+        /* Disabled */
+        &:disabled,
+        &.ui-button--disabled {
+            @inherit .c-button:disabled;
+        }
+
+
+        &.ui-button--active {
+            @inherit .c-button.c-button--active;
+        }
+    }
+}

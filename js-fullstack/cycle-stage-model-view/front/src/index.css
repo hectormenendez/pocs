@@ -1,5 +1,2 @@
 @import 'normalize.css';
-
-body {
-    background: deeppink;
-}
+@import 'blaze/dist/generics.global.min.css';
