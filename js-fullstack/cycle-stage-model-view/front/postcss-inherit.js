@@ -46,7 +46,6 @@ module.exports = PostCss.plugin('postcss-inherit', options => root => {
             // make sure the parameters don't contain unneeded spaces
             .split(',')
             .map(param => param.trim())
-            .reverse()
             // find exact matches
             .map(param => globals.filter(global => global.selector == param))
             .reduce((acc, cur) => acc.concat(cur), [])
