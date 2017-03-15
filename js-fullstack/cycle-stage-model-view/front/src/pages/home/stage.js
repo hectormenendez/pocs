@@ -1,10 +1,10 @@
 import $ from 'xstream';
-import {Component} from '../../helpers/smv';
+import Navigation from '../../components/navigation';
 
 export default function Stage(source){
 
     const component = {};
-    component.navigation = Component({ source, path:'components/navigation' });
+    component.navigation = Navigation(source);
 
     const intent = {};
     intent.click$ = source.DOM

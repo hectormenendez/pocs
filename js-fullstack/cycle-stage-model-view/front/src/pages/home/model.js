@@ -4,7 +4,8 @@ export default function Model({ intent, component, sink }){
 
     const initial = {};
 
-    const navigation$ = component.navigation({
+    // Configure the Navigation component and get its sinks.
+    const navigation = component.navigation({
         title: 'Money',
         items: [
             { title: 'router', href:'#/examples/router' },
@@ -15,23 +16,6 @@ export default function Model({ intent, component, sink }){
         ]
     });
 
-    // Prepare the navigation component sinks
-    const navigation = {};
-    navigation.State = navigation$
-        .map(component => component.State)
-        .flatten()
-        .map(state => ({ navigation: state }));
-
-    navigation.DOM = navigation$
-        .map(component => component.DOM)
-        .flatten()
-        .map(vtree => ({ Navigation: () => vtree }));
-
-    navigation.Router = navigation$
-        .map(component => component.Router)
-        .flatten()
-
-    // navigation.Router.subscribe({ error: e => {}, next: router => { debugger } });
     // Return the sinks
     return {
         State: $.merge($.of(initial), navigation.State),
