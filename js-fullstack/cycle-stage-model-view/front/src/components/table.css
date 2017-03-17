@@ -1,0 +1,27 @@
+@global-import 'blaze/dist/components.tables.min.css';
+
+:root {
+
+    --ui-table {
+        @inherit .c-table;
+
+        /* Table header */
+        & > header {
+            @inherit .c-table__row;
+
+            & > span{
+                @inherit
+                    .c-table__cell,
+                    .c-table__row--heading .c-table__cell;
+            }
+        }
+
+        /* Table rows */
+        & > article {
+            @inherit .c-table__row;
+            & > span {
+                @inherit .c-table__cell;
+            }
+        }
+    }
+}
