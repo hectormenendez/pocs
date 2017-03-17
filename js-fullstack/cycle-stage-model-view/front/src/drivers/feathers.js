@@ -18,36 +18,9 @@ export default function (socket){
             .configure(Feathers.hooks())
             .configure(Feathers.socketio(socket));
 
-        // Handles errors on the sink$ listener
-        const error = err => { throw new Error(`Feathers : ${err.message}`) };
-
-        // Handles success on the sink$ listener
-        const next = ({service, method, response}) => event
-            .emit(`${service}:${method}`, response)
-
-        // Handles sources (events result) selection.
-        const select = selector => {
-            Validate(selector, { service:[String], method:[String] });
-            const { service, method } = selector;
-            return $.create({
-                stop  : () => {},
-                start : listener => event
-                    .on(`${service}:${method}`, response => listener.next(response))
-            })
-        };
-
-        // Handles sources (remote events) selection.
-        const on = event => {
-            Validate(event, { service:[String], method: [String] });
-            const service = app.service(event.service);
-            return $.create({
-                stop  : () => {},
-                start : listener => service
-                    .on(event.method, response => listener.next(response))
-            });
-        };
-
-        // The sink stream that will handle the event queue
+        // Process the received sink stream.
+        // - emits the specified method on the socket service
+        // - triggers a local event that can be later selected from the sources.
         sink$
             .map(sink => {
                 Validate(sink, { service:[String], method:[String], args:Array });
@@ -61,9 +34,40 @@ export default function (socket){
                     .map(response => ({ ...sink, response }));
             })
             .flatten()
-            .addListener({ error, next })
+            .addListener({
+                // just throw the errors if any.
+                error: err => { throw new err },
+                // emit the corresponding event
+                next: ({service, method, response}) => event
+                    .emit(`${service}:${method}`, response),
+            });
 
         // The source stream that will handle the intents
-        return { app, select, on };
+        return {
+            // make this 'hackable', expose the application.
+            app,
+            // Handles selection (for local events)
+            select: selector => {
+                Validate(selector, { service:[String], method:[String] });
+                const { service, method } = selector;
+                function start(listener){
+                    return event.on(`${service}:${method}`, function(response){
+                        return listener.next(response);
+                    })
+                }
+                return $.create({ start , stop:()=>{} }); // stop won't happen
+            },
+            // Handles sources selection. (for remote events)
+            on: event => {
+                Validate(event, { service:[String], method:[String] });
+                const service = app.service(event.service);
+                function start(listener){
+                    return service.on(event.method, function(response){
+                        return listener.next(response);
+                    })
+                }
+                return $.create({ start, stop: ()=>{} }) // stop won't happen
+            },
+        };
     };
 }
