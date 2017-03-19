@@ -36,7 +36,7 @@ export default function (socket){
             .flatten()
             .addListener({
                 // just throw the errors if any.
-                error: err => { throw new err },
+                error: err => { throw err },
                 // emit the corresponding event
                 next: ({service, method, response}) => event
                     .emit(`${service}:${method}`, response),
