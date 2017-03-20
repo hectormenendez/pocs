@@ -1,8 +1,7 @@
 import {html as Html} from 'snabbdom-jsx';
 import Style from './view.css';
 
-export default ({ form, users})=>
-<section>
+export default ({ form, table }) => <section>
 
     <form className={Style.form}>
         {form.fieldset.map(({ legend, fields })=>
@@ -18,23 +17,31 @@ export default ({ form, users})=>
         <button disabled={form.ready}>Crear</button>
     </form>
 
-    {!users.length? '' : <section className={Style.table}>
+    <section className={Style.table}>
         <header>
-            <span>Creación</span>
-            <span>Nombre</span>
-            <span>Alias</span>
-            <span>Acción</span>
+            {table.head.map(head =>
+                <span
+                    attrs-data-type={head.type}
+                    attrs-data-name={head.name}>
+                    {head.legend}
+                </span>
+            )}
         </header>
-        { users.map(user =>
+        {table.data.map(user =>
             <article attrs-data-id={user._id}>
-                <span>{user.dateCreated}</span>
-                <span>{user.nameFull}</span>
-                <span>{user.userName}</span>
+                {table.head
+                    .filter(field => field.type == 'data')
+                    .map(field =>
+                        <span attrs={field.attrs} attrs-data-name={field.name}>
+                            {user[field.name]}
+                        </span>
+                    )
+                }
                 <span>
                     <button attrs-data-confirm="¿Borrar usuario?">x</button>
                 </span>
             </article>
         )}
-    </section>}
+    </section>
 
 </section>

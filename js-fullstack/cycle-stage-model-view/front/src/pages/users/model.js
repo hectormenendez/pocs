@@ -1,166 +1,213 @@
 import $ from 'xstream';
 
-const fieldset = [
-    {
-        legend: 'Nombre',
-        fields: [
-            {
-                type:'text',
-                name:'nameFirst',
-                placeholder:'Nombre(s)',
-                pattern: '([a-záéíóúüñ]{3,} ?){1,3}',
-                required: true,
-                value: null,
-            },
-            {
-                type:'text',
-                name:'nameLast',
-                placeholder:'Apellido(s)',
-                pattern: '([a-záéíóúüñ]{3,} ?){1,3}',
-                required:true,
-                value:null,
-            },
-        ]
-    },
-    {
-        legend: 'Usuario',
-        fields: [
-            {
-                type:'text',
-                name:'userName',
-                placeholder:'Nombre de usuario',
-                pattern: '[a-z][a-z0-9_.]{3,}',
-                required:true,
-                value:null,
-            },
-            {
-                type:'password',
-                name:'userPassword',
-                placeholder:'Contraseña',
-                autocomplete:'new-password',
-                required: true,
-                value:null
-            },
-        ]
-    }
-];
+
 
 export default function Model({ socket, intent }){
 
-    const state = {}; // -----------------------------------------------------------------
-
-    /*
+    /*************************************************************************************
      * The Creation form
-     */
-    state.form$ = intent.userCreate$
-        // Start with default data, and modify it on each intent.
-        .fold((form, data) => {
-            // Traverse fields to find invalids.
-            form.fieldset = form.fieldset.map(({ legend, fields }) => ({
-                legend,
-                fields: fields.map(field => {
-                    // Keep value updated
-                    field.value = data[field.name];
-                    // Determine if the value is well-formatted or required
-                    field.invalid = false;
-                    if (field.required && (!field.value || !field.value.length))
-                        field.invalid = 'requerido';
-                    else if (field.pattern) {
-                        const rx = new RegExp('^' + field.pattern.trim() + '$', 'i');
-                        const match = field.value.trim().match(rx);
-                        if (!match) field.invalid = 'formato';
-                    }
-                    return field;
-                })
-            }));
-            // The form is ready to be sent.
-            form.ready = !form.fieldset
-                .map(({ fields }) => fields.map(({ invalid }) => !!invalid))
-                .reduce((acc, cur) => acc.concat(cur), [])
-                .filter(Boolean)
-                .length
-            return form;
-        }, { ready:false, fieldset })
-        // when a user is created, reset the form.
-        .map(form => socket.userCreated$
-            .mapTo({
+     ************************************************************************************/
+
+    const form = {};
+
+    // The initial state
+    form.state = {
+        ready: false,
+        fieldset: [
+            {
+                legend: 'Datos Personales',
+                fields: [
+                    {
+                        type: 'text',
+                        name: 'namefirst',
+                        placeholder: 'Nombre(s)',
+                        pattern: '([a-záéíóúüñ]{3,} ?){1,3}',
+                        required: true,
+                        value: null,
+                    }, {
+                        type: 'text',
+                        name: 'namelast',
+                        placeholder: 'Apellido(s)',
+                        pattern: '([a-záéíóúüñ]{3,} ?){1,3}',
+                        required: true,
+                        value: null,
+                    },
+                ]
+            }, {
+                legend: 'Usuario',
+                fields: [
+                    {
+                        type: 'email',
+                        name: 'email',
+                        placeholder: 'Correo Electrónico',
+                        pattern: '.+@.+',
+                        required: true,
+                        value: null,
+                    }, {
+                        type: 'text',
+                        name: 'alias',
+                        placeholder: 'Alias',
+                        pattern: '[a-z][a-z0-9_.]{3,}',
+                        required: true,
+                        value: null,
+                    }, {
+                        type: 'password',
+                        name: 'password',
+                        placeholder: 'Contraseña',
+                        autocomplete: 'new-password',
+                        required: true,
+                        value: null
+                    },
+                ]
+            }
+        ]
+    };
+
+    // The actual processing of the form data.
+    form.state$ = $
+        .merge(
+            // The intention of creating a user.
+            intent.userCreate$.map(data => form => {
+                // Traverse fields to find invalids.
+                // if found, mark them with an attribute.
+                form.fieldset = form.fieldset.map(fieldset => ({
+                    ...fieldset,
+                    fields: fieldset.fields.map(field => {
+                        // Update value from arriving data.
+                        field.value = data[field.name];
+                        // Determine if the value is well-formatted or required
+                        field.invalid = false;
+                        if (field.required && (!field.value || !field.value.length))
+                            field.invalid = 'requerido';
+                        else if (field.pattern) {
+                            const rx = new RegExp('^' + field.pattern.trim() + '$', 'i');
+                            if (!field.value.trim().match(rx)) field.invalid = 'formato';
+                        }
+                        return field;
+                    })
+                }));
+                // Determine if the form is ready to be sent. (no invalid fields found)
+                form.ready = !form.fieldset
+                    .map(({ fields }) => fields.map(({ invalid }) => !!invalid))
+                    .reduce((acc, cur) => acc.concat(cur), [])
+                    .filter(Boolean)
+                    .length
+                return form;
+            }),
+            // When the user is actually created, reset the form.
+            socket.userCreated$.map(() => form => ({
                 ...form,
-                ready:false,
+                ready: false,
                 fieldset: form.fieldset.map(fieldset => ({
                     ...fieldset,
-                    fields: fieldset.fields.map(field => ({ ...field, value:'' }))
+                    fields: fieldset.fields.map(field => ({ ...field, value: '' }))
                 }))
-            })
-            .startWith(form)
+            }))
         )
-        .flatten()
+        .fold((state, operator) => operator(state), form.state);
 
-    /*
+    /*************************************************************************************
      * The users table
-     */
-    state.users$ = socket.users$
-        // Apply operattors to the users table whenever a socket event happens.
-        .map(users => $
-            .merge(
-                // when an user is deleted, filter out given id.
-                socket.userDeleted$.map(id => users => users.filter(({_id})=> _id != id)),
-                // when an user is created, prepend it to the users.
-                socket.userCreated$.map(user => users => [user].concat(users))
-            )
-            .fold((result, op) => op(result), users)
+     ************************************************************************************/
+
+    const table = {};
+
+    table.state = {
+        head: [
+            {
+                name: 'alias',
+                legend: 'Alias',
+                type: 'data',
+                attrs: { 'data-editable': true },
+            }, {
+                name: 'namefirst',
+                legend: 'Nombre',
+                type: 'data',
+                attrs: { 'data-editable': true },
+            }, {
+                name: 'namelast',
+                legend: 'Apellido',
+                type: 'data',
+                attrs: { 'data-editable': true },
+            }, {
+                name: 'email',
+                legend: 'Correo',
+                type: 'data',
+                attrs: { 'data-editable': true },
+            }, {
+                name: 'actions',
+                legend: 'Acciones',
+                type: 'nodes'
+            },
+        ],
+        data: []
+    };
+
+    table.state$ = $
+        .merge(
+            // The intial load of users. A simple return.
+            socket.users$.map(data => table => ({ ...table, data })),
+            // When user deleted, filter it out from the array using its ID.
+            socket.userDeleted$.map(id => table => ({
+                ...table,
+                data: table.data.filter(user => user._id != id)
+            })),
+            // When user created. prepend it to the array.
+            socket.userCreated$.map(user => table => ({
+                ...table,
+                data: [user].concat(table.data)
+            }))
         )
-        .flatten()
-        // format all users for table display
-        .map(users => users.map(user => {
-            if (!user.nameFirst || !user.nameLast) user.nameFull = '{?}';
-            else user.nameFull = `${user.nameFirst} ${user.nameLast}`
-            if (!user.dateCreated) user.dateCreated = '{?}';
-            return user;
-        }))
-        .startWith([])
+        .fold((state, operator) => operator(state), table.state);
+
+    /*************************************************************************************
+     * The State stream: Data that the view will receive.
+     ************************************************************************************/
 
     const State = $
         .combine(
-            state.users$,
-            state.form$
+            form.state$,
+            table.state$
         )
-        .map(([ users, form ]) => ({ users, form }))
-        .debug()
+        .map(([ form, table ]) => ({ form, table }))
 
+    /*************************************************************************************
+     * The Feathers stream: Operations for the socket server.
+     ************************************************************************************/
 
     const feathers = {}; // --------------------------------------------------------------
 
     // Requests the initial bunch of users.
     feathers.users$ = $.of({
-        service:'users',
-        method:'find',
-        args:[{ query:{ $limit: Infinity } }]
+        service: 'users',
+        method: 'find',
+        args: [{ query:{ $limit: Infinity } }]
     });
 
     // Request delete a user
     feathers.userDelete$ = intent.userDelete$
         .map(id => ({
-            service:'users',
-            method:'remove',
-            args:[id, { cascade:true }]
+            service: 'users',
+            method: 'remove',
+            args: [id, { cascade:true }]
         }));
 
     // Request the creation of a user
-    feathers.userCreate$ = state.form$
+    feathers.userCreate$ = form.state$
         // only when the form is ready
         .filter(form => form.ready)
         // find all fields, convert it to an object, append the creation date.
         .map(({fieldset}) => fieldset
-            .map(({fields}) => fields.map(({name, value}) => ({ [name]:value})))
+            .map(({fields}) => fields.map(({name, value}) => ({ [name]: value})))
             .reduce((acc,cur) => acc.concat(cur), [])
             .reduce((acc,cur) => Object.assign(acc, cur), {
-                dateCreated: new Date().getTime() / 1000
+                datecreated: new Date().getTime() / 1000
             })
         )
         .map(user => ({
             service: 'users',
             method: 'create',
-            args:[user]
+            args: [user]
         }));
 
     const Feathers = $
@@ -170,6 +217,9 @@ export default function Model({ socket, intent }){
             feathers.userDelete$
         )
 
+    /*************************************************************************************
+     * Sinks
+     ************************************************************************************/
 
     // -----------------------------------------------------------------------------------
     return { State, Feathers }
