@@ -1,23 +1,26 @@
 import {html as Html} from 'snabbdom-jsx';
 import Style from './view.css';
 
-export default ({ form, table }) => <section>
+export default ({ form, table }) => <section className={Style.users}>
 
     <form className={Style.form}>
-        {form.fieldset.map(({ legend, fields })=>
-            <fieldset>
-                <legend>{ legend }</legend>
-                {fields.map(field =>
-                    <span attrs={field.invalid? {invalid:field.invalid} : {}}>
-                        { Html('input', { ...field, disabled:form.ready }) }
-                    </span>
-                )}
-            </fieldset>
-        )}
+        <h3>{form.legend}</h3>
+        <div>
+            {form.fieldset.map(({ legend, fields })=>
+                <fieldset>
+                    <legend>{ legend }</legend>
+                    {fields.map(field =>
+                        <span attrs={field.invalid? {invalid:field.invalid} : {}}>
+                            { Html('input', { ...field, disabled:form.ready }) }
+                        </span>
+                    )}
+                </fieldset>
+            )}
+        </div>
         <button disabled={form.ready}>Crear</button>
     </form>
-
     <section className={Style.table}>
+        <h3>Lista de usuarios</h3>
         <header>
             {table.head.map(head =>
                 <span
@@ -43,5 +46,4 @@ export default ({ form, table }) => <section>
             </article>
         )}
     </section>
-
 </section>

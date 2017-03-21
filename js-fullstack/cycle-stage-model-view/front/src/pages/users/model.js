@@ -13,6 +13,7 @@ export default function Model({ socket, intent }){
     // The initial state
     form.state = {
         ready: false,
+        legend: 'Crear usuario',
         fieldset: [
             {
                 legend: 'Datos Personales',

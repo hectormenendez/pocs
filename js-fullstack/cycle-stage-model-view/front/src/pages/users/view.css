@@ -1,31 +1,84 @@
 @import '../../components/table.css';
 
+:local .users {
+}
+
 :local .table {
     @apply --ui-table;
+
+    & > h3 {
+        margin:0;
+    }
 }
 
 :local .form {
-    & > fieldset > span {
-        display: inline-block;
-        position: relative;
+    margin-bottom: 1rem;
+    lost-flex-container: row;
 
-        &[invalid]{
-            & > input {
-                border: 1px solid red;
+    & > h3 {
+        margin:0;
+        lost-column: 1 0 flex;
+    }
+
+    & > button {
+        lost-column: 1 0 flex;
+    }
+
+    & > div {
+        lost-column: 1 0 flex;
+        lost-flex-container: row;
+
+        & > fieldset {
+            border:0;
+            padding:0;
+            margin: 0 0 1em 0;
+            lost-column: 1/2 flex;
+            lost-column-cycle: 2; /* row after every 2nd element */
+            lost-flex-container: row;
+
+            & > legend {
+                lost-column: 1 0 flex;
+                padding:0 0 0.5em 0;
             }
-            &:after {
-                display: block;
-                position: absolute;
-                right:0;
-                top: 100%;
-                padding: 0.1em 0.5em;
-                boder-radius: 0.25em;
-                content: attr(invalid);
-                background: red;
-                color:white;
-                font-size: 0.8rem;
-                line-height: 1em;
+
+            & > span {
+                lost-column: 1 0 flex;
+                lost-flex-container: row;
+                margin-bottom: 0.5em;
+
+                &:last-of-type {
+                    margin-bottom:0;
+                }
+
+                & > input {
+                    lost-column: 1 0 flex;
+                }
+
+                &[invalid] {
+                    position: relative;
+
+                    &:after {
+                        display:block;
+                        position:absolute;
+                        right:0;
+                        bottom:0;
+                        font-size:0.75em;
+                        line-height: 0.75em;
+                        overflow:hidden;
+                        padding: 0.15em 0.35em;
+                        background:red;
+                        color:white;
+                        content:attr(invalid);
+                        border-top-left-radius: 0.5em;
+                    }
+
+                    & > input {
+                        border:1px solid red;
+                    }
+                }
             }
+
         }
     }
+
 }
