@@ -57,12 +57,19 @@ export function Router(routes){
         .last();
 }
 
-export function Component({ source, path }){
-    if (!source) throw new Error('Invalid sources');
+export function Component({ sources, path }){
+    if (!sources) throw new Error('Invalid sources');
     if (typeof path != 'string') throw new Error('Invalid path');
-
-    return function(props){
-        return SMV(path)
-            .map(func => func(Object.assign(source, { props$: $.of(props || {}) })))
+    return function(Props){
+        const component$ = SMV(path).map(smv => smv({ ...sources, Props }));
+        // Return an object with dynaminc property getter that returns sink streams.
+        return new Proxy({}, {
+            get(target, key) {
+                return component$
+                    .map(component => component[key])
+                    .filter(Boolean)
+                    .flatten();
+            }
+        });
     }
 }
