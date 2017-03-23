@@ -1,19 +1,18 @@
 import $ from 'xstream';
 
-
-
-export default function Model({ socket, intent }){
+export default function Model({ socket, intent, component }){
 
     /*************************************************************************************
      * The Creation form
      ************************************************************************************/
-
-    const form = {};
-
-    // The initial state
-    form.state = {
-        ready: false,
+    const form = component.form({
         legend: 'Crear usuario',
+        message: {
+            pattern: 'formato',
+            required: 'requerido',
+        },
+        submit: { legend:'Crear' },
+        submitted$: socket.userCreated$,
         fieldset: [
             {
                 legend: 'Datos Personales',
@@ -62,55 +61,11 @@ export default function Model({ socket, intent }){
                 ]
             }
         ]
-    };
-
-    // The actual processing of the form data.
-    form.state$ = $
-        .merge(
-            // The intention of creating a user.
-            intent.userCreate$.map(data => form => {
-                // Traverse fields to find invalids.
-                // if found, mark them with an attribute.
-                form.fieldset = form.fieldset.map(fieldset => ({
-                    ...fieldset,
-                    fields: fieldset.fields.map(field => {
-                        // Update value from arriving data.
-                        field.value = data[field.name];
-                        // Determine if the value is well-formatted or required
-                        field.invalid = false;
-                        if (field.required && (!field.value || !field.value.length))
-                            field.invalid = 'requerido';
-                        else if (field.pattern) {
-                            const rx = new RegExp('^' + field.pattern.trim() + '$', 'i');
-                            if (!field.value.trim().match(rx)) field.invalid = 'formato';
-                        }
-                        return field;
-                    })
-                }));
-                // Determine if the form is ready to be sent. (no invalid fields found)
-                form.ready = !form.fieldset
-                    .map(({ fields }) => fields.map(({ invalid }) => !!invalid))
-                    .reduce((acc, cur) => acc.concat(cur), [])
-                    .filter(Boolean)
-                    .length
-                return form;
-            }),
-            // When the user is actually created, reset the form.
-            socket.userCreated$.map(() => form => ({
-                ...form,
-                ready: false,
-                fieldset: form.fieldset.map(fieldset => ({
-                    ...fieldset,
-                    fields: fieldset.fields.map(field => ({ ...field, value: '' }))
-                }))
-            }))
-        )
-        .fold((state, operator) => operator(state), form.state);
+    });
 
     /*************************************************************************************
      * The users table
      ************************************************************************************/
-
     const table = {};
 
     table.state = {
@@ -162,17 +117,6 @@ export default function Model({ socket, intent }){
         .fold((state, operator) => operator(state), table.state);
 
     /*************************************************************************************
-     * The State stream: Data that the view will receive.
-     ************************************************************************************/
-
-    const State = $
-        .combine(
-            form.state$,
-            table.state$
-        )
-        .map(([ form, table ]) => ({ form, table }))
-
-    /*************************************************************************************
      * The Feathers stream: Operations for the socket server.
      ************************************************************************************/
 
@@ -194,7 +138,7 @@ export default function Model({ socket, intent }){
         }));
 
     // Request the creation of a user
-    feathers.userCreate$ = form.state$
+    feathers.userCreate$ = form.State
         // only when the form is ready
         .filter(form => form.ready)
         // find all fields, convert it to an object, append the creation date.
@@ -221,7 +165,19 @@ export default function Model({ socket, intent }){
     /*************************************************************************************
      * Sinks
      ************************************************************************************/
-
-    // -----------------------------------------------------------------------------------
-    return { State, Feathers }
+    return {
+        Feathers,
+        State: $
+            .combine(table.state$)
+            .map(([table]) => ({ table })),
+        DOM: $
+            // Combine all components, and convert them to an object.
+            .combine(form.DOM)
+            .map(([Form]) => ({ Form }))
+            // For convenience, convert each vnode to a function so it can be uses as JSX.
+            .map(nodes => Object
+                .keys(nodes)
+                .reduce((vtree, name) => ({ ...vtree, [name]: () => nodes[name] }), {})
+            )
+    }
 }

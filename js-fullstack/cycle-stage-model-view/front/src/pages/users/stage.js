@@ -1,23 +1,14 @@
 import $ from 'xstream';
+import Form from '../../components/form';
 
 export default function Stage(sources){
 
+    const component = {};
+    component.form = Form(sources);
+
     const intent = {}; // ----------------------------------------------------------------
 
-    intent.userCreate$ = sources.DOM
-        .select('form > button')
-        .events('click')
-        // get all the fieldsets on the parent
-        .map(e => {
-            e.preventDefault()
-            const nodes = e.target.parentNode.querySelectorAll('input');
-            // convert nodelist to array, and then to an object containing name:value
-            return [].slice.call(nodes)
-                .map(node => ({ name:node.getAttribute('name'), value:node.value }))
-                .reduce((result, item) => ({ ...result, [item.name]:item.value }), {})
-        });
-
-    // Intention of deleting an user.
+    // Intention of deleting an user from the table
     intent.userDelete$ = sources.DOM
         .select('section > article button')
         .events('click')
@@ -48,5 +39,5 @@ export default function Stage(sources){
     socket.userCreated$ = sources.Feathers
         .on({ service:'users', method:'created' })
 
-    return { socket, intent };
+    return { socket, intent, component };
 }

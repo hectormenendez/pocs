@@ -1,7 +1,7 @@
 import {Router} from './helpers/smv';
 
 export default Router({
-    '/'                : 'pages/home',
+    '/'                : 'pages/users',
     '/cuentas'         : 'pages/accounts',
     '/examples/'       : 'pages/examples/router',
     '/examples/todo'   : 'pages/examples/todo',

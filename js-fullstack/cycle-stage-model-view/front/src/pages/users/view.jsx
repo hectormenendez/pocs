@@ -1,25 +1,10 @@
 import {html as Html} from 'snabbdom-jsx';
-import Style from './view.css';
+import {Style} from './view.css';
 
-export default ({ form, table }) => <section className={Style.users}>
+export default ({ table }, { Form }) => <section className={Style}>
 
-    <form className={Style.form}>
-        <h3>{form.legend}</h3>
-        <div>
-            {form.fieldset.map(({ legend, fields })=>
-                <fieldset>
-                    <legend>{ legend }</legend>
-                    {fields.map(field =>
-                        <span attrs={field.invalid? {invalid:field.invalid} : {}}>
-                            { Html('input', { ...field, disabled:form.ready }) }
-                        </span>
-                    )}
-                </fieldset>
-            )}
-        </div>
-        <button disabled={form.ready}>Crear</button>
-    </form>
-    <section className={Style.table}>
+    <Form/>
+    <section>
         <h3>Lista de usuarios</h3>
         <header>
             {table.head.map(head =>
