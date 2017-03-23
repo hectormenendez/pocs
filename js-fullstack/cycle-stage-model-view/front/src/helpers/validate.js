@@ -1,12 +1,13 @@
 
-export default function (subject, definitions={}){
+export default function Validate(subject, definitions={}){
     const types = [
         String, Number, Array, Function, RegExp, Boolean, Object,
         Symbol, Date, Map, WeakMap, Set, WeakSet, Error, Promise
     ];
-    if (subject.constructor !== Object) throw new Error(
-        `Invalid subject, expecting an Object, got: ${subject.constructor.name}`
-    );
+    if (!subject || subject.constructor !== Object){
+        subject = subject ? subject.constructor.name : subject;
+        throw new Error(`Invalid subject, expecting an Object, got: ${subject}`);
+    }
     Object
         .keys(definitions)
         // Validate an normalize definition
