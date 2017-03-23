@@ -1,0 +1,65 @@
+:local .Style {
+
+    /*************************************************************************************
+     * Fieldsets
+     * - Appearence will be reset.
+     * - they will be flex-containers.
+     * - Children will be legends (optional) and spans (input containers)
+     * - Span children will serve as container for the invalid messages.
+     * @todo Create variables.
+     ************************************************************************************/
+    & > div > fieldset {
+        border: 0;
+        padding: 0;
+        margin: 0 0 1em 0;
+        lost-flex-container: row;
+        /* Legend and containing spans will use 100% width */
+        & > legend,
+        & > span {
+            lost-column: 1 flex;
+            lost-column-cycle: none;
+        }
+        /* Create a sane separation between legend and inputs (spans)*/
+        & > legend {
+            padding: 0 0 0.5em 0;
+        }
+        /* Create a sane sepatation between inputs (spans) */
+        & > span {
+            lost-flex-container: row;
+            margin-bottom: 0.5em;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+
+            & > input {
+                lost-column: 1 flex;
+                lost-column-cycle: none;
+            }
+
+            &[invalid]{
+                position: relative;
+
+                &:after {
+                    display:block;
+                    position:absolute;
+                    right:0;
+                    bottom:0;
+                    font-size:0.75em;
+                    line-height: 0.75em;
+                    overflow:hidden;
+                    padding: 0.15em 0.35em;
+                    background:red;
+                    color:white;
+                    content:attr(invalid);
+                    border-top-left-radius: 0.5em;
+                }
+
+                & > input {
+                    border:1px solid red;
+                }
+            }
+        }
+
+    }
+}
