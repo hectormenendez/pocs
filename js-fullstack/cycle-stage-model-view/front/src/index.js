@@ -1,11 +1,11 @@
-import { run as Run } from '@cycle/xstream-run';
+import { run as Run } from '@cycle/run';
 import { makeDOMDriver as DomDriver } from '@cycle/dom';
 import { makeRouterDriver as RouterDriver } from 'cyclic-router';
-import { createHistory as History } from 'history';
 
 import $ from 'xstream';
 import SwitchPath from 'switch-path';
 import SocketIO from 'socket.io-client';
+import CreateHistory from 'history/createBrowserHistory';
 
 import FeatherDriver from './drivers/feathers';
 import Routes$ from './routes';
@@ -35,7 +35,7 @@ function onReady(routes){
     Run(main.bind(null, routes), {
         DOM      : DomDriver(document.getElementsByTagName('main')[0]),
         Feathers : FeatherDriver(socket),
-        Router   : RouterDriver(History(), SwitchPath)
+        Router   : RouterDriver(CreateHistory(), SwitchPath)
     });
 }
 
