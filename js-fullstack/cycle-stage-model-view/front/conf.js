@@ -39,9 +39,9 @@ module.exports = toStream(FS.stat, conf.fs[base])
     })
     .compose(Flatten)
     .filter(node =>
-        node.isFile()                              && // is a file (duh)
-        PATH.extname(node.path) === conf.fs.ext         && // is the correct extension
-        (node.path.match(/\./g) || []).length == 1    // only has one dot
+        node.isFile() && // is a file (duh)
+        PATH.extname(node.path) === conf.fs.ext && // is the correct extension
+        (PATH.basename(node.path).match(/\./g) || []).length == 1 // only has one dot
     )
     .map(node => node.path)
     // gets the name and requires the file as an object using the basename as an id.
