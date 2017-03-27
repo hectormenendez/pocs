@@ -1,42 +1,59 @@
+import $ from 'xstream';
+import Debug from 'debug';
+import Socket from 'socket.io-client';
+import SwitchPath from 'switch-path';
+import CreateHistory from 'history/createBrowserHistory';
 import { run as Run } from '@cycle/run';
 import { makeDOMDriver as DomDriver } from '@cycle/dom';
 import { makeRouterDriver as RouterDriver } from 'cyclic-router';
 
-import $ from 'xstream';
-import SwitchPath from 'switch-path';
-import SocketIO from 'socket.io-client';
-import CreateHistory from 'history/createBrowserHistory';
-
-import FeatherDriver from './drivers/feathers';
+import FeathersDriver from './drivers/feathers';
 import Routes$ from './routes';
+
 import './index.css';
 
-const socket = SocketIO('http://localhost:3030', { path:'/ws/' });
+const debug = Debug('money:index');
+const socket = Socket('http://localhost:3030', { path: '/ws' });
+
+socket.on('connect', function(){
+    debug('connected',  { id: socket.id });
+    Routes$.addListener({
+        error: error => { throw error },
+        next : routes => {
+            debug('routes', Object.keys(routes));
+            onReady(routes, { socket });
+        }
+    })
+})
+
+function onReady(routes, { socket }){
+    const  drivers = {
+        DOM      : DomDriver(document.getElementsByTagName('main')[0]),
+        Feathers : FeathersDriver(socket),
+        Router   : RouterDriver(CreateHistory(), SwitchPath)
+    }
+    debug('drivers', Object.keys(drivers));
+    const app = main.bind(main, routes);
+    Run(app, drivers);
+}
 
 function main(routes, sources){
+    debug('main:sources', sources);
+    const route$ = sources.Router.define(routes)
+        .map(route => route.value({
+            ...sources,
+            Router: sources.Router.path(route.path)
+        }))
 
-    const page$ = sources.Router
-        .define(routes)
-        .map(router => {
-            const component = router.value;
-            const obj = { Router: sources.Router.path(router.path) };
-            const src = Object.assign(obj, sources);
-            return component(src);
-        })
-
-    return {
-        DOM      : page$.map(page => page.DOM).flatten(),
-        Router   : page$.map(page => page.Router   || $.never()).flatten(),
-        Feathers : page$.map(page => page.Feathers || $.never()).flatten(),
-    }
+    const sinks = Object
+        .keys(sources)
+        .reduce((sinks, name) => ({
+            ...sinks,
+            [name]: route$
+                .map(routeSinks  => routeSinks[name] || $.never())
+                .flatten()
+        }), {});
+    debug('main:sinks', sinks);
+    return sinks;
 }
 
-function onReady(routes){
-    Run(main.bind(null, routes), {
-        DOM      : DomDriver(document.getElementsByTagName('main')[0]),
-        Feathers : FeatherDriver(socket),
-        Router   : RouterDriver(CreateHistory(), SwitchPath)
-    });
-}
-
-Routes$.addListener({ next: onReady });
