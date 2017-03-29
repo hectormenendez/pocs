@@ -1,15 +1,16 @@
 import $ from 'xstream';
-import Validate from '../../helpers/validate';
+import Validate from '@gik/validate';
 
 export default function Model({ props$, intent }){
 
     // State sinks is based upon props stream
-    const State = props$
-        // A title and items are required
-        .debug(props => Validate(props,{ title: [String], items: [Array] }))
-        // Each item must hace its own title and href defined.
-        .debug(({items}) => items
-            .forEach(item => Validate(item, { href:[String], title:[String] })))
+    const State = props$.debug(props => Validate(props,{
+        title:{ type:String, required:true },
+        items:items => items.map(item => Validate(item, {
+            href:{ type:String, required:true },
+            title:{ type:String, required:true },
+        }))
+    }))
 
     return { State };
 }

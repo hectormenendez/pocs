@@ -1,8 +1,8 @@
 import $ from 'xstream';
 import Feathers from 'feathers-client';
 import Debug from 'debug';
+import Validate from '@gik/validate';
 
-import Validate from '../helpers/validate';
 
 export default function (socket){
 
@@ -22,7 +22,11 @@ export default function (socket){
         // - triggers a local event that can be later selected from the sources.
         sink$
             .map(sink => {
-                Validate(sink, { service: [String], method: [String], args: Array });
+                Validate(sink, {
+                    service:{ type:String, required:true },
+                    method:{ type:String, required:true },
+                    args:{ type:Array, value:[] }
+                });
                 const event = `${sink.service}::${sink.method}`;
                 const service = client.service(sink.service);
                 const method = service[sink.method];
@@ -49,10 +53,10 @@ export default function (socket){
             // Handles selection (for local events)
             on: selector => {
                 const { type, service, method } = Validate(selector, {
-                    service: [String],
-                    method: [String],
-                    type: [String]
-                });
+                    service:{ type:String, required:true },
+                    method:{ type:String, required:true },
+                    type:{ type:String, required:true },
+                })
                 const event = `${service}::${method}`;
                 return $.create({ stop(){}, start(listener){
                     const handler = response => {
