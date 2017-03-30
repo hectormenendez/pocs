@@ -50,8 +50,7 @@ export default function (socket){
 
         // The source stream that will handle the intents
         return {
-            // Handles selection (for local events)
-            on: selector => {
+            select: selector => {
                 const { type, service, method } = Validate(selector, {
                     service:{ type:String, required:true },
                     method:{ type:String, required:true },
