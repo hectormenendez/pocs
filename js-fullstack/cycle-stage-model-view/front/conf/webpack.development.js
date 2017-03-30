@@ -15,8 +15,12 @@ module.exports = conf => ({
     ],
 
     output: {
+        // Determines the name of each output bundle.
+        filename: `bundle.[name]${conf.fs.ext}`,
+        // THe name of on-demand loaded chunk files.
+        chunkFilename: `chunk.[name]${conf.fs.ext}`,
         // Include comments in bundles with information about modules
-        pathinfo: true
+        pathinfo: true,
     },
 
     // Transformations that are applied to given filetype

@@ -15,15 +15,10 @@ module.exports = conf => ({
 
     // Instructions on where the output bundles should behave
     output: {
-        // The name of on-demand loaded chunk files.
-        chunkFilename: `bundle.[chunkhash]${conf.fs.ext}`,
 
         // Only used when "target" is set to "web", wich uses JSONP for loading
         // on-demand chunks by adding script tags.
         crossOriginLoading: false,
-
-        // Determines the name of each output bundle.
-        filename: `bundle.[hash]${conf.fs.ext}`,
 
         // The ouutput directory
         path: conf.path('out'),
