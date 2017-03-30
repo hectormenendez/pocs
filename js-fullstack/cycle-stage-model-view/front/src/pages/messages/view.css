@@ -1,0 +1,14 @@
+:local .ChatBox {
+    display:block;
+    background: red;
+
+    & > fieldset {
+        background:lightgreen;
+        border: 10px solid lightblue;
+    }
+}
+
+:local .UserInput{
+    display:block;
+    background: blue;
+}
