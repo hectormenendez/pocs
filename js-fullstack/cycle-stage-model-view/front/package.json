@@ -16,7 +16,7 @@
     "@cycle/isolate": "^2.1.0",
     "@cycle/run": "^3.1.0",
     "@cycle/time": "^0.8.0",
-    "@gik/validate": "git+https://git@github.com/gikmx/validate.git",
+    "@gik/validate": "gikmx/validate.git#0.0.3",
     "blaze": "^3.2.0",
     "cycle-restart": "^0.1.0",
     "cyclic-router": "^4.0.3",
