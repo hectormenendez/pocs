@@ -3,11 +3,11 @@ import Debug from 'debug';
 import Socket from 'socket.io-client';
 import SwitchPath from 'switch-path';
 import CreateHistory from 'history/createBrowserHistory';
+import FeathersDriver from 'cycle-feathers';
 import { run as Run } from '@cycle/run';
 import { makeDOMDriver as DomDriver } from '@cycle/dom';
 import { makeRouterDriver as RouterDriver } from 'cyclic-router';
 
-import FeathersDriver from './drivers/feathers';
 import Routes$ from './routes';
 
 import './index.css';
