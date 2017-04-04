@@ -1,3 +1,5 @@
+import Logs from './logs';
+
 export default function Services(){
-    const app = this;
+    this.configure(Logs);
 }
