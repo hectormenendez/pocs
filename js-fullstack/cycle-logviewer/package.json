@@ -1,25 +1,23 @@
 {
   "name": "logger.back",
   "description": "A simple logger micro backend.",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "",
-  "main": "src/",
-  "keywords": [
-    "feathers"
-  ],
+  "main": "server/",
+  "keywords": [],
   "license": "MIT",
   "repository": {},
   "author": {},
   "contributors": [],
   "bugs": {},
   "engines": {
-    "node": ">= 0.12.0"
+    "node": ">=7.7.0"
   },
   "scripts": {
     "test": "npm run jshint && npm run mocha",
-    "jshint": "jshint src/. test/. --config",
-    "start": "node src/",
-    "mocha": "mocha test/ --recursive"
+    "jshint": "jshint server/. test/. --config",
+    "start": "nodemon server/ --exec babel-node --presets env,stage-0 -e js",
+    "mocha": "mocha test/ --recursive --compilers js:babel-register"
   },
   "dependencies": {
     "body-parser": "^1.17.1",
@@ -37,8 +35,13 @@
     "winston": "^2.3.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.24.0",
+    "babel-preset-env": "^1.3.2",
+    "babel-preset-stage-0": "^6.22.0",
     "jshint": "^2.9.4",
     "mocha": "^3.2.0",
+    "nodemon": "^1.11.0",
     "request": "^2.81.0"
   }
 }
