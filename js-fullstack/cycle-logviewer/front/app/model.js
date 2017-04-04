@@ -7,23 +7,15 @@ export default function Model({ feather }){
     };
 
     const operator = {};
-    operator.push$ = $
+    operator.insert$ = $
         .merge(feather.init$, feather.created$)
-        .map(data => state => ({
-            ...state,
-            logs: state.logs.concat(data)
-        }))
-
+        .map(data => state => ({ ...state, logs: data.concat(state.logs) }))
     return {
-
+        // Apply all operators.
         State: $
-            // Apply all operators.
-            .merge(operator.push$)
-            .fold((state, operator) => operator(state), state)
-            // Always show logs in reverse order
-            .map(state => ({ ...state, logs:state.logs.reverse() }))
-            .debug(),
-
+            .merge(operator.insert$)
+            .fold((state, operator) => operator(state), state),
+        // Send all requests to socket server
         Feathers: $.of({ service:'logs', method:'find', args:[] })
     }
 }

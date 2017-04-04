@@ -10,6 +10,7 @@ export default function Stage(sources){
     // Everytime a log is created update it.
     feather.created$ = sources.Feathers
         .select({ type:'socket', service:'logs', method:'created' })
+        .map(data => [data])
 
     return { feather }
 }
