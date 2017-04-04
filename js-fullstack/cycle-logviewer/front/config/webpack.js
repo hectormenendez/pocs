@@ -1,7 +1,7 @@
-const Webpack = require('webpack');
-const Html = require('html-webpack-plugin');
+import Webpack from 'webpack';
+import Html from 'html-webpack-plugin';
 
-module.exports = conf => ({
+export default conf => ({
 
     // Defines the target environment for compilation.
     target: 'web',

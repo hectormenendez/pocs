@@ -1,6 +1,6 @@
-const Webpack = require('webpack');
+import Webpack from 'webpack';
 
-module.exports = conf => ({
+export default conf => ({
 
     // for chrome's "persist changes when saving"
     devtool: 'inline-source-map',

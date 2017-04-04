@@ -1,14 +1,14 @@
-const FS   = require('fs');
-const PATH = require('path');
+import FS from 'fs';
+import PATH from 'path';
 
-const $         = require('xstream').default;
-const Flatten   = require('xstream/extra/flattenSequentially').default;
-const Extendify = require('extendify');
-
+import $ from 'xstream';
+import Flatten from 'xstream/extra/flattenSequentially';
+import Extendify from 'extendify';
+//
 // The object extension algorithm to be used for the configuration files.
 const extend = Extendify({ arrays: 'concat' });
 
-module.exports = function Conf(root){
+export default function Conf(root){
     const conf = {};
     const base = PATH.basename(__filename, PATH.extname(__filename));
     // the cur environment
@@ -47,8 +47,11 @@ module.exports = function Conf(root){
         // gets the name and requires the file as an object using the basename as an id.
         .map(path => {
             const base = PATH.basename(path, conf.fs.ext);
-            const spec = PATH.join(PATH.dirname(path), [base, conf.env].join('.') + conf.fs.ext);
-            let mod    = require(path);
+            const spec = PATH.join(
+                PATH.dirname(path),
+                [base, conf.env].join('.') + conf.fs.ext
+            );
+            let mod = require(path).default;
             if (typeof mod != 'function') throw new TypeError(
                 `Invalid module '${path}', expecting function, got: ${typeof mod}`
             );
@@ -57,7 +60,11 @@ module.exports = function Conf(root){
             return toStream(FS.access, spec)
                 // FS.access throws error, catch it and replace it with "true"
                 .replaceError( () => $.of(true))
-                .map(notfound => ({ base, mod, spec: notfound? null : require(spec) }));
+                .map(notfound => ({
+                    base,
+                    mod,
+                    spec: notfound? null : require(spec).default
+                }));
         })
         .compose(Flatten)
         // Create a single object containing all properties (files) found.

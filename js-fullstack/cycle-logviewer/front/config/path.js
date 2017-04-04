@@ -1,4 +1,4 @@
-const PATH = require('path');
+import PATH from 'path';
 
 /**
  * Path utilities.
@@ -9,7 +9,7 @@ const PATH = require('path');
  * @param predicate <string> - An optional string indicating a Node's Path method
  *                             to be applied to the function.
  */
-module.exports = conf => (path=false, predicate=false, ...args) => {
+export default conf => (path=false, predicate=false, ...args) => {
     if (!path) path = conf.fs.root;
     else path = PATH.join(conf.fs.root, String(path).split('/').join(PATH.sep));
     if (!predicate) return path;
