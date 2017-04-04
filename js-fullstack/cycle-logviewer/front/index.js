@@ -16,8 +16,8 @@ export default function Front(server){
             server.use(WebpackDevMiddleware(webpack, {
                 noInfo: false,
                 stats: { colors:true },
-                publicPath: 'http://localhost:3333',
-                filename: config.webpack.output.filename
+                publicPath: config.webpack.output.publicPath,
+                filename: config.webpack.output.filename,
             }));
             server.use(WebpackHotMiddleware(webpack));
             return server;

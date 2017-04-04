@@ -13,12 +13,25 @@ import Compress from 'compression';
 import Cors from 'cors';
 import BodyParser from 'body-parser';
 
+import CommonConfig from '../config.common';
 import Middleware from './middleware';
 import Services from './services';
 import Front  from '../front';
 
+export const commonConfig$ = $.of(CommonConfig)
+    .map(config => Object.keys(config).map(key => ({ key, val:config[key] })));
+
+export const feathers$ = $
+    .of(Feathers());
+
 export const server$ = $
-    .of(Feathers())
+    // setup the common config
+    .combine(commonConfig$, feathers$)
+    .map(([configs, server]) => {
+        configs.forEach(({key,val}) => server.set(key, val));
+        return server;
+    })
+    // Configure Feathers behaviour
     .map(server => server
         .configure(FeathersConfig(__dirname))
         // Enable output compression
