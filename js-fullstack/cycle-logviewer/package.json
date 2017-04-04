@@ -1,6 +1,6 @@
 {
-  "name": "@technisys/logger",
-  "description": "A simple log visualizer",
+  "name": "rt-logger",
+  "description": "A simple realtime log visualizer using cycle.js feathers.js and socket.io",
   "version": "0.0.1",
   "homepage": "",
   "main": "back/",
@@ -20,9 +20,12 @@
     "mocha": "mocha test/ --recursive --compilers js:babel-register"
   },
   "dependencies": {
+    "@cycle/dom": "^17.1.0",
+    "@cycle/run": "^3.1.0",
     "body-parser": "^1.17.1",
     "compression": "^1.6.2",
     "cors": "^2.8.3",
+    "cycle-feathers": "github:gikmx/cycle-feathers#0.0.2",
     "feathers": "^2.1.1",
     "feathers-configuration": "^0.3.3",
     "feathers-errors": "^2.6.2",
@@ -32,6 +35,8 @@
     "feathers-socketio": "^1.5.2",
     "nedb": "^1.8.0",
     "serve-favicon": "^2.4.2",
+    "snabbdom-jsx": "^0.3.1",
+    "socket.io-client": "^1.7.3",
     "winston": "^2.3.1",
     "xstream": "^10.4.0"
   },
