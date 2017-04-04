@@ -1,0 +1,86 @@
+:root {
+
+    --Placeholder {
+        text-align: center;
+        color: #111;
+    }
+
+    --ContainerVertical {
+        display:flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: stretch;
+
+        & > * {
+            flex-grow: 0;
+            flex-shrink: 0;
+            align-self: auto;
+        }
+    }
+
+    --ContainerHorizontal {
+        display:flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: baseline;
+        align-content: stretch;
+
+        & > * {
+            flex-grow: 0;
+            flex-shrink:1;
+            flex-basis: auto;
+            align-self: flex-start;
+            border: 1px solid black;
+        }
+    }
+}
+
+:local .Style {
+    &, & > footer {
+        @apply --ContainerVertical;
+    }
+
+    & > header,
+    & > footer > article {
+        @apply --ContainerHorizontal;
+    }
+
+    & > header {
+        padding:0.75rem;
+        background: rgba(128,128,128);
+    }
+
+    & > footer > article {
+        &:nth-of-type(odd){
+            background: rgba(164,164,164,0.1)
+        }
+        &:nth-of-type(even){
+            background: rgba(128,128,128,0.2)
+        }
+    }
+    & > header > input,
+    & > footer > article div {
+        border:0;
+        width:auto;
+        overflow:hidden;
+        line-height:1.5rem;
+        font-size:1rem;
+        font-family: monospace;
+        padding: 0 0.5rem;
+        margin-right:1rem;
+    }
+
+    & input {
+        border-radius:0.25rem;
+        &:focus {
+            outline-color:deepskyblue;
+        }
+    }
+}
+
+::-webkit-input-placeholder { @apply --Placeholder }
+::-moz-placeholder { @apply --Placeholder }
+:-ms-input-placeholder { @apply --Placeholder }
+input:-moz-placeholder { @apply --Placeholder }

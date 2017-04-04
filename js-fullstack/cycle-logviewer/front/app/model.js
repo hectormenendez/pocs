@@ -14,7 +14,16 @@ export default function Model({ feather }){
         // Apply all operators.
         State: $
             .merge(operator.insert$)
-            .fold((state, operator) => operator(state), state),
+            .fold((state, operator) => operator(state), state)
+            .map(state => {
+                const fields = state.logs
+                    .map(log => Object.keys(log).filter(key => key !== '_id'))
+                    .reduce((acc, key) => acc.concat(key), []);
+                state.fields = [...new Set(fields)];
+                return state;
+            })
+            .debug(),
+
         // Send all requests to socket server
         Feathers: $.of({ service:'logs', method:'find', args:[] })
     }
