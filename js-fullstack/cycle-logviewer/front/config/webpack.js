@@ -1,6 +1,5 @@
 const Webpack = require('webpack');
 const Html = require('html-webpack-plugin');
-const ProgressBar = require('progress-bar-webpack-plugin');
 
 module.exports = conf => ({
 
@@ -50,7 +49,6 @@ module.exports = conf => ({
     },
 
     plugins:[
-        new ProgressBar(),
         new Html({ template: `${conf.path('app/index.html')}` }),
         new Webpack.DefinePlugin({ 'APP': JSON.stringify(conf.app) }),
     ]
