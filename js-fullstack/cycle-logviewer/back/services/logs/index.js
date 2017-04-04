@@ -19,7 +19,7 @@ export default function Logs(){
         Model: db,
         paginate:{
             default: 10,
-            max: 99,
+            max: Infinity,
         },
     }));
 
