@@ -1,81 +1,80 @@
 :root {
 
-    --Placeholder {
-        text-align: center;
+    --Color: darkblue;
+
+    --Font {
+        font-family: monospace;
+        font-size: 10pt;
+        font-weight: normal;
         color: #111;
     }
 
-    --ContainerVertical {
-        display:flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        align-items: stretch;
-
-        & > * {
-            flex-grow: 0;
-            flex-shrink: 0;
-            align-self: auto;
-        }
+    --Placeholder {
+        text-align: center;
+        @apply --Font;
+        font-weight:bold;
+        color: color(var(--Color) blackness(+10%));
     }
 
-    --ContainerHorizontal {
-        display:flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        align-items: baseline;
-        align-content: stretch;
-
-        & > * {
-            flex-grow: 0;
-            flex-shrink:1;
-            flex-basis: auto;
-            align-self: flex-start;
-            border: 1px solid black;
-        }
-    }
 }
 
 :local .Style {
-    &, & > footer {
-        @apply --ContainerVertical;
+    & {
+        display:table;
+        width: 100%;
+        overflow:scroll;
     }
 
     & > header,
-    & > footer > article {
-        @apply --ContainerHorizontal;
+    & > footer {
+        display:table-row-group;
+
+        & > article {
+            display: table-row;
+            & > div {
+                display: table-cell;
+                padding-left:0.5rem;
+                padding-right:0.5rem;
+                & > input,
+                & > span {
+                    display:block;
+                    padding-left:0.5rem;
+                    padding-right:0.5rem;
+                    line-height:1.5rem;
+                    white-space: nowrap;
+                    @apply --Font;
+                }
+            }
+        }
     }
 
     & > header {
-        padding:0.75rem;
-        background: rgba(128,128,128);
+        background:  var(--Color);
+        & > article > div {
+            padding-top: 0.85rem;
+            padding-bottom: 0.85rem;
+        }
+        & > article > div > input {
+            display:block;
+            width:0;
+            min-width:100%;
+            border:0;
+            border-radius: 0.25rem;
+            &:focus {
+                outline-color: color(var(--Color) saturation(+33%) lightness(+33%));
+                background-color: color(var(--Color) lightness(+85%));
+            }
+        }
     }
 
-    & > footer > article {
-        &:nth-of-type(odd){
-            background: rgba(164,164,164,0.1)
-        }
-        &:nth-of-type(even){
-            background: rgba(128,128,128,0.2)
-        }
-    }
-    & > header > input,
-    & > footer > article div {
-        border:0;
-        width:auto;
-        overflow:hidden;
-        line-height:1.5rem;
-        font-size:1rem;
-        font-family: monospace;
-        padding: 0 0.5rem;
-        margin-right:1rem;
-    }
-
-    & input {
-        border-radius:0.25rem;
-        &:focus {
-            outline-color:deepskyblue;
+    & > footer {
+        & > article {
+            &:nth-of-type(odd){
+                background-color: color(var(--Color) saturation(+33%) lightness(+75%));
+            }
+            &:nth-of-type(even){
+                background-color: color(var(--Color) saturation(+33%) lightness(+70%));
+            }
         }
     }
 }

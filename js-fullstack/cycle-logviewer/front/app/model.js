@@ -1,45 +1,57 @@
 import $ from 'xstream';
+import Debug from 'debug';
 
 export default function Model({ feather, intent }){
 
+    const debug = Debug('app:model');
     const state = {
+        loaded: false,
+        fields:[],
         logs: []
     };
 
     const operator = {};
 
-    operator.insert$ = $
-        .merge(feather.init$, feather.created$)
-        .map(data => state => ({ ...state, logs: data.concat(state.logs) }))
+    operator.init$ = feather.init$
+        .map(logs => state => ({ ...state, logs, loaded:true }))
+
+    operator.reset$ = intent.reset$
+        .map(() => state => ({ ...state, logs:[], loaded:false }))
 
     operator.filter$ = intent.filter$
-        .map(({value, name}) => state => ({
+        .map(({ val, key }) => state => ({
             ...state,
             logs: state.logs.filter(function(log){
-                const orig = String(log[name]).toLowerCase();
-                const comp = String(value).toLowerCase();
+                const orig = String(log[key]).toLowerCase();
+                const comp = String(val).toLowerCase();
                 return orig.indexOf(comp) !== -1;
             })
-        }))
+        }));
 
-    return {
-        // Apply all operators.
-        State: $
-            .merge(
-                operator.insert$,
-                operator.filter$
-            )
-            .fold((state, operator) => operator(state), state)
-            .map(state => {
-                const fields = state.logs
-                    .map(log => Object.keys(log).filter(key => key !== '_id'))
-                    .reduce((acc, key) => acc.concat(key), []);
-                state.fields = [...new Set(fields)];
-                return state;
-            })
-            .debug(),
+    operator.created$ = feather.created$
+        .map(data => state => ({ ...state, logs: [data].concat(state.logs) }))
 
-        // Send all requests to socket server
-        Feathers: $.of({ service:'logs', method:'find', args:[] })
-    }
+    const State = $
+        // run all operators against the state
+        .merge(
+            operator.init$,
+            operator.created$,
+            operator.filter$
+        )
+        .fold((state, operator) => operator(state), state)
+        // Determine the fields from the unique properties found on the logs.
+        .map(state => {
+            const fields = state.logs
+                .map(log => Object.keys(log).filter(key => key !== '_id'))
+                .reduce((acc, key) => acc.concat(key), []);
+            state.fields = [...new Set(fields)];
+            return state;
+        })
+        .debug(state => debug('State', state));
+
+    const Feathers = intent.reset$
+        .fold(request => request, { service:'logs', method:'find', args:[] })
+        .debug(feathers => debug('Feathers', feathers));
+
+    return { State, Feathers };
 }

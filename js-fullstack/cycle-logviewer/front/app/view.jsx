@@ -1,18 +1,36 @@
 import {html as Html} from 'snabbdom-jsx';
 import {Style} from './view.css';
 
-export default ({logs, fields}) =>
+export default ({loaded, logs, fields}) =>
 <section className={Style}>
+    {!loaded? <center>
+        <h2>Cargando registros …</h2>
+    </center> : ''}
+    {loaded && !logs.length? <center>
+        <h2>¡No existen registros!</h2>
+        <button>RESTABLECER</button>
+    </center> : ''}
     <header>
-        {fields.map(field =>
-            <input name={field} type="text" placeholder={field}/>
-        )}
+        <article>
+            {fields.map(field =>
+                <div>
+                    <input
+                        name={field}
+                        title={field}
+                        type="text"
+                        placeholder={field}
+                    />
+                </div>
+            )}
+        </article>
     </header>
     <footer>
         {logs.map(log =>
             <article>
                 {fields.map(field =>
-                    <div>{log[field]}</div>
+                    <div>
+                        <span>{log[field]}</span>
+                    </div>
                 )}
             </article>
         )}
