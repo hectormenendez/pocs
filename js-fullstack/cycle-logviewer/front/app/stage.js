@@ -1,5 +1,19 @@
 export default function Stage(sources){
 
+
+    const filter$ = sources.DOM
+        .select('input')
+        .events('keyup')
+        .map(e => {
+            const value = e.target.value;
+            const name = e.target.getAttribute('name');
+            return { value, name };
+        });
+
+    const intent = {};
+    intent.filter$ = filter$.filter(({value}) => value.length);
+    intent.reset$ = filter$.filter(({value}) => !value.length);
+
     const feather = {};
 
     // Fetch initial logs when starting
@@ -12,5 +26,5 @@ export default function Stage(sources){
         .select({ type:'socket', service:'logs', method:'created' })
         .map(data => [data])
 
-    return { feather }
+    return { feather, intent }
 }
