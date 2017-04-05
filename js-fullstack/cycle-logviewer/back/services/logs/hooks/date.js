@@ -15,7 +15,7 @@ export function DateSort(){
 }
 
 export function DateFormat(hooktype){
-    const format = date => Moment(date).format('YY-MM-DD hh:mm:ss')
+    const format = date => Moment(date).format('YY-MM-DD HH:mm:ss')
     return hook => {
         if (hooktype == 'find') hook.result.data = hook.result.data
             .map(data => ({ ...data, _date:format(data._date)  }));

@@ -18,7 +18,7 @@ export default function Logs(){
     this.use(route, FeathersNeDB({
         Model: db,
         paginate:{
-            default: 10,
+            default: 99,
             max: Infinity,
         },
     }));
