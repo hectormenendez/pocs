@@ -78,6 +78,10 @@
             &:nth-of-type(even){
                 background-color: color(var(--Color) saturation(+33%) lightness(+70%));
             }
+            &:hover {
+                cursor: pointer;
+                background-color: color(var(--Color) saturation(+33%) lightness(+65%));
+            }
         }
     }
 }
