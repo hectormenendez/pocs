@@ -13,6 +13,9 @@ export default ({loaded, logs, fields}) =>
 
     <log-head>
         <log-row>
+            <log-cell>
+                <button>X</button>
+            </log-cell>
             {fields.map(field =>
                 <log-cell>
                     <input
@@ -28,6 +31,9 @@ export default ({loaded, logs, fields}) =>
     <log-body>
         {logs.map(log =>
             <log-row>
+                <log-cell>
+                    <button>X</button>
+                </log-cell>
                 {fields.map(field =>
                     <log-cell>
                         <span>{log[field] || ''}</span>

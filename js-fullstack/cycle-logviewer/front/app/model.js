@@ -1,7 +1,7 @@
 import $ from 'xstream';
 import Debug from 'debug';
 
-export default function Model({ feather, intent }){
+export default function Model({ intent }){
 
     const debug = Debug('app:model');
     const state = {
@@ -12,7 +12,7 @@ export default function Model({ feather, intent }){
 
     const operator = {};
 
-    operator.init$ = feather.init$
+    operator.load$ = intent.load$
         .map(logs => state => ({ ...state, logs, loaded:true }))
 
     operator.reset$ = intent.reset$
@@ -28,17 +28,19 @@ export default function Model({ feather, intent }){
             })
         }));
 
-    operator.created$ = feather.created$
+    operator.append$ = intent.append$
         .map(data => state => ({ ...state, logs: [data].concat(state.logs) }))
 
-    const State = $
-        // run all operators against the state
+    // run all operators against the state
+    const opState$ = $
         .merge(
-            operator.init$,
-            operator.created$,
+            operator.load$,
+            operator.append$,
             operator.filter$
         )
-        .fold((state, operator) => operator(state), state)
+        .fold((state, operator) => operator(state), state);
+
+    const State = opState$
         // Determine the fields from the unique properties found on the logs.
         .map(state => {
             const fields = state.logs
