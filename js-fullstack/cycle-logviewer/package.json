@@ -35,6 +35,7 @@
     "feathers-socketio": "^1.5.2",
     "moment": "^2.18.1",
     "nedb": "^1.8.0",
+    "normalize.css": "^6.0.0",
     "serve-favicon": "^2.4.2",
     "snabbdom-jsx": "^0.3.1",
     "socket.io-client": "^1.7.3",
