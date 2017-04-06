@@ -5,7 +5,7 @@
     --Font {
         font-family: monospace;
         font-size: 10pt;
-        font-weight: normal;
+        font-weight: 100;
         color: #111;
     }
 
@@ -25,41 +25,44 @@
         overflow:scroll;
     }
 
-    & > header,
-    & > footer {
-        display:table-row-group;
+    & log-head,
+    & log-body {
+        display: table-row-group;
+        border-collapse: collapse;
+        border-style: hidden;
 
-        & > article {
+        & log-row {
             display: table-row;
-            & > div {
-                display: table-cell;
-                padding-left:0.5rem;
-                padding-right:0.5rem;
-                & > input,
-                & > span {
-                    display:block;
-                    padding-left:0.5rem;
-                    padding-right:0.5rem;
-                    line-height:1.5rem;
-                    white-space: nowrap;
-                    @apply --Font;
-                }
-            }
+        }
+
+        & log-cell {
+            display: table-cell;
+            padding: 0.25rem 0.75rem;
+            max-width: 33vw;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 
-    & > header {
-        background:  var(--Color);
-        & > article > div {
-            padding-top: 0.85rem;
-            padding-bottom: 0.85rem;
+    & input,
+    & span {
+        @apply --Font;
+    }
+
+    & > log-head {
+        background: var(--Color);
+        & log-cell {
+            padding: 0.85em 0.75rem;
         }
-        & > article > div > input {
+        & input {
             display:block;
             width:0;
             min-width:100%;
             border:0;
-            border-radius: 0.25rem;
+            border-radius:0.25rem;
+            line-height: 1.5rem;
+            padding:0 0.5rem;
             &:focus {
                 outline-color: color(var(--Color) saturation(+33%) lightness(+33%));
                 background-color: color(var(--Color) lightness(+85%));
@@ -67,8 +70,8 @@
         }
     }
 
-    & > footer {
-        & > article {
+    & > log-body {
+        & log-row {
             &:nth-of-type(odd){
                 background-color: color(var(--Color) saturation(+33%) lightness(+75%));
             }

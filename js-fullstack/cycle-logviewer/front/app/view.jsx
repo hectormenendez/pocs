@@ -10,29 +10,30 @@ export default ({loaded, logs, fields}) =>
         <h2>¡No existen registros!</h2>
         <button>RESTABLECER</button>
     </center> : ''}
-    <header>
-        <article>
+
+    <log-head>
+        <log-row>
             {fields.map(field =>
-                <div>
+                <log-cell>
                     <input
                         name={field}
                         title={field}
                         type="text"
                         placeholder={field}
                     />
-                </div>
+                </log-cell>
             )}
-        </article>
-    </header>
-    <footer>
+        </log-row>
+    </log-head>
+    <log-body>
         {logs.map(log =>
-            <article>
+            <log-row>
                 {fields.map(field =>
-                    <div>
-                        <span>{log[field]}</span>
-                    </div>
+                    <log-cell>
+                        <span>{log[field] || ''}</span>
+                    </log-cell>
                 )}
-            </article>
+            </log-row>
         )}
-    </footer>
+    </log-body>
 </section>
