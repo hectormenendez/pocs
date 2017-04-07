@@ -19,68 +19,64 @@
 }
 
 :local .Style {
-    & {
-        display:table;
-        width: 100%;
-        overflow:scroll;
-    }
-
-    & log-head,
-    & log-body {
-        display: table-row-group;
-        border-collapse: collapse;
-        border-style: hidden;
-
-        & log-row {
-            display: table-row;
-        }
-
-        & log-cell {
-            display: table-cell;
-            padding: 0.25rem 0.75rem;
-            max-width: 33vw;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    }
 
     & input,
     & span {
         @apply --Font;
     }
 
-    & > log-head {
-        background: var(--Color);
-        & log-cell {
-            padding: 0.85em 0.75rem;
-        }
-        & input {
-            display:block;
-            width:0;
-            min-width:100%;
-            border:0;
-            border-radius:0.25rem;
-            line-height: 1.5rem;
-            padding:0 0.5rem;
-            &:focus {
-                outline-color: color(var(--Color) saturation(+33%) lightness(+33%));
-                background-color: color(var(--Color) lightness(+85%));
+    & log-table {
+        display:table;
+        width: 100%;
+        overflow:scroll;
+        & log-head,
+        & log-body {
+            display: table-row-group;
+            border-collapse: collapse;
+            border-style: hidden;
+            & log-row {
+                display: table-row;
+            }
+            & log-cell {
+                display: table-cell;
+                padding: 0.25rem 0.75rem;
+                max-width: 33vw;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
-    }
-
-    & > log-body {
-        & log-row {
-            &:nth-of-type(odd){
-                background-color: color(var(--Color) saturation(+33%) lightness(+75%));
+        & log-head {
+            background: var(--Color);
+            & log-cell {
+                padding: 0.85em 0.75rem;
             }
-            &:nth-of-type(even){
-                background-color: color(var(--Color) saturation(+33%) lightness(+70%));
+            & input {
+                display:block;
+                width:0;
+                min-width:100%;
+                border:0;
+                border-radius:0.25rem;
+                line-height: 1.5rem;
+                padding:0 0.5rem;
+                &:focus {
+                    outline-color: color(var(--Color) saturation(+33%) lightness(+33%));
+                    background-color: color(var(--Color) lightness(+85%));
+                }
             }
-            &:hover {
-                cursor: pointer;
-                background-color: color(var(--Color) saturation(+33%) lightness(+65%));
+        }
+        & log-body {
+            & log-row {
+                &:nth-of-type(odd){
+                    background-color: color(var(--Color) saturation(+33%) lightness(+75%));
+                }
+                &:nth-of-type(even){
+                    background-color: color(var(--Color) saturation(+33%) lightness(+70%));
+                }
+                &:hover {
+                    cursor: pointer;
+                    background-color: color(var(--Color) saturation(+33%) lightness(+65%));
+                }
             }
         }
     }

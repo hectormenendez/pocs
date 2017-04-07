@@ -6,18 +6,16 @@ export default function Model({ intent }){
     const debug = Debug('app:model');
     const state = {
         loaded: false,
+        detail:null,
         fields:[],
         logs: []
     };
 
     const operator = {};
-
     operator.load$ = intent.load$
-        .map(logs => state => ({ ...state, logs, loaded:true }))
-
+        .map(logs => state => ({ ...state, logs, loaded:true }));
     operator.reset$ = intent.reset$
-        .map(() => state => ({ ...state, logs:[], loaded:false }))
-
+        .map(() => state => ({ ...state, logs:[], loaded:false }));
     operator.filter$ = intent.filter$
         .map(({ val, key }) => state => ({
             ...state,
@@ -27,20 +25,24 @@ export default function Model({ intent }){
                 return orig.indexOf(comp) !== -1;
             })
         }));
-
     operator.append$ = intent.append$
-        .map(data => state => ({ ...state, logs: [data].concat(state.logs) }))
+        .map(data => state => ({ ...state, logs: [data].concat(state.logs) }));
+    operator.detailShow$ = intent.detailShow$
+        .map(detail => state => ({ ...state, detail }));
+    operator.detailHide$ = intent.detailHide$
+        .map(() => state => ({ ...state, detail:null }));
 
-    // run all operators against the state
-    const opState$ = $
+
+    const State = $
+        // run all operators against the state
         .merge(
             operator.load$,
             operator.append$,
-            operator.filter$
+            operator.filter$,
+            operator.detailShow$,
+            operator.detailHide$,
         )
-        .fold((state, operator) => operator(state), state);
-
-    const State = opState$
+        .fold((state, operator) => operator(state), state)
         // Determine the fields from the unique properties found on the logs.
         .map(state => {
             const fields = state.logs
@@ -51,9 +53,20 @@ export default function Model({ intent }){
         })
         .debug(state => debug('State', state));
 
-    const Feathers = intent.reset$
-        .fold(request => request, { service:'logs', method:'find', args:[] })
+
+    const request = {};
+    request.reset$ = intent.reset$
+        .fold(request => request, { service:'logs', method:'find', args:[] });
+    request.detail$ = intent.detailRequest$
+        .map(id => ({ service:'logs', method:'get', args:[id] }));
+
+    const Feathers = $
+        .merge(
+            request.reset$,
+            request.detail$,
+        )
         .debug(feathers => debug('Feathers', feathers));
+
 
     return { State, Feathers };
 }

@@ -12,16 +12,23 @@ export default function Stage(sources){
     // Fetch initial logs when starting
     feather.loaded$ = sources.Feathers
         .select({ type:'local', service:'logs', method:'find' })
-        .map(response => response.data)
+        .map(response => response.data);
     // Everytime a log is created update it.
     feather.created$ = sources.Feathers
-        .select({ type:'socket', service:'logs', method:'created' })
+        .select({ type:'socket', service:'logs', method:'created' });
+    // Whenever a detail arrives, convert the object to an array containing key:value
+    feather.detail$ = sources.Feathers
+        .select({ type:'local', service:'logs', method:'get' })
+        .map(data => Object
+            .keys(data)
+            .reduce(( result, name ) => (result.concat([{ name, value:data[name] }])), [])
+        )
 
 
     const event = {};
     // A click on the "RESTABLECER" button
     event.reset$ = sources.DOM
-        .select('button')
+        .select('center button')
         .events('click')
         .mapTo({});
     // Whenever a key is pressed on the filter inputs.
@@ -32,9 +39,14 @@ export default function Stage(sources){
             val: e.target.value,
             key: e.target.getAttribute('name')
         }));
-    event.scroll$ = $fromEvent(window, 'scroll')
-        .compose($throttle(100))
-        .addListener({ next: x => { console.log('.-----') }})
+    event.detail$ = sources.DOM
+        .select('log-body log-row')
+        .events('click')
+        .map(e => e.ownerTarget.dataset.id);
+    event.detailHide$ = sources.DOM
+        .select('log-detail button')
+        .events('click')
+        .mapTo({});
 
 
     const intent = {};
@@ -53,6 +65,13 @@ export default function Stage(sources){
     // Whenever a log needs to be appended
     intent.append$ = feather.created$
         .debug(data => debug('intent.append', data));
+    // Whenever a row is clicked for log details.
+    intent.detailRequest$ = event.detail$
+        .debug(data => debug('intent.detailRequest', data));
+    intent.detailShow$ = feather.detail$
+        .debug(data => debug('intent.detailShow', data));
+    intent.detailHide$ = event.detailHide$
+        .debug(data => debug('intent.detailHide', data));
 
 
     return { intent }

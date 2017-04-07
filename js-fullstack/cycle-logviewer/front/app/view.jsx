@@ -11,32 +11,39 @@ export default ({loaded, logs, fields, detail}) =>
         <button>RESTABLECER</button>
     </center> : ''}
 
-    <log-head>
-        <log-row>
-            {fields.map(field =>
-                <log-cell>
-                    <input
-                        name={field}
-                        title={field}
-                        type="text"
-                        placeholder={field}
-                    />
-                </log-cell>
-            )}
-        </log-row>
-    </log-head>
-    <log-body>
-        {logs.map(log =>
-            <log-row attrs-data-id={log._id}>
+    <log-table>
+        <log-head>
+            <log-row>
                 {fields.map(field =>
                     <log-cell>
-                        <span>{log[field] || ''}</span>
+                        <input
+                            name={field}
+                            title={field}
+                            type="text"
+                            placeholder={field}
+                        />
                     </log-cell>
                 )}
             </log-row>
-        )}
-    </log-body>
+        </log-head>
+        <log-body>
+            {logs.map(log =>
+                <log-row attrs-data-id={log._id}>
+                    {fields.map(field =>
+                        <log-cell>
+                            <span>{log[field] || ''}</span>
+                        </log-cell>
+                    )}
+                </log-row>
+            )}
+        </log-body>
+    </log-table>
 
     {detail? <log-detail>
+        <button>X</button>
+        {detail.map(({ name, value }) => <fieldset>
+            <legend>{name}</legend>
+            <code>{value}</code>
+        </fieldset>)}
     </log-detail> : ''}
 </section>
