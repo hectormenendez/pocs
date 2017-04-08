@@ -108,6 +108,15 @@
             background:var(--Color);
             & log-cell {
                 padding:0.85em 0.75rem;
+                & fieldset {
+                    display:block;
+                    border:0;
+                    padding:0;
+                    margin:0;
+                    & button {
+                        display:none;
+                    }
+                }
             }
             & input {
                 display:block;

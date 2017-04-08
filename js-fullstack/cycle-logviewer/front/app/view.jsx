@@ -16,12 +16,10 @@ export default ({loaded, logs, fields, detail}) =>
             <log-row>
                 {fields.map(field =>
                     <log-cell>
-                        <input
-                            name={field}
-                            title={field}
-                            type="text"
-                            placeholder={field}
-                        />
+                        <fieldset>
+                            <input name={field} title={field} type="text" placeholder={field} />
+                            <button>✔</button>
+                        </fieldset>
                     </log-cell>
                 )}
             </log-row>
@@ -40,7 +38,7 @@ export default ({loaded, logs, fields, detail}) =>
     </log-table>
 
     {detail? <log-detail>
-        <button>X</button>
+        <button>✘</button>
         {detail.map(({ name, value }) => <fieldset>
             <legend>{name}</legend>
             <pre>{value}</pre>
