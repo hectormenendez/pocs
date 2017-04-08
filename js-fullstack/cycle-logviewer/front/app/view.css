@@ -1,19 +1,20 @@
 :root {
 
-    --Color: darkblue;
+    --Color:darkblue;
+    --ColorClose:darkorange;
 
     --Font {
-        font-family: monospace;
-        font-size: 10pt;
-        font-weight: 100;
-        color: #111;
+        font-family:monospace;
+        font-size:10pt;
+        font-weight:100;
+        color:#111;
     }
 
     --Placeholder {
-        text-align: center;
+        text-align:center;
         @apply --Font;
         font-weight:bold;
-        color: color(var(--Color) blackness(+10%));
+        color:color(var(--Color) blackness(+10%));
     }
 
 }
@@ -25,31 +26,88 @@
         @apply --Font;
     }
 
+    & log-detail {
+        display:block;
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        width:95vw;
+        margin:3vh auto;
+        padding:1.3rem 1rem;
+        background:color(var(--Color) saturation(50%) lightness(97%));
+        border-radius:0.33rem;
+        box-shadow:0 0 1rem color(var(--Color) blackness(95%));
+        overflow:scroll;
+        border:1px solid color(var(--Color) lightness(97%));
+        & button {
+            position:absolute;
+            display:block;
+            top:0;
+            right:0;
+            cursor:pointer;
+            width:2rem;
+            height:1.33rem;
+            line-height:0;
+            background-color:color(var(--ColorClose));
+            color:color(var(--ColorClose) blackness(50%));
+            text-shadow:1px 1px color(var(--ColorClose) lightness(+25%));
+            font-weight:900;
+            border-top-right-radius:0.33rem;
+            border-bottom-left-radius:0.15rem;
+            border:0;
+            &:hover {
+                background-color:color(var(--ColorClose) lightness(+10%))
+            }
+        }
+        & fieldset {
+            border:1px solid color(var(--Color) saturation(30%) lightness(+60%));
+            padding:0.6rem 1rem 1rem 1rem;
+            border-radius:0.2rem;
+            background:white;
+            margin-bottom:1rem;
+            &:last-of-type {
+                margin-bottom:0;
+            }
+            & legend {
+                padding:0 0.5rem;
+                color:color(var(--Color) saturation(20%) lightness(+33%));
+                font-family:monospace;
+            }
+            & pre {
+                font-size:10pt;
+                margin:0;
+                display:block;
+            }
+        }
+    }
+
     & log-table {
         display:table;
-        width: 100%;
+        width:100%;
         overflow:scroll;
         & log-head,
         & log-body {
-            display: table-row-group;
-            border-collapse: collapse;
-            border-style: hidden;
+            display:table-row-group;
+            border-collapse:collapse;
+            border-style:hidden;
             & log-row {
-                display: table-row;
+                display:table-row;
             }
             & log-cell {
-                display: table-cell;
-                padding: 0.25rem 0.75rem;
-                max-width: 33vw;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                display:table-cell;
+                padding:0.25rem 0.75rem;
+                max-width:33vw;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow:ellipsis;
             }
         }
+
         & log-head {
-            background: var(--Color);
+            background:var(--Color);
             & log-cell {
-                padding: 0.85em 0.75rem;
+                padding:0.85em 0.75rem;
             }
             & input {
                 display:block;
@@ -57,25 +115,26 @@
                 min-width:100%;
                 border:0;
                 border-radius:0.25rem;
-                line-height: 1.5rem;
+                line-height:1.5rem;
                 padding:0 0.5rem;
                 &:focus {
-                    outline-color: color(var(--Color) saturation(+33%) lightness(+33%));
-                    background-color: color(var(--Color) lightness(+85%));
+                    outline-color:color(var(--Color) saturation(+33%) lightness(+33%));
+                    background-color:color(var(--Color) lightness(+85%));
                 }
             }
         }
+
         & log-body {
             & log-row {
                 &:nth-of-type(odd){
-                    background-color: color(var(--Color) saturation(+33%) lightness(+75%));
+                    background-color:color(var(--Color) saturation(+33%) lightness(+75%));
                 }
                 &:nth-of-type(even){
-                    background-color: color(var(--Color) saturation(+33%) lightness(+70%));
+                    background-color:color(var(--Color) saturation(+33%) lightness(+70%));
                 }
                 &:hover {
-                    cursor: pointer;
-                    background-color: color(var(--Color) saturation(+33%) lightness(+65%));
+                    cursor:pointer;
+                    background-color:color(var(--Color) saturation(+33%) lightness(+65%));
                 }
             }
         }

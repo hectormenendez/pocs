@@ -43,7 +43,7 @@ export default ({loaded, logs, fields, detail}) =>
         <button>X</button>
         {detail.map(({ name, value }) => <fieldset>
             <legend>{name}</legend>
-            <code>{value}</code>
+            <pre>{value}</pre>
         </fieldset>)}
     </log-detail> : ''}
 </section>
