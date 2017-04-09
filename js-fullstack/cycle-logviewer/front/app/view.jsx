@@ -1,7 +1,7 @@
 import {html as Html} from 'snabbdom-jsx';
 import {Style} from './view.css';
 
-export default ({loaded, logs, fields, detail}) =>
+export default ({loaded, logs, fields, detail, filter}) =>
 <section className={Style}>
     {!loaded? <center>
         <h2>Cargando registros …</h2>
@@ -14,10 +14,16 @@ export default ({loaded, logs, fields, detail}) =>
     <log-table>
         <log-head>
             <log-row>
-                {fields.map(field =>
+                {fields.map(({ name, value, active })=>
                     <log-cell>
-                        <fieldset>
-                            <input name={field} title={field} type="text" placeholder={field} />
+                        <fieldset attrs-data-active={active}>
+                            <input
+                                type="text"
+                                name={name}
+                                title={name}
+                                placeholder={name}
+                                value={value}
+                            />
                             <button>✔</button>
                         </fieldset>
                     </log-cell>
@@ -27,9 +33,9 @@ export default ({loaded, logs, fields, detail}) =>
         <log-body>
             {logs.map(log =>
                 <log-row attrs-data-id={log._id}>
-                    {fields.map(field =>
+                    {fields.map(({ name }) =>
                         <log-cell>
-                            <span>{log[field] || ''}</span>
+                            <span>{log[name] || ''}</span>
                         </log-cell>
                     )}
                 </log-row>

@@ -8,9 +8,10 @@ export default function Stage(sources){
     const debug = Debug('app:stage');
     const intent = {};
 
-    /**
+
+    /*************************************************************************************
      * Log list.
-     */
+     ************************************************************************************/
 
     // Whenever new logs were requested and found on the server.
     intent.logsLoaded$ = sources.Feathers
@@ -27,19 +28,10 @@ export default function Stage(sources){
         .events('click')
         .mapTo({});
 
-    // Whenever the user types in a filter field.
-    intent.logsFilterTyped$ = sources.DOM
-        .select('log-head input')
-        .events('keyup')
-        .map(e => ({
-            value:e.ownerTarget.value,
-            name: e.ownerTarget.getAttribute('name'),
-        }))
-        .filter(value => value && value.length);
 
-    /**
+    /*************************************************************************************
      * Log detail.
-     */
+     ************************************************************************************/
 
     // Whenever a log detail was requested and found on the server.
     intent.detailLoaded$ = sources.Feathers
@@ -62,6 +54,49 @@ export default function Stage(sources){
         .mapTo({});
 
 
+    /*************************************************************************************
+     * Filter
+     ************************************************************************************/
+
+    const filterDOM = sources.DOM.select('log-head input');
+    const filterLostFocus$ = filterDOM
+        .events('blur')
+        // if the blur happened inside the same parent, omit it.
+        .filter(e => {
+            // e.relatedTarget: Webkit
+            // e.explicitOriginalTarget: SpiderMonkey
+            const clicked = e.relatedTarget || e.explicitOriginalTarget || {};
+            if(!clicked.parentElement) return true;
+            return e.target.parentElement.innerHTML != clicked.parentElement.innerHTML;
+        });
+
+    // Whenever the user interacts with a filter input.
+    intent.filterChangedFocus$ = $
+        .merge(filterDOM.events('focus'), filterLostFocus$)
+        .map(e => ({
+            name: e.target.getAttribute('name'),
+            active: e.type === 'focus' || undefined,
+        }));
+
+    // Whenever the user applies a filter, get all the values from all the filters.
+    intent.filterNeeded$ = sources.DOM
+        .select('log-head button')
+        .events('click')
+        .map(e => {
+            let parent = e.target;
+            while((parent = parent.parentElement) && parent.tagName != 'LOG-HEAD');
+            const inputs = [];
+            parent.querySelectorAll('input').forEach(input => {
+                inputs.push({
+                    name: input.getAttribute('name'),
+                    value: input.value
+                });
+            })
+            return inputs;
+        });
+
+
+    /************************************************************************************/
     return {
         // Adds debug to every intent sent
         intent: Object
