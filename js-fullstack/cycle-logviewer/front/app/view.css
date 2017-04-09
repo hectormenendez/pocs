@@ -40,6 +40,7 @@
         box-shadow:0 0 1rem color(var(--Color) blackness(95%));
         overflow:scroll;
         border:1px solid color(var(--Color) lightness(97%));
+
         & button {
             position:absolute;
             display:block;
@@ -60,6 +61,7 @@
                 background-color:color(var(--ColorClose) lightness(+10%))
             }
         }
+
         & fieldset {
             border:1px solid color(var(--Color) saturation(30%) lightness(+60%));
             padding:0.6rem 1rem 1rem 1rem;
@@ -110,11 +112,31 @@
                 padding:0.85em 0.75rem;
                 & fieldset {
                     display:block;
+                    position:relative;
                     border:0;
                     padding:0;
                     margin:0;
                     & button {
                         display:none;
+                    }
+                }
+                & fieldset[data-active=true] {
+                    margin-right:1.5rem;
+                    & input {
+                        border-bottom-right-radius:0;
+                        border-top-right-radius:0;
+                    }
+                    & button {
+                        display:block;
+                        position:absolute;
+                        right:-1.5rem;
+                        top:0;
+                        border:0;
+                        border-bottom-right-radius:0.25rem;
+                        border-top-right-radius:0.25rem;
+                        width: 1.5rem;
+                        height: 1.5rem;
+                        font-size: 1rem;
                     }
                 }
             }
