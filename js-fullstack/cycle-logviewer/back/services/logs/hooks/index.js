@@ -1,9 +1,10 @@
 import FeathersHooks from 'feathers-hooks';
+import { QueryRegex } from './query';
 import { DateSort, DateAssign, DateFormat } from './date';
 
 export const before = {
     all: [],
-    find: [DateSort()],
+    find: [QueryRegex(), DateSort()],
     get: [],
     update: [],
     create: [DateAssign()],
