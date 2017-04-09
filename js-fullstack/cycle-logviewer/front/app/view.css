@@ -1,7 +1,7 @@
 :root {
 
     --Color:darkblue;
-    --ColorClose:darkorange;
+    --ColorButton:darkorange;
 
     --Font {
         font-family:monospace;
@@ -17,6 +17,19 @@
         color:color(var(--Color) blackness(+10%));
     }
 
+    --Button {
+        display:block;
+        cursor:pointer;
+        background-color:color(var(--ColorButton));
+        color:color(var(--ColorButton) blackness(50%));
+        text-shadow:1px 1px color(var(--ColorButton) lightness(+25%));
+        font-size: 1rem;
+        font-weight:900;
+        border:0;
+        &:hover {
+            background-color:color(var(--ColorButton) lightness(+10%))
+        }
+    }
 }
 
 :local .Style {
@@ -43,23 +56,14 @@
 
         & button {
             position:absolute;
-            display:block;
             top:0;
             right:0;
-            cursor:pointer;
             width:2rem;
             height:1.33rem;
             line-height:0;
-            background-color:color(var(--ColorClose));
-            color:color(var(--ColorClose) blackness(50%));
-            text-shadow:1px 1px color(var(--ColorClose) lightness(+25%));
-            font-weight:900;
             border-top-right-radius:0.33rem;
             border-bottom-left-radius:0.15rem;
-            border:0;
-            &:hover {
-                background-color:color(var(--ColorClose) lightness(+10%))
-            }
+            @apply --Button;
         }
 
         & fieldset {
@@ -127,7 +131,6 @@
                         border-top-right-radius:0;
                     }
                     & button {
-                        display:block;
                         position:absolute;
                         right:-1.5rem;
                         top:0;
@@ -136,7 +139,7 @@
                         border-top-right-radius:0.25rem;
                         width: 1.5rem;
                         height: 1.5rem;
-                        font-size: 1rem;
+                        @apply --Button;
                     }
                 }
             }
