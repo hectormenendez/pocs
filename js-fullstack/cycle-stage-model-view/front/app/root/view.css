@@ -1,0 +1,19 @@
+:root {
+    --ColorText: orangered;
+    --ColorBg: lightblue;
+}
+
+:local .Style {
+    & h1 {
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        margin:auto;
+        text-align: center;
+        line-height: 100vh;
+        background-color: var(--ColorBg);
+        color: var(--ColorText);
+    }
+}
