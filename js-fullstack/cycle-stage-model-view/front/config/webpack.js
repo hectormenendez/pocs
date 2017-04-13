@@ -27,6 +27,14 @@ export default conf => ({
         publicPath: "",
     },
 
+    resolve: {
+        alias: {
+            app: conf.path('app'),
+            components: conf.path('app/components'),
+            helpers: conf.path('app/helpers'),
+        }
+    },
+
     // Transformations that are applied on a file.
     module: {
         rules: [
@@ -51,6 +59,6 @@ export default conf => ({
     plugins:[
         new Html({ template: `${conf.path('app/index.html')}` }),
         new Webpack.DefinePlugin({ 'APP': JSON.stringify(conf.app) }),
-    ]
+    ],
 
 });
