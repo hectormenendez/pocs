@@ -7,18 +7,14 @@ import { makeDOMDriver as DomDriver } from '@cycle/dom';
 
 import './index.css';
 
-import Stage from './root/stage';
-import Model from './root/model';
-import View from './root/view.jsx';
+import SMV from 'helpers/smv';
 
-export default function main(sources){
-    const actors = Stage(sources);
-    const sinks = Model(actors);
-    sinks.DOM = sinks.State.map(state => View(state));
-    return sinks;
-}
+const root$ = SMV('root');
 
-Run(main, {
-    DOM: DomDriver(document.getElementsByTagName('main')[0]),
-    Feathers: FeathersDriver(Socket(`http://${APP.host}:${APP.port}`)),
-})
+root$.addListener({
+    error: error => { throw error },
+    next: main => Run(main, {
+        DOM: DomDriver(document.getElementsByTagName('main')[0]),
+        Feathers: FeathersDriver(Socket(`http://${APP.host}:${APP.port}`)),
+    })
+});

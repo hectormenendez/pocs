@@ -1,11 +1,15 @@
 import $ from 'xstream';
 import Debug from 'debug';
+import {Component} from 'helpers/smv';
 
-export default function Stage(sources){
+export default sources => ({
 
-    const debug = Debug('app:stage');
-    const intent = {};
+    debug: Debug('app:root'),
 
-    /************************************************************************************/
-    return { intent }
-}
+    intent: {},
+
+    component:{
+        slider: Component({ sources, path:'components/slider' }),
+    },
+
+});

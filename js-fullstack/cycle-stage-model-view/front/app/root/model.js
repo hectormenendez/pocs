@@ -1,14 +1,18 @@
 import $ from 'xstream';
-import Debug from 'debug';
 
-export default function Model({ intent }){
+export default ({ intent, debug, component }) => ({
 
-    const debug = Debug('app:model');
+    State:$.of({
+        initial$: $.of(state => ({
+            subject:'World',
+            slider: {
+                value: 10
+            }
+        })),
+    }),
 
-    // The default state
-    const state = {
-        subject: 'World'
-    };
-
-    return { State: $.of(state) };
-}
+    DOM:$.of({
+        Slider1: state => component.slider(state.slider).DOM,
+        Slider2: state => component.slider(state.slider).DOM,
+    })
+})
