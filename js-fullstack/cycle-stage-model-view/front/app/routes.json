@@ -1,0 +1,4 @@
+{
+    "root": { "uri": "/", "path": "pages/root" },
+    "bmi": { "uri": "/bmi", "path": "pages/bmi" }
+}
