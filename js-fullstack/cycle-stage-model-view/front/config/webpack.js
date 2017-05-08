@@ -32,6 +32,7 @@ export default conf => ({
             app: conf.path('app'),
             components: conf.path('app/components'),
             helpers: conf.path('app/helpers'),
+            pages: conf.path('app/path'),
         }
     },
 
