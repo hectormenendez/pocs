@@ -1,0 +1,21 @@
+{
+    "parser": "babel-eslint",
+    "plugins":["cycle"],
+    "env":{
+	"browser": true,
+	"es6": true
+    },
+    "ecmaFeatures":{
+	"arrowFunctions": true,
+	"jsx": true,
+	"modules": true,
+	"destructuring": true,
+	"spread": true,
+	"templateStrings":true,
+	"defaultParams": true,
+	"classes": false,
+	"generators": false,
+    },
+    "rules":{
+    }
+}
