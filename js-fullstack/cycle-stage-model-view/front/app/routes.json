@@ -1,4 +1,13 @@
-{
-    "root": { "uri": "/", "path": "pages/root" },
-    "bmi": { "uri": "/bmi", "path": "pages/bmi" }
-}
+[
+    {
+        "href": "/",
+        "path": null,
+        "title": "Home"
+    },
+    {
+        "href": "/bmi",
+        "path": "pages/bmi",
+        "title": "BMI Calculator"
+    }
+]
+
