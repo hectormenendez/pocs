@@ -14,9 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // The initial game settings
     game.settings = {
         framerate:10,
-        color: {
-            bg: 'black',
-            fg: 'lime'
+        size: 10,
+        style: {
+            canvas:'black',
+            snake: 'lime',
+            target: 'tomato'
         }
     };
     // Setup canvas initial properties
@@ -27,17 +29,24 @@ document.addEventListener("DOMContentLoaded", () => {
     // The initial snake properties
     game.snake = {
         // the size in pixels for the snake's tail
-        size: 10,
-        length: 1,
+        size: game.settings.size,
         // the current direction for the snake
         dir:{ x:0, y:0 },
         // the current position of the snake's head (middle of the screen)
         pos:{
             x: Math.floor(canvas.width/2),
             y: Math.floor(canvas.height/2)
+        },
+        tail:[]
+    };
+    // the initial target properties
+    game.target = {
+        size: game.settings.size,
+        pos: {
+            x: Math.floor((Math.random() * canvas.width) +1),
+            y: Math.floor((Math.random() * canvas.height) +1)
         }
     };
-
     setInterval(main.bind(game), 1000/game.settings.framerate);
     document.addEventListener('keydown', onKey.bind(game));
 });
@@ -51,18 +60,29 @@ function main(){
     if (this.snake.pos.x >= this.canvas.width) this.snake.pos.x = 0;
     if (this.snake.pos.y <= 0) this.snake.pos.y = this.canvas.height - this.snake.size;
     if (this.snake.pos.y >= this.canvas.height) this.snake.pos.y = 0;
+    paint.call(this);
+}
+
+function paint(){
     // re paint the background on every frame
-    this.context.fillStyle = this.settings.color.bg;
+    this.context.fillStyle = this.settings.style.canvas;
     this.context.fillRect(0,0, this.canvas.width, this.canvas.height);
     // paint the snake
-    this.context.fillStyle = this.settings.color.fg;
+    this.context.fillStyle = this.settings.style.snake;
     this.context.fillRect(
         this.snake.pos.x,
         this.snake.pos.y,
         this.snake.size,
         this.snake.size
     );
-    console.log(this.snake.pos)
+    // paint the target
+    this.context.fillStyle = this.settings.style.target;
+    this.context.fillRect(
+        this.target.pos.x,
+        this.target.pos.y,
+        this.target.size,
+        this.target.size
+    );
 }
 
 function onKey(e){
