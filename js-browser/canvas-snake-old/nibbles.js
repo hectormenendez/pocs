@@ -65,24 +65,24 @@ function main(){
 
 function paint(){
     // re paint the background on every frame
-    this.context.fillStyle = this.settings.style.canvas;
-    this.context.fillRect(0,0, this.canvas.width, this.canvas.height);
+    paintRect.call(this, this.settings.style.canvas, {
+        pos: { x:0, y:0 },
+        width: this.canvas.width,
+        height: this.canvas.height
+    });
     // paint the snake
-    this.context.fillStyle = this.settings.style.snake;
-    this.context.fillRect(
-        this.snake.pos.x,
-        this.snake.pos.y,
-        this.snake.size,
-        this.snake.size
-    );
+    paintRect.call(this, this.settings.style.snake, this.snake);
     // paint the target
-    this.context.fillStyle = this.settings.style.target;
-    this.context.fillRect(
-        this.target.pos.x,
-        this.target.pos.y,
-        this.target.size,
-        this.target.size
-    );
+    paintRect.call(this, this.settings.style.target, this.target);
+}
+
+function paintRect(style, figure){
+    this.context.fillStyle = style;
+    const {x,y} = figure.pos;
+    let width, height;
+    if (figure.size) width = height = figure.size;
+    else ({ width, height } = figure);
+    this.context.fillRect(x, y, width, height);
 }
 
 function onKey(e){
