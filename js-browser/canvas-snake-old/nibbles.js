@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // The initial game settings
     game.settings = {
         framerate:10,
+        difficulty: 1.03,
         size: 10,
         style: {
             canvas:'black',
@@ -47,9 +48,15 @@ document.addEventListener("DOMContentLoaded", () => {
             y: Math.floor((Math.random() * game.canvas.height) +1)
         }
     };
-    setInterval(main.bind(game), 1000/game.settings.framerate);
+    setup.call(game);
     document.addEventListener('keydown', onKey.bind(game));
 });
+
+function setup(){
+    if (this.interval) clearInterval(this.interval);
+    this.interval = setInterval(main.bind(this), 1000/this.settings.framerate);
+    console.log(1000/this.settings.framerate)
+}
 
 function main(){
     // Set the snake.pos based upon the current direction
@@ -64,6 +71,8 @@ function main(){
     if (areBoxesColliding(this.snake, this.target)){
         this.target.pos.x = Math.floor((Math.random() * this.canvas.width) +1);
         this.target.pos.y = Math.floor((Math.random() * this.canvas.height) +1);
+        this.settings.framerate *= this.settings.difficulty;
+        setup.call(this);
     };
     paint.call(this);
 }
