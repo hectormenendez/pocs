@@ -34,8 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
         dir:{ x:0, y:0 },
         // the current position of the snake's head (middle of the screen)
         pos:{
-            x: Math.floor(canvas.width/2),
-            y: Math.floor(canvas.height/2)
+            x: Math.floor(game.canvas.width/2),
+            y: Math.floor(game.canvas.height/2)
         },
         tail:[]
     };
@@ -43,8 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
     game.target = {
         size: game.settings.size,
         pos: {
-            x: Math.floor((Math.random() * canvas.width) +1),
-            y: Math.floor((Math.random() * canvas.height) +1)
+            x: Math.floor((Math.random() * game.canvas.width) +1),
+            y: Math.floor((Math.random() * game.canvas.height) +1)
         }
     };
     setInterval(main.bind(game), 1000/game.settings.framerate);
@@ -60,6 +60,11 @@ function main(){
     if (this.snake.pos.x >= this.canvas.width) this.snake.pos.x = 0;
     if (this.snake.pos.y <= 0) this.snake.pos.y = this.canvas.height - this.snake.size;
     if (this.snake.pos.y >= this.canvas.height) this.snake.pos.y = 0;
+    // If the snake head touches a target, set a new target position
+    if (areBoxesColliding(this.snake, this.target)){
+        this.target.pos.x = Math.floor((Math.random() * this.canvas.width) +1);
+        this.target.pos.y = Math.floor((Math.random() * this.canvas.height) +1);
+    };
     paint.call(this);
 }
 
@@ -83,6 +88,15 @@ function paintRect(style, figure){
     if (figure.size) width = height = figure.size;
     else ({ width, height } = figure);
     this.context.fillRect(x, y, width, height);
+}
+
+function areBoxesColliding(box1, box2){
+    return !(
+        (box1.pos.y + box1.size < box2.pos.y) ||
+        (box1.pos.x + box1.size < box2.pos.x) ||
+        (box1.pos.y > box2.pos.y + box2.size) ||
+        (box1.pos.x > box2.pos.x + box2.size)
+    );
 }
 
 function onKey(e){
