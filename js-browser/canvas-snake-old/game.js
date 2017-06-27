@@ -15,9 +15,9 @@ class Game {
             { code:40, value:() => ({ x:0 , y:1  }) }
         ];
         document.addEventListener('keydown', this.onKey.bind(this));
-        // setup the game loop
+        // setup
+        this.snake.setup(this.canvas);
         this.target.setup(this.canvas);
-        console.log(this.target);
         this.setup();
     }
 
@@ -34,21 +34,18 @@ class Game {
     }
 
     main(){
-        // If the snake doesn't have a body, create it on the middle of the grid
-        if (!this.snake.body.length) this.snake.body.push({
-            x: Math.floor(this.canvas.grid.x.length / 2),
-            y: Math.floor(this.canvas.grid.y.length / 2)
-        });
         // detect collision of snake and target
         if (
-            this.snake.body[0].x == this.target.position.x &&
-            this.snake.body[0].y == this.target.position.y
+            this.snake.position.x == this.target.position.x &&
+            this.snake.position.y == this.target.position.y
         ){
+            // set a new position for the target
             this.target.setup(this.canvas);
+            // increase the difficulty by increasing the framerate
             this.settings.framerate *= this.settings.difficulty;
             this.setup();
         }
-        // Paint all elements in the script
+        // Paint all elements on canvas
         this.canvas.update();
         this.snake.update(this.canvas);
         this.target.update(this.canvas);
