@@ -4,8 +4,15 @@
   "description": "My tools for twitter parsing",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "nodemon": "nodemon"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "lokijs": "^1.5.0",
+    "rxjs": "^5.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
 }
