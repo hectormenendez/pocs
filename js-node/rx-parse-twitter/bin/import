@@ -1,0 +1,92 @@
+#!/usr/bin/env node
+
+const FS = require('fs');
+const PATH = require('path');
+
+const Rx = require('rxjs');
+const Loki = require('lokijs');
+const LokiFS = require('lokijs/src/loki-fs-structured-adapter');
+
+
+// Determine the correct argument number by finding this filename on the argv array
+const root = PATH.resolve(PATH.join(__dirname, '..'));
+const argi = process.argv.indexOf(__filename);
+const argv = process.argv.slice(argi +1);
+
+if (argi === -1) throw 'could not find executable index';
+if (!argv.length) throw 'expecting path(s) to twitter data';
+
+// Instantiate database (loading and saving will be done manually)
+const loki = new Loki(PATH.join(root, 'twitter.json'), {
+    adapter: new LokiFS(),
+    autoLoad: false,
+    autoSave: false
+});
+
+// Convert Native async methods intro stream factories
+const lokiLoad = Rx.Observable.bindNodeCallback(loki.loadDatabase.bind(loki));
+const lokiSave = Rx.Observable.bindNodeCallback(loki.saveDatabase.bind(loki));
+const streamStat = Rx.Observable.bindNodeCallback(FS.stat);
+const streamDir = Rx.Observable.bindNodeCallback(FS.readdir);
+const streamFile = Rx.Observable.bindNodeCallback(FS.readFile);
+
+// Grab the target directory or directories where the twitter archive should reside
+const path$ = Rx.Observable
+    .from(argv)
+    // convert every path to an absolute string
+    .map(path => PATH.resolve(path))
+    // make sure given argument is a directory
+    .mergeMap(path => streamStat(path)
+        .catch(err => { throw `"${path}" does not exist.` })
+        .do(stat => { if (!stat.isDirectory()) throw `"${path}" is not a directory`; })
+        .mapTo(path)
+    )
+    // make sure given arguments contains a 'data/js/tweets' directory
+    .mergeMap(path => {
+        const message = `"${path}" does not contain a tweets directory.`;
+        path = PATH.join(path, 'data', 'js', 'tweets');
+        return streamStat(path)
+            .catch(err => { throw message; })
+            .do(stat => { if (!stat.isDirectory()) throw message })
+            .mapTo(path);
+    });
+
+const tweet$ = path$
+    // Get the stream and parse it accoridingly
+    .mergeMap(path =>
+        streamDir(path)
+        .mergeAll()
+        .map(file => PATH.join(path, file))
+    )
+    // get each file contents and leave only  the array declaration and parse it
+    .concatMap(path => streamFile(path, 'utf-8'))
+    .map(content => content.replace(/^[^\[]+/,''))
+    .concatMap(content => JSON.parse(content))
+    // make sure a date object is created for each tweet
+    .map(tweet => Object.assign(tweet, { created_at: new Date(tweet.created_at) }))
+
+const db$ = lokiLoad({})
+    // load or create the tweet collection accordingly
+    .mapTo(
+        loki.getCollection('tweets') ||
+        loki.addCollection('tweets', { unique:'id_str' })
+    )
+    // inject the collection to each tweet
+    .mergeMap(collection => tweet$.map(tweet => ({ collection, tweet })))
+    // filter out tweets already inserted, and insert those that aren't
+    .filter(({ collection, tweet }) => !collection.by('id_str', tweet.id_str))
+    .do(({ collection, tweet }) => {
+        collection.insert(tweet)
+        console.log('inserted»', tweet.id_str);
+    })
+    // once everything is done, persist the database
+    .toArray()
+    .mergeMapTo(lokiSave())
+
+
+db$.subscribe(
+    // Each saved tweet
+    tweets => console.log('--------'),
+    // Any errors?
+    error => { throw error }
+);
