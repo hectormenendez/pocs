@@ -4,19 +4,25 @@ const Rx = require('rxjs');
 const Loki = require('lokijs');
 const LokiFS = require('lokijs/src/loki-fs-structured-adapter');
 
-const loki = new Loki(PATH.join(__dirname, 'twitter.json'), {
+const loki = new Loki(PATH.join(__dirname, 'data', 'twitter.json'), {
     adapter: new LokiFS(),
     autoLoad: false,
     autoSave: false
 });
 
-const lokiLoad = Rx.Observable.bindNodeCallback(loki.loadDatabase.bind(loki));
-const lokiSave = Rx.Observable.bindNodeCallback(loki.saveDatabase.bind(loki));
+const rxLoad = Rx.Observable.bindNodeCallback(loki.loadDatabase.bind(loki));
 
-lokiLoad({})
-    .mapTo(loki.collections)
-    .subscribe(
-        si => console.log('si', si),
-        no => console.log('no', no),
-        () => console.log('------')
-    )
+const db$ =
+    // load database
+    rxLoad({})
+    // grab tweet collection
+    .map(() => loki.getCollection('tweets'))
+    // if the collection does not exist, do nothing
+    .filter(Boolean);
+
+db$.subscribe(
+    si => console.log('si', si),
+    no => console.log('no', no),
+    () => console.log('------')
+);
+
