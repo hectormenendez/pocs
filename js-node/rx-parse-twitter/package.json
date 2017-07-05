@@ -4,7 +4,7 @@
   "description": "My tools for twitter parsing",
   "main": "index.js",
   "scripts": {
-    "nodemon": "nodemon"
+    "nodemon": "nodemon -V"
   },
   "author": "",
   "license": "ISC",

@@ -17,7 +17,7 @@ if (argi === -1) throw 'could not find executable index';
 if (!argv.length) throw 'expecting path(s) to twitter data';
 
 // Instantiate database (loading and saving will be done manually)
-const loki = new Loki(PATH.join(root, 'twitter.json'), {
+const loki = new Loki(PATH.join(root, 'data', 'twitter.json'), {
     adapter: new LokiFS(),
     autoLoad: false,
     autoSave: false
@@ -37,7 +37,7 @@ const path$ = Rx.Observable
     .map(path => PATH.resolve(path))
     // make sure given argument is a directory
     .mergeMap(path => streamStat(path)
-        .catch(err => { throw `"${path}" does not exist.` })
+        .catch(err => { throw `"${path}" does not exist.`; })
         .do(stat => { if (!stat.isDirectory()) throw `"${path}" is not a directory`; })
         .mapTo(path)
     )
@@ -63,30 +63,32 @@ const tweet$ = path$
     .map(content => content.replace(/^[^\[]+/,''))
     .concatMap(content => JSON.parse(content))
     // make sure a date object is created for each tweet
-    .map(tweet => Object.assign(tweet, { created_at: new Date(tweet.created_at) }))
+    .map(tweet => Object.assign(tweet, { created_at: new Date(tweet.created_at) }));
 
 const db$ = lokiLoad({})
     // load or create the tweet collection accordingly
-    .mapTo(
-        loki.getCollection('tweets') ||
-        loki.addCollection('tweets', { unique:'id_str' })
-    )
+    .map(() => loki.getCollection('tweets') || loki.addCollection('tweets', {
+        unique:'id_str'
+    }))
     // inject the collection to each tweet
     .mergeMap(collection => tweet$.map(tweet => ({ collection, tweet })))
     // filter out tweets already inserted, and insert those that aren't
     .filter(({ collection, tweet }) => !collection.by('id_str', tweet.id_str))
-    .do(({ collection, tweet }) => {
-        collection.insert(tweet)
-        console.log('inserted»', tweet.id_str);
+    // import tweet into collection
+    .map(({ collection, tweet }) => {
+        const document = collection.insert(tweet);
+        console.log('import»', document.$loki);
+        return document;
     })
-    // once everything is done, persist the database
+    // wait until every insert is done and save the database
     .toArray()
-    .mergeMapTo(lokiSave())
+    .mergeMap(documents => lokiSave().mapTo(documents));
 
 
 db$.subscribe(
-    // Each saved tweet
-    tweets => console.log('--------'),
+    documents => {
+        console.log(`Imported ${documents.length} documents.`);
+    },
     // Any errors?
-    error => { throw error }
+    error => { throw error; }
 );
