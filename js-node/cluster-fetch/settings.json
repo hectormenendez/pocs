@@ -1,5 +1,8 @@
 {
     "url": "https://reqres.in/api/unknown/2",
     "method": "GET",
-    "body": ""
+    "body": "",
+    "blocking":false,
+    "interval":1000
 }
+
