@@ -4,7 +4,7 @@
     "description": "A music manager",
     "license": "unlicensed",
     "private": true,
-    "main": "config/web-server.js",
+    "main": "scripts/start.js",
     "contributors": [
         "Héctor Menéndez <hector@gik.mx>"
     ],
@@ -16,6 +16,7 @@
         "node": "^8.2.1"
     },
     "scripts": {
+        "start": "NODE_PATH=./ NODE_ENV=development babel-node -- $(printenv npm_package_main)"
     },
     "dependencies": {
         "@cycle/dom": "^18.0.0",
@@ -29,10 +30,15 @@
     "devDependencies": {
         "babel-cli": "^6.26.0",
         "babel-preset-env": "^1.6.0",
-        "babel-preset-stage-0": "^6.24.1"
+        "babel-preset-stage-0": "^6.24.1",
+        "webpack": "^3.5.6",
+        "webpack-dev-server": "^2.7.1"
     },
-    "babel":{
-        "presets": ["env", "stage-0"],
+    "babel": {
+        "presets": [
+            "env",
+            "stage-0"
+        ],
         "plugins": []
     }
 }
