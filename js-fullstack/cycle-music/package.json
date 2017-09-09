@@ -4,7 +4,7 @@
     "description": "A music manager",
     "license": "unlicensed",
     "private": true,
-    "main": "scripts/start.js",
+    "main": "run.js",
     "contributors": [
         "Héctor Menéndez <hector@gik.mx>"
     ],
@@ -16,7 +16,8 @@
         "node": "^8.2.1"
     },
     "scripts": {
-        "start": "NODE_PATH=./ NODE_ENV=development babel-node -- $(printenv npm_package_main)"
+        "runner": "NODE_PATH=./ NODE_ENV=development babel-node -- $(printenv npm_package_main)",
+        "start": "npm run runner -s -- start"
     },
     "dependencies": {
         "@cycle/dom": "^18.0.0",

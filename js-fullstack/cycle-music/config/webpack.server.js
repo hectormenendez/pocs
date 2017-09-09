@@ -1,3 +1,3 @@
-export default {
-    test:true
-}
+import Config from 'config/webpack';
+
+console.log('webpack.server');
