@@ -4,4 +4,4 @@ import Server from 'webpack-dev-server';
 // Local
 import Config from 'config/webpack.server';
 
-console.log('start');
+console.log(Config);

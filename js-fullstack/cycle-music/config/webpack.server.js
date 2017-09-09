@@ -1,3 +1,7 @@
-import Config from 'config/webpack';
+// NPM modules
+import WebpackMerge from 'webpack-merge';
+import Config from 'config/webpack.development';
 
-console.log('webpack.server');
+export default WebpackMerge(Config, {
+    server: true
+});
