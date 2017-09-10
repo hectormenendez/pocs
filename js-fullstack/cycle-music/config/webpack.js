@@ -67,23 +67,35 @@ export default {
 
             {
                 // js or jsx files
-                // Apply the babel-loader so they get properly transpiled
                 test: /\.jsx?$/,
                 include: Path.source_front,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        // Use these presets for transpiling
-                        presets: ['env', 'stage-0'],
-                        // Cache the directory after first run, so the loader saves time.
-                        cacheDirectory: true,
-                        // Extra functionality
-                        plugins: [
-                            // Transform JSX whenever the Snabbdom module is included
-                            ['transform-react-jsx', { pragma: 'Snabbdom.createElement' }]
-                        ]
+                use: [
+                    // Transpile with babel
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            // Use these presets for transpiling
+                            presets: ['env', 'stage-0'],
+                            // Cache the directory after first run, to save time.
+                            cacheDirectory: true,
+                            // Extra functionality
+                            plugins: [
+                                // Transform JSX whenever the Snabbdom module is included
+                                [
+                                    'transform-react-jsx',
+                                    { pragma: 'Snabbdom.createElement' }
+                                ]
+                            ]
+                        },
                     },
-                }
+                    // Allow the use of conditional comments for special actions.
+                    {
+                        loader: 'ifdef-loader',
+                        options: {
+                            PRODUCTION: process.NODE_ENV === 'production'
+                        }
+                    }
+                ]
             }
 
         ],
