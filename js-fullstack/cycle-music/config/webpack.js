@@ -5,7 +5,7 @@ import Webpack from 'webpack';
 import WebpackHtml from 'html-webpack-plugin';
 // Local modules
 import Path from 'util/path';
-import ConfigApp from 'config/app';
+import Config from 'config/front';
 
 export default {
 
@@ -26,6 +26,27 @@ export default {
         path: Path.output,
         // The public URL for the root on the browser
         publicPath: ""
+    },
+
+    // Tell the module resolver how to behave
+    resolve: {
+        // If ommited, assume one of these extensions
+        extensions: ['.js', '.jsx', '.json'],
+        // if ommited, assume one of these paths
+        modules: [ Path.source_front, Path.module ],
+        // Make the app configuration available
+        alias: {
+            config: PATH.join(Path.config, 'front.json')
+        }
+    },
+
+    // Some libraries import Node modules (pointless in the browser) make dummies for'em.
+    node: {
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty',
+        dgram: 'empty',
+        child_process: 'empty'
     },
 
     // Transformations applied to each file-type imported on the app
@@ -76,7 +97,7 @@ export default {
         // Outputs an html file based upon a template (specified on the html-loader)
         new WebpackHtml({
             // The title to use for the generated html
-            title: ConfigApp.title,
+            title: Config.title,
             // The filename to use for the generated html
             filename: 'index.html',
             // Use this file as a template for the generated html
