@@ -1,7 +1,9 @@
 import $ from 'xstream';
 
-export const Model = ({ increment$, decrement$ }) => $
-    .merge(increment$, decrement$)
-    .fold((state, num) => ({ ...state, num: state.num + num }), { num: 0 })
+export const Model = ({ increment$, decrement$ }) => $.merge(
+    $.of(state => ({ ...state, num:0 })),
+    increment$.map(num => state => ({ ...state, num: state.num + num })),
+    decrement$.map(num => state => ({ ...state, num: state.num + num })),
+)
 
 export default Model;

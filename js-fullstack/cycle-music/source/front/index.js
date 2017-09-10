@@ -9,15 +9,14 @@ import App from 'layouts/app';
 
 /// #if PRODUCTION
 
-Run(App, Drivers());
+Run(Onionify(App), Drivers());
 
 /// #else
 
 const runner = Rerunner(Setup, Drivers, Isolate);
-runner(App);
+runner(Onionify(App));
 module.hot.accept('layouts/app', function(){
-    const newApp = require('layouts/app').default;
-    runner(newApp);
+    runner(Onionify(require('layouts/app').default));
 });
 
 /// #endif

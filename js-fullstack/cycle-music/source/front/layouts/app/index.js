@@ -6,10 +6,11 @@ import Model from './model';
 export default function App(sources){
 
     const intent = Intent(sources.DOM);
-    const state$ = Model(intent);
-    const dom$ = state$.map(View);
+    const reducer$ = Model(intent);
+    const dom$ = sources.onion.state$.map(View);
 
     return {
-        DOM: dom$
+        DOM: dom$,
+        onion: reducer$
     }
 }
