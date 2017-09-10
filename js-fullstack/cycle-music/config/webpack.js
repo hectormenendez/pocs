@@ -34,23 +34,35 @@ export default {
         // These are the index files that will be put at the root of the output folder.
         {
             test: /\.html$/,
-            loader: 'html-loader',
-            include: PATH.join(Path.source_front, 'index.html')
+            include: PATH.join(Path.source_front, 'index.html'),
+            use: {
+                loader: 'html-loader',
+                options: {}
+            }
         },
         {
             // js or jsx files
             // Apply the babel-loader so they get properly transpiled
             test: /\.jsx?$/,
-            loader: 'babel-loader',
             include: Path.source_front,
-            query: {
-                // Cache the directory after the first run, so the loader can save time.
-                cacheDirectory: true
+            use: {
+                loader: 'babel-loader',
+                options: {
+                    // Use these presets for transpiling
+                    presets: ['env', 'stage-0'],
+                    // Cache the directory after the first run, so the loader saves time.
+                    cacheDirectory: true
+                },
+                plugins: [
+                    // Transform JSX whenever the Snabbdom module is included
+                    ['transform-react-jsx', { pragma: 'Snabbdom.createElement' }]
+                ]
             }
         }
     ],
 
     plugins: [
+
         // Outputs an html file based upon a template (specified on the html-loader)
         new WebpackHtml({
             // The title to use for the generated html

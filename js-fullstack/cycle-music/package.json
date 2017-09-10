@@ -4,7 +4,7 @@
     "description": "A music manager",
     "license": "unlicensed",
     "private": true,
-    "main": "run.js",
+    "main": "util/run.js",
     "contributors": [
         "Héctor Menéndez <hector@gik.mx>"
     ],
