@@ -15,9 +15,6 @@ export default {
     // The directory containing the entry files
     context: Path.source_front,
 
-    // The application starting point
-    entry: './index.js',
-
     // Instructions on how to output the bundle
     output: {
         // Use JSONP for loading on-demand chunks, by adding a script tag.
@@ -114,8 +111,8 @@ export default {
             filename: 'index.html',
             // Use this file as a template for the generated html
             template: PATH.join(Path.source_front, 'index.html'),
-            // Inject generated resources on the head element of the html
-            inject: 'head',
+            // Inject generated resources inside the body element of the html
+            inject: 'body',
             // Append hashes to every generated resources to avoid caching them
             hash: process.env.NODE_ENV !== 'production',
             // Only emit the file when it hasn't changed between compiles

@@ -2,13 +2,23 @@
 import Webpack from 'webpack';
 import WebpackMerge from 'webpack-merge';
 // Local modules
-import Config from 'config/webpack';
+import ConfigCommon from 'config/webpack';
+import ConfigServer from 'config/webpack.server';
 
-export default WebpackMerge(Config, {
+export default WebpackMerge(ConfigCommon, {
 
     // The style of source-mapping, this can greatly speed-up bundling.
-    // This is not the fastest method, but produces the original source-code.
-    devtool: 'eval-source-map',
+    devtool: 'cheap-module-source-map',
+
+    // The application starting point
+    entry: [
+        // for hot-module-replacement
+        `webpack-dev-server/client?http://${ConfigServer.host}:${ConfigServer.port}`,
+        // For hot-style-replacement
+        'webpack/hot/dev-server',
+        // The actual starting point
+        'index.js'
+    ],
 
     // Instructions on how to output the bundle (extending base config)
     output: {
