@@ -21,6 +21,9 @@ export default {
     // Enable Hot Module Replacement
     hot: true,
 
+    // Disable the "restart" fallback in case of build failures
+    hotOnly: true,
+
     // Enable https support?
     https: false,
 
@@ -39,8 +42,8 @@ export default {
     // The port where to serve
     port: process.env.PORT || 9000,
 
-    // Watch the files located on contentBase
-    watchContentBase: true,
+    // Watch the files located on contentBase and trigger a full-reload
+    watchContentBase: false,
 
     stats: {
         // Add asset Information
