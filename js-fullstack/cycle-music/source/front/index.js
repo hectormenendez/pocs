@@ -1,15 +1,23 @@
 // NPM modules
-import $ from 'xstream';
 import Isolate from '@cycle/isolate';
 import Onionify from 'cycle-onionify';
+import { rerunner as Rerunner } from 'cycle-restart';
 import { setup as Setup, run as Run } from '@cycle/run';
-import { makeDOMDriver as DriverDOM } from '@cycle/dom';
-import { makeHTTPDriver as DriverHTTP } from '@cycle/http';
-import { timeDriver as DriverTime } from '@cycle/time';
-import { restartable as Restartable, rerunner as Rerunner } from 'cycle-restart';
+// Local modules
+import Drivers from 'drivers';
+import App from 'layouts/app';
 
 /// #if PRODUCTION
-console.log('here');
+
+Run(App, Drivers());
+
 /// #else
-console.log('there');
+
+const runner = Rerunner(Setup, Drivers, Isolate);
+runner(App);
+module.hot.accept('layouts/app', function(){
+    const newApp = require('layouts/app').default;
+    runner(newApp);
+});
+
 /// #endif
