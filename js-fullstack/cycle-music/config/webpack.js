@@ -16,7 +16,7 @@ export default {
     context: Path.source_front,
 
     // The application starting point
-    entry: 'index.js',
+    entry: './index.js',
 
     // Instructions on how to output the bundle
     output: {
@@ -29,39 +29,49 @@ export default {
     },
 
     // Transformations applied to each file-type imported on the app
-    module: [
-        // Html files.
-        // These are the index files that will be put at the root of the output folder.
-        {
-            test: /\.html$/,
-            include: PATH.join(Path.source_front, 'index.html'),
-            use: {
-                loader: 'html-loader',
-                options: {}
+    module: {
+
+        rules: [
+
+            // Html files.
+            // These are the index files that will be put at the root of the output folder
+            {
+                test: /\.html$/,
+                include: PATH.join(Path.source_front, 'index.html'),
+                use: {
+                    loader: 'html-loader',
+                    options: {}
+                }
+            },
+
+            {
+                // js or jsx files
+                // Apply the babel-loader so they get properly transpiled
+                test: /\.jsx?$/,
+                include: Path.source_front,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        // Use these presets for transpiling
+                        presets: ['env', 'stage-0'],
+                        // Cache the directory after first run, so the loader saves time.
+                        cacheDirectory: true,
+                        // Extra functionality
+                        plugins: [
+                            // Transform JSX whenever the Snabbdom module is included
+                            ['transform-react-jsx', { pragma: 'Snabbdom.createElement' }]
+                        ]
+                    },
+                }
             }
-        },
-        {
-            // js or jsx files
-            // Apply the babel-loader so they get properly transpiled
-            test: /\.jsx?$/,
-            include: Path.source_front,
-            use: {
-                loader: 'babel-loader',
-                options: {
-                    // Use these presets for transpiling
-                    presets: ['env', 'stage-0'],
-                    // Cache the directory after the first run, so the loader saves time.
-                    cacheDirectory: true
-                },
-                plugins: [
-                    // Transform JSX whenever the Snabbdom module is included
-                    ['transform-react-jsx', { pragma: 'Snabbdom.createElement' }]
-                ]
-            }
-        }
-    ],
+
+        ],
+    },
 
     plugins: [
+
+        // If any error is found on the compiling phase, don't emit a build.
+        new Webpack.NoEmitOnErrorsPlugin(),
 
         // Outputs an html file based upon a template (specified on the html-loader)
         new WebpackHtml({
