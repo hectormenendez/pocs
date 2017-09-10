@@ -26,6 +26,7 @@
         "@cycle/run": "^3.1.0",
         "@cycle/time": "^0.8.0",
         "cycle-onionify": "^3.3.0",
+        "cycle-restart": "^0.2.2",
         "snabbdom-pragma": "^2.4.0",
         "xstream": "^10.9.0"
     },
