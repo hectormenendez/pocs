@@ -21,7 +21,9 @@ export default WebpackMerge(Config, {
     },
 
     plugins: [
-        // When HMR is enabled, show the relative path of the module
-        new Webpack.NamedModulesPlugin()
+        // Add module names to factory functions so they appear in the browser profiler
+        new Webpack.NamedModulesPlugin(),
+        // Enable sending hot updates
+        new Webpack.HotModuleReplacementPlugin(),
     ]
 });
