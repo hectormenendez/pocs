@@ -3,8 +3,9 @@ import PATH from 'path';
 // NPM modules
 import Webpack from 'webpack';
 import WebpackHtml from 'html-webpack-plugin';
+import EsLintFormatter from 'eslint-formatter-pretty';
 // Local modules
-import Path from 'util/path';
+import Path from 'tools/path';
 import Config from 'config/front';
 
 export default {
@@ -13,7 +14,7 @@ export default {
     target: 'web',
 
     // The directory containing the entry files
-    context: Path.source_front,
+    context: Path.front,
 
     // Instructions on how to output the bundle
     output: {
@@ -22,7 +23,7 @@ export default {
         // Where should the bundle be put?
         path: Path.output,
         // The public URL for the root on the browser
-        publicPath: ""
+        publicPath: '',
     },
 
     // Tell the module resolver how to behave
@@ -30,11 +31,12 @@ export default {
         // If ommited, assume one of these extensions
         extensions: ['.js', '.jsx', '.json'],
         // if ommited, assume one of these paths
-        modules: [ Path.source_front, Path.module ],
+        modules: [Path.front, Path.modules],
         // Make the app configuration available
         alias: {
-            config: PATH.join(Path.config, 'front.json')
-        }
+            config: Path.config,
+            tools: Path.tools,
+        },
     },
 
     // Some libraries import Node modules (pointless in the browser) make dummies for'em.
@@ -43,7 +45,7 @@ export default {
         net: 'empty',
         tls: 'empty',
         dgram: 'empty',
-        child_process: 'empty'
+        child_process: 'empty',
     },
 
     // Transformations applied to each file-type imported on the app
@@ -55,17 +57,21 @@ export default {
             // These are the index files that will be put at the root of the output folder
             {
                 test: /\.html$/,
-                include: PATH.join(Path.source_front, 'index.html'),
+                include: PATH.join(Path.front, 'index.html'),
                 use: {
                     loader: 'html-loader',
-                    options: {}
-                }
+                    options: {},
+                },
             },
 
             {
                 // js or jsx files
                 test: /\.jsx?$/,
-                include: Path.source_front,
+                include: [
+                    Path.front,
+                    Path.config,
+                    Path.tools,
+                ],
                 use: [
                     // Transpile with babel
                     {
@@ -80,29 +86,35 @@ export default {
                                 // Transform JSX whenever the Snabbdom module is included
                                 [
                                     'transform-react-jsx',
-                                    { pragma: 'Snabbdom.createElement' }
-                                ]
-                            ]
+                                    { pragma: 'Snabbdom.createElement' },
+                                ],
+                            ],
                         },
                     },
                     // Allow the use of conditional comments for special actions.
                     {
                         loader: 'ifdef-loader',
                         options: {
-                            PRODUCTION: process.NODE_ENV === 'production'
-                        }
-                    }
-                ]
-            }
-
+                            PRODUCTION: process.NODE_ENV === 'production',
+                        },
+                    },
+                    // Parse Javascript before transpiling
+                    {
+                        loader: 'eslint-loader',
+                        options: {
+                            formatter: EsLintFormatter,
+                            emitError: false, // everything would be an error
+                            emitWarning: false, // everything would be a warning
+                            failOnWarning: false, // stop execution for warnings
+                            failOnError: true, // stop execution for errors
+                        },
+                    },
+                ],
+            },
         ],
     },
 
     plugins: [
-
-        // If any error is found on the compiling phase, don't emit a build.
-        new Webpack.NoEmitOnErrorsPlugin(),
-
         // Outputs an html file based upon a template (specified on the html-loader)
         new WebpackHtml({
             // The title to use for the generated html
@@ -110,7 +122,7 @@ export default {
             // The filename to use for the generated html
             filename: 'index.html',
             // Use this file as a template for the generated html
-            template: PATH.join(Path.source_front, 'index.html'),
+            template: PATH.join(Path.front, 'index.html'),
             // Inject generated resources inside the body element of the html
             inject: 'body',
             // Append hashes to every generated resources to avoid caching them
@@ -118,7 +130,7 @@ export default {
             // Only emit the file when it hasn't changed between compiles
             cache: process.env.NODE_ENV !== 'production',
             // Write error details on the webpage
-            showErrors: true
-        })
-    ]
-}
+            showErrors: true,
+        }),
+    ],
+};

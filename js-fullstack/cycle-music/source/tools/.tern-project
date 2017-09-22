@@ -1,0 +1,17 @@
+{
+    "ecmaVersion": 7,
+    "libs": ["node"],
+    "loadEagerly": ["./"],
+    "dontLoad": [],
+    "plugins": {
+        "doc_comment": {
+            "fullDocs": true,
+            "strong" :true
+        },
+        "strings": {
+            "maxLength": 15
+        },
+        "es_modules": {},
+        "node": {}
+    }
+}

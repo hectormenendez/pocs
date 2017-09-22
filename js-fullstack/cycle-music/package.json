@@ -1,10 +1,9 @@
 {
-    "name": "@etor/music.front",
+    "name": "@etor/music",
     "version": "0.0.1",
     "description": "A music manager",
     "license": "unlicensed",
     "private": true,
-    "main": "util/run.js",
     "contributors": [
         "Héctor Menéndez <hector@gik.mx>"
     ],
@@ -16,8 +15,8 @@
         "node": "^8.2.1"
     },
     "scripts": {
-        "runner": "NODE_PATH=./ NODE_ENV=development babel-node -- $(printenv npm_package_main)",
-        "start": "npm run runner -s -- start"
+        "tools": "NODE_PATH=./source babel-node -- ./source/tools/index.js",
+        "start:front": "NODE_ENV=development npm run -s tools -- start.front"
     },
     "dependencies": {
         "@cycle/dom": "^18.0.0",
@@ -27,28 +26,31 @@
         "@cycle/time": "^0.8.0",
         "cycle-onionify": "^3.3.0",
         "cycle-restart": "^0.2.2",
+        "deepmerge": "^1.5.1",
         "snabbdom-pragma": "^2.4.0",
         "xstream": "^10.9.0"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.0",
+        "babel-eslint": "^8.0.0",
         "babel-loader": "^7.1.2",
         "babel-plugin-transform-react-jsx": "^6.24.1",
         "babel-preset-env": "^1.6.0",
+        "babel-preset-flow": "^6.23.0",
         "babel-preset-stage-0": "^6.24.1",
+        "eslint": "^4.7.1",
+        "eslint-config-airbnb-base": "^12.0.0",
+        "eslint-formatter-pretty": "^1.3.0",
+        "eslint-import-resolver-webpack": "^0.8.3",
+        "eslint-loader": "^1.9.0",
+        "eslint-plugin-import": "^2.7.0",
+        "eslint-plugin-jsx": "0.0.2",
         "html-loader": "^0.5.1",
         "html-webpack-plugin": "^2.30.1",
         "ifdef-loader": "^2.0.1",
         "webpack": "^3.5.6",
         "webpack-dev-server": "^2.7.1",
         "webpack-merge": "^4.1.0"
-    },
-    "babel": {
-        "presets": [
-            "env",
-            "stage-0"
-        ],
-        "plugins": []
     }
 }

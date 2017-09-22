@@ -1,9 +1,0 @@
-{
-    "module": ["%NODE_PATH%", "node_modules"],
-    "config": ["%NODE_PATH%", "config"],
-    "source": ["%NODE_PATH%", "source"],
-    "output": ["%NODE_PATH%", "output"],
-    "source_front": ["%source%", "front"],
-    "source_back": ["%source%", "back"],
-    "util_scripts": ["%util%", "scripts"]
-}

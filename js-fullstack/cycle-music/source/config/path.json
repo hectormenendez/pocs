@@ -1,0 +1,11 @@
+{
+    "root": ["${NODE_PATH}", ".."],
+    "modules": ["${root}", "node_modules"],
+    "output": ["${root}", "output"],
+    "source": "${NODE_PATH}",
+    "front": ["${source}", "front"],
+    "back": ["${source}", "back"],
+    "config": ["${source}", "config"],
+    "tools": ["${source}", "tools"],
+    "scripts": ["${tools}", "scripts"]
+}

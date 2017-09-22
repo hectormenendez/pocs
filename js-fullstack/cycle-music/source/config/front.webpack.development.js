@@ -2,8 +2,8 @@
 import Webpack from 'webpack';
 import WebpackMerge from 'webpack-merge';
 // Local modules
-import ConfigCommon from 'config/webpack';
-import ConfigServer from 'config/webpack.server';
+import ConfigCommon from 'config/front.webpack';
+import ConfigServer from 'config/front.webpack.server';
 
 export default WebpackMerge(ConfigCommon, {
 
@@ -17,7 +17,7 @@ export default WebpackMerge(ConfigCommon, {
         // For hot-style-replacement
         'webpack/hot/dev-server',
         // The actual starting point
-        'index.js'
+        'index.js',
     ],
 
     // Instructions on how to output the bundle (extending base config)
@@ -35,5 +35,5 @@ export default WebpackMerge(ConfigCommon, {
         new Webpack.NamedModulesPlugin(),
         // Enable sending hot updates
         new Webpack.HotModuleReplacementPlugin(),
-    ]
+    ],
 });
