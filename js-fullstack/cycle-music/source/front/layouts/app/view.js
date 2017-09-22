@@ -7,4 +7,4 @@ export default state => <section>
         <strong>Counter: </strong>
         <span>{state.num}</span>
     </p>
-</section>
+</section>;

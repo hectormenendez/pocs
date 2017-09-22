@@ -9,7 +9,7 @@ export const Intent = DOM => ({
     increment$: DOM
         .select('.increment')
         .events('click')
-        .mapTo(+1)
+        .mapTo(+1),
 
 });
 

@@ -1,25 +1,16 @@
 // NPM modules
+import Onionify from 'cycle-onionify';
 import { makeDOMDriver as DriverDOM } from '@cycle/dom';
 import { makeHTTPDriver as DriverHTTP } from '@cycle/http';
 import { timeDriver as DriverTime } from '@cycle/time';
-import { restartable as Restartable } from 'cycle-restart';
+import { run as Run } from '@cycle/run';
+// Local modules
+import App from 'layouts/app';
 
 const root = document.getElementsByTagName('main')[0];
 
-/// #if PRODUCTION
-
-export default () => ({
+Run(Onionify(App), {
     DOM: DriverDOM(root),
     HTTP: DriverHTTP(),
     Time: DriverTime,
 });
-
-/// #else
-
-export default () => ({
-    DOM: Restartable(DriverDOM(root), { pauseSinksWhileReplaying: false }),
-    HTTP: Restartable(DriverHTTP()),
-    Time: DriverTime,
-})
-
-/// #endif
