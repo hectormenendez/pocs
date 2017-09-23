@@ -5,7 +5,7 @@ import { makeHTTPDriver as DriverHTTP } from '@cycle/http';
 import { timeDriver as DriverTime } from '@cycle/time';
 import { run as Run } from '@cycle/run';
 // Local modules
-import App from 'layouts/app';
+import App from './example';
 
 const root = document.getElementsByTagName('main')[0];
 

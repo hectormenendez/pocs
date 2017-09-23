@@ -7,7 +7,7 @@ import { timeDriver as DriverTime } from '@cycle/time';
 import { setup as Setup } from '@cycle/run';
 import { restartable as Restartable, rerunner as Rerunner } from 'cycle-restart';
 // Local modules
-import App from 'layouts/app';
+import App from './example';
 
 const root = document.getElementsByTagName('main')[0];
 const runner = Rerunner(
@@ -22,6 +22,7 @@ const runner = Rerunner(
 
 runner(Onionify(App));
 
-module.hot.accept('layouts/app', function cbackHMR() {
-    runner(Onionify(require('layouts/app').default));
+module.hot.accept('./example', function cbackHMR() {
+    const hotApp = require('./example').default;
+    runner(Onionify(hotApp));
 });
