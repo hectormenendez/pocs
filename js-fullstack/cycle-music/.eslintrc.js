@@ -34,6 +34,7 @@ module.exports = {
         'spaced-comment': 'warn', // better comment readability
         'semi': 'warn', // Semicolons are a necessary evil for readability
         'space-before-blocks': 'warn', // another readability enhancement.
+        'object-curly-spacing': 'warn',
 
         // ---------------------------------------------------------------------- Disabled
 
@@ -42,6 +43,8 @@ module.exports = {
         'import/extensions': 'off', // Don't enforce the use of extensions on imports
         'prefer-arrow-callback': 'off', // plain functions will do when not returning
         'space-before-function-paren': 'off', // This doesn't enhace readability
-
+        'padded-blocks': 'off', // having some space sometimes helps readability
+        'no-confusing-arrow': 'off', // what's confusing about a ternary? c'mon!
+        'function-paren-newline': 'off' // sometimes its needed for readabiity.
     }
 }

@@ -47,14 +47,17 @@ EsLint.globals = Object.assign(
 EsLint.rules = Object.assign(
     // Common
     {
+        // ------------------------------------------------------------------------- Error
         'no-unused-vars': ['error', { // Disallow declaring something is not used.
             varsIgnorePattern: 'Snabbdom', // This is used by wabpack for JSX
         }],
         'jsx/uses-factory': ['error', { pragma: 'Snabbdom' }],
-        'jsx/factory-in-scope': ['error', { pragma: 'Snabbdom' }],
         'jsx/mark-used-vars': 'error',
         'jsx/no-undef': 'error',
+        // ----------------------------------------------------------------------- Warning
         'spaced-comment': ['warn', 'always', { markers: ['/'] }], // for ifdef
+        // ---------------------------------------------------------------------- Disabled
+        'jsx/factory-in-scope': ['off', { pragma: 'Snabbdom' }],
     },
     // Production only
     NODE_ENV === 'production' ?
