@@ -6,6 +6,7 @@
     "front": ["${source}", "front"],
     "back": ["${source}", "back"],
     "config": ["${source}", "config"],
+    "data": ["${source}", "data"],
     "tools": ["${source}", "tools"],
     "scripts": ["${tools}", "scripts"]
 }
