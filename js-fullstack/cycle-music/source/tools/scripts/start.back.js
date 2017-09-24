@@ -15,6 +15,7 @@ commands.push([
 
 // Runs the backend source trough babel-node
 commands.push([
+    'DEBUG=feathers*,socket.io*,app:*',
     `NODE_PATH=${Path.back}:${Path.source}`,
     PATH.join(Path.modules, '.bin', 'babel-node'),
     Path.back,
