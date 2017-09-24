@@ -45,6 +45,7 @@ module.exports = {
         'space-before-function-paren': 'off', // This doesn't enhace readability
         'padded-blocks': 'off', // having some space sometimes helps readability
         'no-confusing-arrow': 'off', // what's confusing about a ternary? c'mon!
-        'function-paren-newline': 'off' // sometimes its needed for readabiity.
+        'function-paren-newline': 'off', // sometimes its needed for readabiity.
+        'no-plusplus': 'off', // Aww c'mon man, I like using it.
     }
 }
