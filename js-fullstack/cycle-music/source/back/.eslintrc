@@ -1,0 +1,17 @@
+{
+    "extends": "../../.eslintrc.js",
+    "env": {
+        "browser": false,
+        "node": true
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "paths": [
+                    "./source/back",
+                    "./source"
+                ]
+            }
+        }
+    }
+}
