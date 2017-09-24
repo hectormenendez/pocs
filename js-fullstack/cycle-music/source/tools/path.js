@@ -16,7 +16,10 @@ const path = Replacer(Object
         ...result,
         [key]: Array.isArray(Config[key]) ? PATH.join(...Config[key]) : Config[key]
     }), {
-        NODE_PATH: PATH.resolve(NODE_PATH),
+        // if more than one path is sent, always use the last
+        // (more likely to be the source path)
+        // TODO: Find a more consistent way of fixing this.
+        NODE_PATH: PATH.resolve(NODE_PATH.split(':').pop()),
     })
 );
 
