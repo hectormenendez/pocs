@@ -1,9 +1,5 @@
 {
-    "extends": "../../.eslintrc.js",
-    "env": {
-        "browser": false,
-        "node": true
-    },
+    "extends": "@gik/node",
     "settings": {
         "import/resolver": {
             "node": {
