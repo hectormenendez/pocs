@@ -7,9 +7,9 @@ on run fileName
 
 	set the clipboard to ""
 
-	set _pin to "20160816"
-	set _usr to "TECHRSO"
-	set _url to "https://teletrabajo.b-enlinea.com/dana-na/auth/url_9/welcome.cgi"
+	set _pin to "XXX"
+	set _usr to "YYY"
+	set _url to "https://zzzzzz"
 
 	-- Get the Token from the SecureID Application
 
