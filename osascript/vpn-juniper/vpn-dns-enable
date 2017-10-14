@@ -4,8 +4,8 @@
 sudo scutil << EOL
 get State:/Network/Service/net.juniper.ncproxyd.main/DNS
 d.init
-d.add SearchDomains * cb.bbvabancomer.com.mx
-d.add ServerAddresses * 150.100.228.41 150.100.229.51
+d.add SearchDomains * subdomain.domain.con
+d.add ServerAddresses * XXX.XXX.XXX.XXX
 set State:/Network/Service/net.juniper.ncproxyd.main/DNS
 d.show
 quit
