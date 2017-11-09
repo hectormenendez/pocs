@@ -1,6 +1,6 @@
 // Modules
 import Express from 'express';
-import ExpressGraphQL from 'express-graphql'
+import ExpressGraphQL from 'express-graphql';
 // Local
 import Config from 'config';
 import Log from 'logger';
@@ -14,12 +14,21 @@ Server.get('/', (request, response) => {
     return true;
 });
 
-const root = { hello: () => "Hi, I'm Hector" };
+const resolvers = {
+    friend: () => ({
+        id: 322321,
+        nameFirst: 'Hector',
+        nameLast: 'Menendez',
+        gender: 'F',
+        email: 'etor@gik.mx',
+        lang: 'ES',
+    }),
+};
 
 Server.use('/graphql', ExpressGraphQL({
     graphiql: true, // enable GUI
     schema: Schema,
-    rootValue: root,
+    rootValue: resolvers,
 }));
 
 Server.listen(Config.port, Config.host, () =>
