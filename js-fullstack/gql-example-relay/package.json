@@ -1,6 +1,6 @@
 {
     "name": "graphql-lynda",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Following the tutorial on lynda,",
     "license": "UNLICENSED",
     "contributors": [
@@ -8,12 +8,14 @@
     ],
     "directories": {
         "out": "./out",
-        "src": "./src"
+        "src": "./src",
+        "cfg": "./cfg"
     },
-    "main": "out/index.js",
+    "main": "./out/index.js",
     "scripts": {
         "build": "gik-npm lint src && gik-npm build",
-        "start": "gik-npm start 'npm run build -s && node $npm_package_main'",
+        "start": "NODE_PATH=$npm_package_directories_out node $npm_package_main",
+        "watch": "gik-npm start 'npm run build -s && npm start -s'",
         "precommit": "gik-npm version patch"
     },
     "dependencies": {
@@ -22,6 +24,7 @@
     "devDependencies": {
         "@gik/eslint-config-node": "0.0.3",
         "@gik/eslint-config-react": "0.0.1",
-        "@gik/npm": "^0.1.11"
+        "@gik/npm": "^0.1.11",
+        "eslint-import-resolver-node": "^0.3.1"
     }
 }
