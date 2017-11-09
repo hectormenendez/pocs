@@ -1,6 +1,6 @@
 {
     "name": "graphql-lynda",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Following the tutorial on lynda,",
     "license": "UNLICENSED",
     "contributors": [
@@ -19,7 +19,9 @@
         "precommit": "gik-npm version patch"
     },
     "dependencies": {
-        "express": "^4.16.2"
+        "express": "^4.16.2",
+        "express-graphql": "^0.6.11",
+        "graphql": "^0.11.7"
     },
     "devDependencies": {
         "@gik/eslint-config-node": "0.0.3",
