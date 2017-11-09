@@ -1,0 +1,27 @@
+{
+    "name": "graphql-lynda",
+    "version": "0.0.2",
+    "description": "Following the tutorial on lynda,",
+    "license": "UNLICENSED",
+    "contributors": [
+        "Héctor Menéndez <hector@gik.mx>"
+    ],
+    "directories": {
+        "out": "./out",
+        "src": "./src"
+    },
+    "main": "out/index.js",
+    "scripts": {
+        "build": "gik-npm lint src && gik-npm build",
+        "start": "gik-npm start 'npm run build -s && node $npm_package_main'",
+        "precommit": "gik-npm version patch"
+    },
+    "dependencies": {
+        "express": "^4.16.2"
+    },
+    "devDependencies": {
+        "@gik/eslint-config-node": "0.0.3",
+        "@gik/eslint-config-react": "0.0.1",
+        "@gik/npm": "^0.1.11"
+    }
+}
