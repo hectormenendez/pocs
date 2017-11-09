@@ -1,3 +1,5 @@
+// Native
+import Crypto from 'crypto';
 // Modules
 import Express from 'express';
 import ExpressGraphQL from 'express-graphql';
@@ -14,21 +16,36 @@ Server.get('/', (request, response) => {
     return true;
 });
 
-const resolvers = {
-    friend: () => ({
-        id: 322321,
-        nameFirst: 'Hector',
-        nameLast: 'Menendez',
-        gender: 'F',
-        email: 'etor@gik.mx',
-        lang: 'ES',
-    }),
+class Friend {
+    constructor(id, data) {
+        this.id = id;
+        this.nameFirst = data.nameFirst;
+        this.nameLast = data.nameLast;
+        this.gender = data.gender;
+        this.email = data.email;
+        this.lang = data.lang;
+    }
+}
+
+const memory = {};
+
+const global = {
+    getFriend: ({ id }) => new Friend(id, memory[id]),
+    createFriend: ({ input }) => {
+        const id = Crypto.randomBytes(10).toString('hex');
+        memory[id] = input;
+        return new Friend(id, input);
+    },
+    updateFriend: ({ id, input }) => {
+        memory[id] = input;
+        return new Friend(id, input);
+    },
 };
 
 Server.use('/graphql', ExpressGraphQL({
-    graphiql: true, // enable GUI
+    graphiql: true,
     schema: Schema,
-    rootValue: resolvers,
+    rootValue: global,
 }));
 
 Server.listen(Config.port, Config.host, () =>
