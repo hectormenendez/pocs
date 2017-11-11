@@ -69,7 +69,9 @@ export default conf => ({
                                 }],
                                 'stage-2',
                             ],
-                            plugins: [],
+                            plugins: [
+                                'inline-import', // for graphql files
+                            ],
                         },
                     },
                     {

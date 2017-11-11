@@ -1,7 +1,26 @@
 import React from 'react';
+import GQL from 'graphql-tag';
+import { graphql as GraphQL } from 'react-apollo';
 
-export default () => <ul>
-    <li>Mariela Vallejo</li>
-    <li>Maria Eugenia Rivera</li>
-    <li>Mario Vallejo</li>
-</ul>;
+export const Query = GQL`
+    query ContactsQuery {
+        contacts {
+            id
+            firstName
+            lastName
+        }
+    }
+`;
+
+export const Component = ({ data: { loading, error, contacts }}) => {
+    if (loading) return <p>Loading … </p>;
+    if (error) return <p>{ error.message }</p>;
+    return <ul>
+        {contacts.map(contact => <li key={ contact.id }>
+            {contact.firstName}
+            {contact.lastName}
+        </li>)}
+    </ul>;
+};
+
+export default GraphQL(Query)(Component);

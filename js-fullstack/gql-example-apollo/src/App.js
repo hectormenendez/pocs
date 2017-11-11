@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Contacts from 'Contacts';
 
-class App extends Component {
+export default class App extends Component {
 
     render() { // eslint-disable-line class-methods-use-this
         return <div className="App">
@@ -13,5 +13,3 @@ class App extends Component {
     }
 
 }
-
-export default App;
