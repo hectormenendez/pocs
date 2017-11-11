@@ -2,8 +2,8 @@ export default conf => ({
     clientLogLevel: 'none',
     compress: false,
     contentBase: `${conf.path.src}`,
+    publicPath: '/src/',
     historyApiFallback: true,
-    host: `${conf.host}`,
     hot: true,
     hotOnly: false,
     https: false,
@@ -11,7 +11,9 @@ export default conf => ({
     lazy: false,
     open: false,
     overlay: { warnings: false, errors: true },
-    port: `${conf.port}`,
+    proxy: {
+        '/graphql': 'http://localhost:8080',
+    },
     watchContentBase: true,
     stats: {
         colors: true,

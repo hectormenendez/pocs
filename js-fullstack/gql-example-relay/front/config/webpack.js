@@ -3,7 +3,6 @@
 import PATH from 'path';
 import Webpack from 'webpack';
 import WebpackHtml from 'html-webpack-plugin';
-// import EslintFormatter from 'eslint-formatter-pretty';
 
 export default conf => ({
 
@@ -16,7 +15,7 @@ export default conf => ({
     entry: [
         `webpack-dev-server/client?http://${conf.host}:${conf.port}`,
         'webpack/hot/dev-server',
-        'index.js',
+        'App.js',
     ],
 
     output: {
@@ -60,13 +59,22 @@ export default conf => ({
                     {
                         loader: 'babel-loader',
                         options: {
-                            babelrc: true,
+                            babelrc: false, // don't use .babelrc it is used for "node"
+                            presets: [
+                                'react',
+                                ['env', {
+                                    targets: {
+                                        browsers: ['last 2 versions', 'Safari >= 7'],
+                                    },
+                                }],
+                                'stage-2',
+                            ],
+                            plugins: ['relay'],
                         },
                     },
                     {
                         loader: 'eslint-loader',
                         options: {
-                            // formatter: EslintFormatter,
                             failOnError: true,
                         },
                     },
