@@ -4,16 +4,33 @@
     "description": "",
     "private": true,
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test --env=jsdom",
-        "eject": "react-scripts eject"
+        "start": "babel-node start"
+    },
+    "directories": {
+        "src": "./src",
+        "out": "./out",
+        "etc": "./etc"
     },
     "dependencies": {
-        "react": "^15.6.1",
-        "react-dom": "^15.6.1"
+        "react": "^16.1.0",
+        "react-dom": "^16.1.0"
     },
     "devDependencies": {
-        "react-scripts": "1.0.10"
+        "@babel/core": "^7.0.0-beta.31",
+        "@babel/node": "^7.0.0-beta.31",
+        "@gik/eslint-config-react": "0.0.3",
+        "@gik/npm": "^0.1.11",
+        "babel-loader": "^8.0.0-beta.0",
+        "babel-plugin-relay": "^1.4.1",
+        "babel-plugin-transform-runtime": "^7.0.0-beta.3",
+        "babel-preset-react": "^7.0.0-beta.3",
+        "eslint-import-resolver-webpack": "^0.8.3",
+        "eslint-loader": "^1.9.0",
+        "html-loader": "^0.5.1",
+        "html-webpack-plugin": "^2.30.1",
+        "relay-compiler": "^1.4.1",
+        "webpack": "^3.8.1",
+        "webpack-dev-server": "^2.9.4",
+        "webpack-merge": "^4.1.1"
     }
 }
