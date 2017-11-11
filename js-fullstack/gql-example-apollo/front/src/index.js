@@ -8,7 +8,7 @@ import { ApolloProvider } from 'react-apollo';
 import App from 'App';
 
 const apollo = new ApolloClient({
-    link: CreateLink({ uri: 'http://localhost:8080' }),
+    link: CreateLink({ uri: 'http://localhost:8080/graphql' }),
     cache: new InMemoryCache(),
 });
 
