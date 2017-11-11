@@ -1,12 +1,10 @@
-// Native
-import Crypto from 'crypto';
 // Modules
 import Express from 'express';
 import ExpressGraphQL from 'express-graphql';
 // Local
-import Config from 'config';
-import Log from 'logger';
-import Schema from 'schema';
+import Config from 'tools/config';
+import Log from 'tools/logger';
+import Schema from 'graphql/schema';
 
 const Server = Express();
 export default Server;
