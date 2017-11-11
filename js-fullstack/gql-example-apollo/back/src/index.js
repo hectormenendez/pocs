@@ -1,5 +1,6 @@
 import Express from 'express';
 import BodyParser from 'body-parser';
+import Cors from 'cors';
 import {
     graphqlExpress as ExpressGQL,
     graphiqlExpress as ExpressGraphiQL,
@@ -8,6 +9,8 @@ import {
 import Schema from 'schema';
 
 const server = Express();
+
+server.use('*', Cors({ origin: 'http://localhost:3333' }));
 
 server.use(
     '/graphql',
