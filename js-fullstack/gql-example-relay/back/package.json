@@ -16,8 +16,7 @@
         "build": "gik-npm lint src && gik-npm build",
         "start": "NODE_PATH=$npm_package_directories_out node $npm_package_main",
         "schema": "npm run build -s && npm start -s schema",
-        "watch": "gik-npm start 'npm run build -s && npm start -s server'",
-        "relay": "relay-compiler --src ./src --schema $npm_package_directories_out/schema.graphql"
+        "watch": "gik-npm start 'npm run build -s && npm start -s server'"
     },
     "dependencies": {
         "express": "^4.16.2",
@@ -29,7 +28,6 @@
         "@gik/npm": "^0.1.11",
         "babel-relay-plugin": "^0.11.0",
         "eslint-import-resolver-node": "^0.3.1",
-        "graphql-relay": "^0.5.3",
-        "relay-compiler": "^1.4.1"
+        "graphql-relay": "^0.5.3"
     }
 }
