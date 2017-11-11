@@ -1,0 +1,7 @@
+{
+    "extends": "./node_modules/@gik/npm/.babelrc",
+    "plugins": [
+        "dynamic-import-node",
+        "inline-import"
+    ]
+}
