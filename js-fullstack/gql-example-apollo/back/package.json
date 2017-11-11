@@ -1,0 +1,29 @@
+{
+    "name": "crm-back",
+    "version": "0.0.1",
+    "description": "",
+    "private": true,
+    "directories": {
+        "src": "./src",
+        "out": "./out",
+        "etc": "./etc"
+    },
+    "scripts": {
+        "build": "gik-npm lint src && gik-npm build",
+        "start": "NODE_PATH=$npm_package_directories_out node $npm_package_directories_out",
+        "watch": "gik-npm start 'npm run build -s && npm start'"
+    },
+    "dependencies": {
+        "apollo-server-express": "^1.2.0",
+        "body-parser": "^1.18.2",
+        "express": "^4.16.2",
+        "graphql": "^0.11.7",
+        "graphql-tools": "^2.7.2"
+    },
+    "devDependencies": {
+        "@gik/eslint-config-node": "0.0.5",
+        "@gik/npm": "^0.1.11",
+        "babel-plugin-inline-import": "^2.0.6",
+        "eslint-import-resolver-node": "^0.3.1"
+    }
+}
