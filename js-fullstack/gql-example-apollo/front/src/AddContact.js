@@ -1,6 +1,8 @@
 import React from 'react';
 import GQL from 'graphql-tag';
 import { graphql as GraphQL } from 'react-apollo';
+// Local
+import { Actions as ContactsActions } from 'Contacts';
 
 const stateDefault = {
     firstName: '',
@@ -35,6 +37,13 @@ export class Component extends React.Component {
                 variables: {
                     firstName,
                     lastName,
+                },
+                // Update the store after running the mutation so the changes are
+                // reflected immediately.
+                update: (store, { data: { addContact } }) => {
+                    const data = store.readQuery({ query: ContactsActions });
+                    data.contacts.push(addContact);
+                    store.writeQuery({ query: ContactsActions, data });
                 },
             })
             .then(() => this.setState(stateDefault));

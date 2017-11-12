@@ -2,7 +2,7 @@ import React from 'react';
 import GQL from 'graphql-tag';
 import { graphql as GraphQL } from 'react-apollo';
 
-export const Query = GQL`
+export const Actions = GQL`
     query ContactsQuery {
         contacts {
             id
@@ -24,4 +24,4 @@ export const Component = ({ data: { loading, error, contacts } }) => {
     </ul>;
 };
 
-export default GraphQL(Query)(Component);
+export default GraphQL(Actions)(Component);
