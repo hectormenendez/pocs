@@ -1,11 +1,23 @@
+type Note {
+    id: ID!
+    details: String
+}
+
 type Contact {
     id: ID!
     firstName: String
     lastName: String
+    notes: [Note]!
+}
+
+input InputNote {
+    contact: ID!
+    content: String
 }
 
 type Query {
     contacts: [Contact]
+    contact(id: ID!): Contact
 }
 
 type Mutation {
@@ -15,4 +27,10 @@ type Mutation {
         lastName: String
     ): Contact
 
+    addNote(note: InputNote!): Note
+
+}
+
+type Subscription {
+    noteAdded(contact: ID!): Note
 }
