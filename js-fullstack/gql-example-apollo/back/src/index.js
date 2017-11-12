@@ -1,6 +1,9 @@
+import HTTP from 'http';
 import Express from 'express';
 import BodyParser from 'body-parser';
 import Cors from 'cors';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { execute as Execute, subscribe as Subscribe } from 'graphql';
 import {
     graphqlExpress as ExpressGQL,
     graphiqlExpress as ExpressGraphiQL,
@@ -9,28 +12,60 @@ import {
 import Schema from 'schema';
 
 const server = Express();
+const ws = HTTP.createServer(server);
 
-server.use('*', Cors({ origin: 'http://localhost:3333' }));
+const conf = {
+    server: {
+        port: process.env.PORT || 8080,
+        host: process.env.HOST || '0.0.0.0',
+        endpoints: {
+            root: '/graphql',
+            ui: '/',
+            subscriptions: '/subscriptions',
+        },
+    },
+    client: {
+        port: 3333,
+        host: 'localhost',
+    },
+};
+
+server.use('*', Cors({ origin: `http://${conf.client.host}:${conf.client.port}` }));
 
 server.use(
-    '/graphql',
+    conf.server.endpoints.root,
     BodyParser.json(),
     ExpressGQL({ schema: Schema }),
 );
 
 server.use(
-    '/test',
+    conf.server.endpoints.ui,
     BodyParser.json(),
-    ExpressGraphiQL({ endpointURL: '/graphql' }),
+    ExpressGraphiQL({
+        endpointURL: conf.server.endpoints.root,
+        subscriptionsEndpoint: [
+            'ws://',
+            `${conf.server.host}:${conf.server.port}`,
+            conf.server.endpoints.subscriptions,
+        ].join(''),
+    }),
 );
 
-const conf = {
-    port: process.env.PORT || 8080,
-    host: process.env.HOST || '0.0.0.0',
-};
-
-server.listen(
-    conf.port,
-    conf.host,
-    () => console.info('Listening on %s:%s', conf.host, conf.port),
+ws.listen(
+    conf.server.port,
+    conf.server.host,
+    () => {
+        SubscriptionServer.create( // eslint-disable-line no-new
+            {
+                schema: Schema,
+                execute: Execute,
+                subcribe: Subscribe,
+            },
+            {
+                server: ws,
+                path: conf.server.endpoints.subscriptions,
+            },
+        );
+        console.info('Listening on %s:%s', conf.server.host, conf.server.port);
+    },
 );
