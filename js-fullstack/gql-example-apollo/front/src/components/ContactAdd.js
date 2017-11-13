@@ -2,7 +2,7 @@ import React from 'react';
 import GQL from 'graphql-tag';
 import { graphql as GraphQL } from 'react-apollo';
 // Local
-import { Actions as ContactsActions } from 'Contacts';
+import { Actions as ContactsActions } from 'components/ContactList';
 
 const stateDefault = {
     firstName: '',

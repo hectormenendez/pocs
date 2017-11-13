@@ -21,7 +21,7 @@ const conf = {
         endpoints: {
             root: '/graphql',
             ui: '/',
-            subscriptions: '/subscriptions',
+            subscriptions: '/subscription',
         },
     },
     client: {
