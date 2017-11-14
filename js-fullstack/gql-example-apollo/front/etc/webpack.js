@@ -21,7 +21,7 @@ export default conf => ({
     output: {
         crossOriginLoading: false,
         path: conf.path.out,
-        publicPath: '',
+        publicPath: '/',
         filename: 'bundle.[name].js',
         chunkFilename: 'bundle.chunk.[name].js',
         pathinfo: true,

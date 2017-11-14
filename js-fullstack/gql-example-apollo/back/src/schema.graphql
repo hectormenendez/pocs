@@ -1,6 +1,6 @@
 type Note {
     id: ID!
-    details: String
+    content: String
 }
 
 type Contact {

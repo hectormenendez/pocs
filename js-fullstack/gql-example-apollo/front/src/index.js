@@ -9,6 +9,7 @@ import { InMemoryCache as ApolloCache } from 'apollo-cache-inmemory';
 import { WebSocketLink as ApolloSocket } from 'apollo-link-ws';
 import { getMainDefinition as ApolloDef } from 'apollo-utilities';
 import { SubscriptionClient as SubsClient } from 'subscriptions-transport-ws';
+import { BrowserRouter as Router } from 'react-router-dom';
 // Local
 import App from 'layouts/App';
 
@@ -31,7 +32,9 @@ const link = ApolloSplitLink(
 
 ReactDOM.render(
     <ApolloProvider client={ new ApolloClient({ link, cache }) }>
-        <App />
+        <Router>
+            <App />
+        </Router>
     </ApolloProvider>,
     document.getElementsByTagName('main')[0],
 );
