@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_top">
+    </head>
+    <body>
+        <h1>List Classrom Courses</h1>
+        <button onclick="listCourses()">List Courses</button>
+        <script>
+            function listCourses(){
+                google.script.run
+                    .withSuccessHandler(response => {
+                        console.log(response);
+                    })
+                    .withFailureHandler(error => {
+                        console.error(error);
+                    })
+                    .listCourses();
+            }
+        </script>
+    </body>
+</html>

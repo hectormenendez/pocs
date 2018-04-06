@@ -1,8 +1,10 @@
+
 // import 'google-apps-script'; // For intellisense on vscode, comment out before pushing
 
-function main() {
-    const Document = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = Document.getActiveSheet();
+function doGet() {
+    return HtmlService.createHtmlOutputFromFile('listCourses');
+}
 
-    sheet.getRange('A1').setValue('hola mundo');
+function listCourses() {
+    return  'SUCCESS';
 }
