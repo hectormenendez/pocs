@@ -1,6 +1,9 @@
 import React from 'react';
-import { Spin, Button } from 'antd';
+import { Button } from 'antd';
+
 import GoogleAPI from '~/utils/gapi';
+import Loader from '~/components/loader';
+import Login from '~/components/login';
 
 import './index.css';
 
@@ -35,12 +38,9 @@ export default class extends React.Component {
      */
     render() {
         if (!this.state.isGoogleReady)
-            return <section className="Spin"><Spin size="large"/></section>
+            return <Loader/>;
         if (this.state.isGoogleReady && !this.state.isUserAuthenticated)
-            return <section className="Login">
-                <Button type="primary" onClick={this.handleAuthLogin}>Login</Button>
-            </section>;
-
+            return <Login onClick={this.handleAuthLogin}/>;
         return <section>
             <Button type="primary" onClick={this.handleRun}>Run</Button>
             <Button type="secondary" onClick={this.handleAuthLogout}>Logout</Button>
