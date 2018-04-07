@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Divider, Input, InputNumber, Select, Option } from 'antd';
+import { Button, Divider, Input, InputNumber, Select } from 'antd';
 
 import GoogleAPI from '~/utils/gapi';
 import Formatters from '~/utils/formatters';
@@ -12,10 +12,13 @@ import Style from './index.module.css';
 
 var API; // this will be populated with the GoogleAPI client once is loaded.
 
+const Option = Select.Option;
+
 // default state
 const State = {
     isGoogleReady: null,
     isUserAuthenticated: null,
+    types: null,
 };
 
 export default class extends React.Component {
@@ -34,6 +37,16 @@ export default class extends React.Component {
             // Get the initial Authentication state
             this.handleAuthStatus(instance.isSignedIn.get());
         });
+    }
+
+    componentDidUpdate() {
+        if (!this.state.isUserAuthenticated) return;
+        // Fetch the types from the spreadsheet
+        if (!this.state.types) {
+            API.shorthands
+                .run({ func: 'getTypes' })
+                .then(response => this.setState({ types: response }));
+        }
     }
 
     /**
@@ -70,18 +83,22 @@ export default class extends React.Component {
                     showSearch
                     className={Style.SelectFull}
                     placeholder="Select an owner">
-                    <Select.Option value="Test">Test</Select.Option>
+                    <Option value="Test">Test</Option>
                 </Select>
             </fieldset>
 
             <fieldset >
                 <label>Type</label>
-                <Select
-                    showSearch
-                    className={Style.SelectFull}
-                    placeholder="Select a type">
-                    <Select.Option value="Test">Test</Select.Option>
-                </Select>
+                {!this.state.types
+                    ? <Input disabled placeholder="Loading…" />
+                    : <Select
+                        showSearch
+                        className={Style.SelectFull}
+                        placeholder="Select a type">
+                        {this.state.types.map(({key, value}, i) =>
+                            <Option key={`option-${i}`} value={value}>{key}</Option>
+                        )}
+                    </Select>}
             </fieldset>
 
             <fieldset >
@@ -95,7 +112,7 @@ export default class extends React.Component {
                     showSearch
                     className={Style.SelectMin}
                     defaultValue="MXN">
-                    <Select.Option value="MXN">MXN</Select.Option>
+                    <Option value="MXN">MXN</Option>
                 </Select>
             </fieldset>
 
@@ -114,18 +131,4 @@ export default class extends React.Component {
     // Callback for button that logs the user out.
     handleAuthLogout = () => API.auth2.getAuthInstance().signOut();
 
-    // handleRun = () => {
-    //     API.client.script.scripts
-    //         .run({
-    //             scriptId: 'M_VxGmzjDQco4epsaDzbnidEPgpVJ72BN',
-    //             resource: {
-    //                 function: 'myFunction',
-    //                 parameters: ['this is a test'],
-    //                 devMode: true,
-    //             }
-    //         })
-    //         .then(x => {
-    //             console.log('x', x);
-    //         })
-    // }
 }
