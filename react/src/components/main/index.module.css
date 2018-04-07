@@ -1,0 +1,16 @@
+
+.SelectFull {
+    width: 100%;
+}
+
+.SelectMin {
+    width: 10em;
+}
+
+.Main {
+    padding: 1em;
+}
+
+.Main > fieldset {
+    margin-bottom: 1em;
+}
