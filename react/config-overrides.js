@@ -19,7 +19,7 @@ module.exports = function override(config, env) {
     // Overwrite less Variables for AntD themes.
     config = RewireLess.withLoaderOptions({
         modifyVars: {
-            "@primary-color": "#1DA57A",
+            // "@primary-color": "#1DA57A",
         },
     })(config, env);
 

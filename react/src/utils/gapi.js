@@ -1,13 +1,16 @@
 
 // Enabled for localhost:8000
 const Settings = {
-    apiKey: 'AIzaSyDHA4Dru_MbjGqUmla47OG9a97LGloKQZg',
-    clientId: '84228066695-6q1m2q82mb4i467n0raiuk8pp272lnrn.apps.googleusercontent.com',
-    // Array of API discovery doc URLs for APIs used by the quickstart
+    // Credentials needed to access the service
+    apiKey: 'AIzaSyCIDOW4w30lvezMIxOLmWpu0FPfRFPW5ok',
+    clientId: '352671104011-s088b7hohuemalpkm3dajuvml66v37tn.apps.googleusercontent.com',
+    // Connect to the correct API endpoints
     discoveryDocs: ["https://script.googleapis.com/$discovery/rest?version=v1"],
     // Authorization scopes required by the API;
-    // Multiple scopes can be included, separated by spaces.
-    scope: 'https://www.googleapis.com/auth/script.projects',
+    scope: [
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/spreadsheets',
+    ].join(' '),
 };
 
 /**

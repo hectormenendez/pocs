@@ -1,8 +1,10 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Spin, Button } from 'antd';
 import GoogleAPI from '~/utils/gapi';
 
 import './index.css';
+
+var API; // this will be populated with the GoogleAPI client once is loaded.
 
 // default state
 const State = {
@@ -16,13 +18,15 @@ export default class extends React.Component {
 
     componentDidMount() {
         // Initialize the google API
-        GoogleAPI().then(googleAPI => {
-            // Setup a listener so we know when the user authenticates
-            googleAPI.auth2
-                .getAuthInstance()
-                .isSignedIn.listen(this.handleAuth.bind(this, googleAPI));
+        GoogleAPI().then(gapi => {
+            API = gapi;
+            const instance = API.auth2.getAuthInstance();
             // Let know the state that we're ready to roll
             this.setState({ isGoogleReady: true });
+            // Setup a listener so we know when the user authenticates
+            instance.isSignedIn.listen(this.handleAuthStatus);
+            // Get the initial Authentication state
+            this.handleAuthStatus(instance.isSignedIn.get());
         });
     }
 
@@ -30,14 +34,40 @@ export default class extends React.Component {
      * @todo Use components instead of elements.
      */
     render() {
-        return !this.state.isGoogleReady
-        ? <section>Loading</section>
-        : <div className="App">
-            <Button type="primary">Button</Button>
-        </div>;
+        if (!this.state.isGoogleReady)
+            return <section className="Spin"><Spin size="large"/></section>
+        if (this.state.isGoogleReady && !this.state.isUserAuthenticated)
+            return <section className="Login">
+                <Button type="primary" onClick={this.handleAuthLogin}>Login</Button>
+            </section>;
+
+        return <section>
+            <Button type="primary" onClick={this.handleRun}>Run</Button>
+            <Button type="secondary" onClick={this.handleAuthLogout}>Logout</Button>
+        </section>;
     }
 
-    handleAuth = (googleAPI, isUserAuthenticated) => {
-        console.log('handleAuth', this, isUserAuthenticated);
+    // Callback for API client's listener that verifies the status of the authentication
+    handleAuthStatus = (isUserAuthenticated) => this.setState({ isUserAuthenticated });
+
+    // Callback for button that triggers Google Authentication process.
+    handleAuthLogin = () => API.auth2.getAuthInstance().signIn();
+
+    // Callback for button that logs the user out.
+    handleAuthLogout = () => API.auth2.getAuthInstance().signOut();
+
+    handleRun = () => {
+        API.client.script.scripts
+            .run({
+                scriptId: 'M_VxGmzjDQco4epsaDzbnidEPgpVJ72BN',
+                resource: {
+                    function: 'myFunction',
+                    parameters: ['this is a test'],
+                    devMode: true,
+                }
+            })
+            .then(x => {
+                console.log('x', x);
+            })
     }
 }
