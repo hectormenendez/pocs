@@ -1,5 +1,6 @@
 const { injectBabelPlugin: RewireInject } = require('react-app-rewired');
 const RewireLess = require('react-app-rewire-less');
+const RewireCssModules = require('react-app-rewire-css-modules');
 
 module.exports = function override(config, env) {
 
@@ -15,6 +16,9 @@ module.exports = function override(config, env) {
         rootPathPrefix: '~',
         rootPathSuffix: 'src',
     }], config);
+
+    // Enable CSS-modules (using less)
+    config = RewireCssModules(config, env);
 
     // Overwrite less Variables for AntD themes.
     config = RewireLess.withLoaderOptions({
