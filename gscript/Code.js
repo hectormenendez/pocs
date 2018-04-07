@@ -2,9 +2,9 @@
 // import 'google-apps-script'; // For intellisense on vscode, comment out before pushing
 
 function doGet() {
-    return HtmlService.createHtmlOutputFromFile('listCourses');
+    return HtmlService.createHtmlOutputFromFile('index');
 }
 
-function listCourses() {
+function main() {
     return  'SUCCESS';
 }
