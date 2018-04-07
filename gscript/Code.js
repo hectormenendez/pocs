@@ -1,10 +1,7 @@
-
-// import 'google-apps-script'; // For intellisense on vscode, comment out before pushing
-
-function doGet() {
-    return HtmlService.createHtmlOutputFromFile('index');
-}
-
-function main() {
-    return  'SUCCESS';
+function myFunction(value) {
+  Logger.log('this is a log: ' + value);
+  if (!value) value = "Hello World";
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getActiveSheet();
+  sheet.getRange("A1").setValue(value);
 }
