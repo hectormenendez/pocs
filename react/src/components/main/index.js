@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 
-import './App.css';
+import './index.css';
 
 export default class extends React.Component {
     render() {
