@@ -1,0 +1,17 @@
+
+.Header > h1 {
+    color: #fff;
+}
+
+.Content {
+    margin: 1em;
+}
+
+.Content > section {
+    padding: 1em;
+    background: #fff;
+}
+
+.Footer {
+    text-align: center;
+}
