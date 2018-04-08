@@ -1,6 +1,6 @@
 {
     "extends": [
-        "esint:recommended",
+        "eslint:recommended",
         "@gik/react"
     ],
     "plugins": ["react"],
