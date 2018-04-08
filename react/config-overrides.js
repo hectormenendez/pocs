@@ -4,6 +4,8 @@ const RewireCssModules = require('react-app-rewire-css-modules');
 
 module.exports = function override(config, env) {
 
+    /* eslint-disable no-param-reassign */
+
     // Only load Components that are actually being used.
     config = RewireInject(['import', {
         style: true, // Use less instad of css
@@ -29,4 +31,6 @@ module.exports = function override(config, env) {
 
 
     return config;
-}
+
+    /* eslint-enable no-param-reassign */
+};

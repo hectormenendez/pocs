@@ -10,9 +10,9 @@ import Login from '~/components/login';
 
 import Style from './index.module.css';
 
-var API; // this will be populated with the GoogleAPI client once is loaded.
+let API; // this will be populated with the GoogleAPI client once is loaded.
 
-const Option = Select.Option;
+const { Option } = Select;
 
 // default state
 const State = {
@@ -27,7 +27,7 @@ export default class extends React.Component {
 
     componentDidMount() {
         // Initialize the google API
-        GoogleAPI().then(gapi => {
+        GoogleAPI().then((gapi) => {
             API = gapi;
             const instance = API.auth2.getAuthInstance();
             // Let know the state that we're ready to roll
@@ -80,7 +80,7 @@ export default class extends React.Component {
             <fieldset >
                 <label>Owner</label>
                 <Select
-                    showSearch
+                    showSearch={true}
                     className={Style.SelectFull}
                     placeholder="Select an owner">
                     <Option value="Test">Test</Option>
@@ -90,13 +90,13 @@ export default class extends React.Component {
             <fieldset >
                 <label>Type</label>
                 {!this.state.types
-                    ? <Input disabled placeholder="Loading…" />
+                    ? <Input disabled={true} placeholder="Loading…" />
                     : <Select
-                        showSearch
+                        showSearch={true}
                         className={Style.SelectFull}
                         placeholder="Select a type">
-                        {this.state.types.map(({key, value}, i) =>
-                            <Option key={`option-${i}`} value={value}>{key}</Option>
+                        {this.state.types.map(({ key, value }, i) =>
+                            <Option key={`option-${i}`} value={value}>{key}</Option>,
                         )}
                     </Select>}
             </fieldset>
@@ -109,7 +109,7 @@ export default class extends React.Component {
                     parser={Parsers.currency}
                 />
                 <Select
-                    showSearch
+                    showSearch={true}
                     className={Style.SelectMin}
                     defaultValue="MXN">
                     <Option value="MXN">MXN</Option>
@@ -123,7 +123,7 @@ export default class extends React.Component {
     }
 
     // Callback for API client's listener that verifies the status of the authentication
-    handleAuthStatus = (isUserAuthenticated) => this.setState({ isUserAuthenticated });
+    handleAuthStatus = isUserAuthenticated => this.setState({ isUserAuthenticated });
 
     // Callback for button that triggers Google Authentication process.
     handleAuthLogin = () => API.auth2.getAuthInstance().signIn();
