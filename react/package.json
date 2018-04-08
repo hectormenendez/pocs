@@ -11,7 +11,8 @@
     "dependencies": {
         "antd": "^3.4.0",
         "react": "^16.3.1",
-        "react-dom": "^16.3.1"
+        "react-dom": "^16.3.1",
+        "react-router-dom": "^4.2.2"
     },
     "devDependencies": {
         "@gik/eslint-config-react": "0.0.4",
