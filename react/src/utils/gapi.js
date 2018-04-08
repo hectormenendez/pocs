@@ -63,5 +63,5 @@ export default () => {
             sibling.parentNode.insertBefore(script, sibling);
         });
     }
-    return Promise.reject(new Error('you suck'));
+    return Promise.reject(new Error('GoogleAPI can only be requested after first load.'));
 };
