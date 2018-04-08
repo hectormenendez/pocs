@@ -1,0 +1,30 @@
+.Header {
+
+    .HeaderLeft {
+
+        h1 {
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+    }
+
+    .HeaderRight {
+        text-align: right;
+    }
+}
+
+.Content {
+    margin: 1em;
+
+    & > section {
+        padding: 1em;
+        background: #fff;
+    }
+}
+
+
+.Footer {
+    text-align: center;
+}

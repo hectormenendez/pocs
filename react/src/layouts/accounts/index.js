@@ -5,7 +5,7 @@ import GoogleAPI from '~/utils/gapi';
 import Formatters from '~/utils/formatters';
 import Parsers from '~/utils/parsers';
 
-import { Content as StyleContent } from '~/layouts/index.module.css';
+import { Content as StyleContent } from '~/layouts/index.module.scss';
 import Style from './index.module.css';
 
 const State = {
