@@ -15,6 +15,7 @@
     },
     "devDependencies": {
         "@gik/eslint-config-react": "0.0.4",
+        "babel-plugin-import": "^1.7.0",
         "babel-plugin-root-import": "^5.1.0",
         "eslint": "^4.19.1",
         "eslint-plugin-react": "^7.7.0",
