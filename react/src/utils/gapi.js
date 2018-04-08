@@ -17,50 +17,51 @@ const ScriptSettings = {
     devMode: true,
 };
 
-/**
- * @todo The script currently would load the script everytime the function is called
- *       Implement a checker so this is avoided, and the promise can always return the
- *       gapi object. (to avoid using a global, which is a bad idea).
- */
-export default () => new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = 'https://apis.google.com/js/api.js';
-    script.defer = true;
-    // when the Auth client has loaded
-    const onAuthClientLoad = function(){
-        // initialize the client
-        window.gapi.client
-            .init(Settings)
-            // the client is loaded return it so the caller applies logic to it.
-            .then(() => {
-                const API = window.gapi;
-                window.gapi = undefined; // NOTE: This is me being stubborn.
-                // Add a shorthand for calling the scripts
-                API.shorthands = {
-                    run: ({ func, params }) => API.client.script.scripts
-                        .run({
-                            scriptId: ScriptSettings.id,
-                            resource: {
-                                function: func,
-                                parameters: params,
-                                devMode: ScriptSettings.devMode,
-                            }
-                        })
-                        .then(({ result }) => result.response.result ),
-                };
-                resolve(API);
-            });
-    };
-    // when loaded resolve and reset the event.
-    script.onload = function(){
-        this.onload = function(){};
-        window.gapi.load('client:auth2', onAuthClientLoad);
-    };
-    // IE only.
-    script.onreadystatechange = function(){
-        if (this.readyState === 'complete') this.onload();
-    };
-    // Create the element and start loading the script.
-    const sibling = document.getElementsByTagName('script')[0];
-    sibling.parentNode.insertBefore(script, sibling);
-});
+export default () => {
+    const el = document.getElementById('__GoogleAPI__');
+    if (el && window.gapi) return Promise.resolve(window.gapi);
+    if (!el && !window.gapi) {
+        return new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.id = '__GoogleAPI__';
+            script.src = 'https://apis.google.com/js/api.js';
+            script.defer = true;
+            // when the Auth client has loaded
+            const onAuthClientLoad = function(){
+                // initialize the client
+                window.gapi.client
+                    .init(Settings)
+                    // the client is loaded return it so the caller applies logic to it.
+                    .then(() => {
+                        // Add a shorthand for calling the scripts
+                        window.gapi.shorthands = {
+                            run: ({ func, params }) => window.gapi.client.script.scripts
+                                .run({
+                                    scriptId: ScriptSettings.id,
+                                    resource: {
+                                        function: func,
+                                        parameters: params,
+                                        devMode: ScriptSettings.devMode,
+                                    },
+                                })
+                                .then(({ result }) => result.response.result),
+                        };
+                        resolve(window.gapi);
+                    });
+            };
+            // when loaded resolve and reset the event.
+            script.onload = function(){
+                this.onload = function(){};
+                window.gapi.load('client:auth2', onAuthClientLoad);
+            };
+            // IE only.
+            script.onreadystatechange = function(){
+                if (this.readyState === 'complete') this.onload();
+            };
+            // Create the element and start loading the script.
+            const sibling = document.getElementsByTagName('script')[0];
+            sibling.parentNode.insertBefore(script, sibling);
+        });
+    }
+    return Promise.reject(new Error('you suck'));
+};
