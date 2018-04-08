@@ -17,25 +17,29 @@ const ScriptSettings = {
     devMode: true,
 };
 
+let API; // Once the library is loaded, populate this with it. (to avoid having a global)
+
 export default () => {
     const el = document.getElementById('__GoogleAPI__');
-    if (el && window.gapi) return Promise.resolve(window.gapi);
-    if (!el && !window.gapi) {
+    if (el && API) return Promise.resolve(API);
+    if (!el && !API) {
         return new Promise((resolve) => {
             const script = document.createElement('script');
             script.id = '__GoogleAPI__';
             script.src = 'https://apis.google.com/js/api.js';
             script.defer = true;
             // when the Auth client has loaded
-            const onAuthClientLoad = function(){
+            function onAuthClientLoad() {
                 // initialize the client
                 window.gapi.client
                     .init(Settings)
                     // the client is loaded return it so the caller applies logic to it.
                     .then(() => {
                         // Add a shorthand for calling the scripts
-                        window.gapi.shorthands = {
-                            run: ({ func, params }) => window.gapi.client.script.scripts
+                        API = window.gapi;
+                        window.gapi = undefined;
+                        API.shorthands = {
+                            run: ({ func, params }) => API.client.script.scripts
                                 .run({
                                     scriptId: ScriptSettings.id,
                                     resource: {
@@ -46,16 +50,16 @@ export default () => {
                                 })
                                 .then(({ result }) => result.response.result),
                         };
-                        resolve(window.gapi);
+                        resolve(API);
                     });
-            };
+            }
             // when loaded resolve and reset the event.
-            script.onload = function(){
-                this.onload = function(){};
+            script.onload = function (){
+                this.onload = function (){};
                 window.gapi.load('client:auth2', onAuthClientLoad);
             };
             // IE only.
-            script.onreadystatechange = function(){
+            script.onreadystatechange = function (){
                 if (this.readyState === 'complete') this.onload();
             };
             // Create the element and start loading the script.
