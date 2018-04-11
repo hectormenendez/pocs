@@ -2,10 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-// import Main from '~/components/main';
 import Layout from '~/layouts';
 import registerServiceWorker from '~/utils/registerServiceWorker';
-
 import './index.css';
 
 ReactDOM.render(
