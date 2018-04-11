@@ -1,9 +1,13 @@
 {
     "extends": [
-        "eslint:recommended",
         "@gik/react"
     ],
-    "plugins": ["react"],
-    "settings": {
+    "settings":{
+        "import/resolver": {
+            "babel-plugin-root-import": {
+                "rootPathPrefix": "~",
+                "rootPathSuffix": "src"
+            }
+        }
     }
 }
