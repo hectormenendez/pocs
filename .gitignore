@@ -1,3 +1,7 @@
+
+# The local configuration
+/src/config.json
+
 .expo/
 
 node_modules
