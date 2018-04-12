@@ -15,43 +15,51 @@ const styles = StyleSheet.create({
     },
 });
 
+Config.endpoint = 'https://todoist.com/api/v7/sync';
+
+const Request = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: {
+        token: Config.token,
+        resource_types: JSON.stringify(['items']),
+    },
+};
+
 export default class App extends React.Component {
 
     state = {
-        token: Config.token,
-        sync_token: '*',
-        resource_types: JSON.stringify(['items']),
+        sync: '*',
+        items: [],
     };
 
     componentDidMount() {
-
-        // A proper x-www-form-urlencoded paylod has to be created.
-        const body = [
-            `token=${this.state.token}`,
-            `sync_token=${this.state.sync_token}`,
-            `resource_types=${encodeURIComponent(this.state.resource_types)}`,
-        ].join('&');
-
-        fetch('https://todoist.com/api/v7/sync', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body,
-        })
-        .then(response => response.json())
-        .then(json => console.log(json));
+        // TODO: Move initial fetch to here.
     }
 
     render() {
         return (
             <View style={styles.container}>
                 <Button
-                    title="Count"
-                    onPress={() => this.setState({ count: this.state.count + 1 })} />
+                    title="Fetch"
+                    onPress={this.handleFetch} />
                 <Text style={styles.text}>{this.state.count}</Text>
             </View>
         );
+    }
+
+    handleFetch = () => {
+        // Convert body into x-www-form-urlencoded
+        const body = Object
+            .entries(Object.assign({ sync_token: this.state.sync }, Request.body))
+            .reduce((acc, [k, v]) => acc.concat(`${k}=${encodeURIComponent(v)}`), [])
+            .join('&');
+        fetch(Config.endpoint, { ...Request, body })
+            .then(response => response.json())
+            .then(({ sync_token: sync, items }) => {
+                this.setState({ sync, items: items.concat[items] });
+                console.log(this.state);
+            });
     }
 }
 
