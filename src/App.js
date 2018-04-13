@@ -24,8 +24,8 @@ const State = {
     items: null,
     selected: null,
     timer: {
-        ms: 25 * 60 * 1000,
-        text: '25:00',
+        ms: 10 * 1000,
+        text: '00:10',
     },
     search: {
         text: '',
@@ -55,7 +55,14 @@ export default class App extends React.Component {
     }
 
     componentWillUnmount() {
-        Interval = null;
+        clearInterval(Interval);
+    }
+
+    componentDidUpdate() {
+        if (this.state.timer.ms <= 0) {
+            clearInterval(Interval);
+            this.setState({ selected: State.selected, timer: State.timer });
+        }
     }
 
     render() {
