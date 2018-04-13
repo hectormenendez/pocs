@@ -1,8 +1,9 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
-import { Button } from 'antd-mobile';
-
+import { AsyncStorage, StyleSheet, SafeAreaView } from 'react-native';
+import { Button, SearchBar, LocaleProvider, List } from 'antd-mobile';
+import EnUS from 'antd-mobile/lib/locale-provider/en_US';
 import Config from './config.json';
+import Todoist from './util/todoist';
 
 const styles = StyleSheet.create({
     container: {
@@ -16,29 +17,35 @@ const styles = StyleSheet.create({
     },
 });
 
-Config.endpoint = 'https://todoist.com/api/v7/sync';
-
-const Request = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: {
-        token: Config.token,
-        resource_types: JSON.stringify(['items']),
+const State = {
+    sync: null,
+    items: null,
+    search: {
+        text: '',
+        results: [],
     },
 };
 
 export default class App extends React.Component {
 
-    state = {
-        sync: '*',
-        items: [],
-    };
+    state = State;
 
     componentDidMount() {
         AsyncStorage
-            .getItem('@Gomodoro:state')
-            .then(string => JSON.parse(string))
-            .then(state => this.setState(state));
+            .getItem(Config.storeKey)
+            .then((storedValue) => {
+                if (storedValue !== null) return JSON.parse(storedValue);
+                return Todoist('*') // fetch all items
+                    .then(({ sync, items }) => AsyncStorage
+                        .setItem(Config.storeKey, JSON.stringify({ sync, items }))
+                        .then(() => ({ sync, items })),
+                    );
+            })
+            .then((data) => {
+                console.log('x', data);
+                this.setState(data);
+            })
+            .catch(err => console.error(err));
     }
 
     componentDidUpdate() {
@@ -48,21 +55,34 @@ export default class App extends React.Component {
         //         sync: this.state.sync,
         //         items: this.state.items,
         //     }))
-        //     .catch(err => console.error(err))
+        //     .Catch(err => console.error(err))
         //     .then(() => console.log('Saved state.'));
     }
 
     render() {
-        return (
-            <View style={styles.container}>
-                <Button
-                    type="primary"
-                    onPress={this.handleFetch}>
-                    Fetch
-                </Button>
-                <Text style={styles.text}>{this.state.count}</Text>
-            </View>
-        );
+        return <LocaleProvider locale={EnUS}>
+            {this.state.sync === null
+                ? <SafeAreaView />
+                : <SafeAreaView>
+
+                    <SearchBar
+                        placeholder="Tasks"
+                        maxLength={20}
+                        onChange={this.handleSearch}
+                    />
+
+                    <List>
+                        <List.Item onPress={this.handleFetch}>Test</List.Item>
+                        <List.Item>Test</List.Item>
+                        <List.Item>Test</List.Item>
+                        <List.Item>Test</List.Item>
+                        <List.Item>Test</List.Item>
+                        <List.Item>Test</List.Item>
+                    </List>
+                    <Button onClick={this.handleFetch}>Remove</Button>
+                    <Button onClick={this.handleShow}>Show</Button>
+                </SafeAreaView>}
+        </LocaleProvider>;
     }
 
     /**
@@ -70,19 +90,27 @@ export default class App extends React.Component {
      * and after fetching, it updates the sync token on the state.
      */
     handleFetch = () => {
-        // Convert body into x-www-form-urlencoded
-        const body = Object
-            .entries(Object.assign({ sync_token: this.state.sync }, Request.body))
-            .reduce((acc, [k, v]) => acc.concat(`${k}=${encodeURIComponent(v)}`), [])
-            .join('&');
-        fetch(Config.endpoint, { ...Request, body })
-            .then(response => response.json())
-            .then(({ sync_token: sync, items }) => {
-                this.setState(prevState => ({
-                    sync,
-                    items: prevState.items.concat(items),
-                }));
-            });
+        AsyncStorage
+            .removeItem(Config.storeKey)
+            .then(x => console.log('delete', x));
     }
+
+    handleShow = () => {
+        AsyncStorage
+            .getItem(Config.storeKey)
+            .then(x => console.log('show', x));
+    }
+
+    handleSearch = (text) => {
+        // console.log('state', this.state);
+        // const results = this.state.items
+        //     .map(item => {
+        //         console.log(item);
+        //         return item;
+        //     })
+        //     .filter(item => item.content.toLowerCase().indexOf(text.toLowerCase()) !== -1);
+        // console.log('---->', results);
+    }
+
 }
 
