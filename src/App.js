@@ -1,25 +1,14 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, SafeAreaView } from 'react-native';
-import { Button, SearchBar, LocaleProvider, List } from 'antd-mobile';
+import { AsyncStorage, SafeAreaView } from 'react-native';
+import { SearchBar, LocaleProvider, List } from 'antd-mobile';
 import EnUS from 'antd-mobile/lib/locale-provider/en_US';
 import Config from './config.json';
 import Todoist from './util/todoist';
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    text: {
-        fontSize: 40,
-    },
-});
-
 const State = {
     sync: null,
     items: null,
+    selected: null,
     search: {
         text: '',
         results: [],
@@ -41,22 +30,8 @@ export default class App extends React.Component {
                         .then(() => ({ sync, items })),
                     );
             })
-            .then((data) => {
-                console.log('x', data);
-                this.setState(data);
-            })
+            .then(data => this.setState(data))
             .catch(err => console.error(err));
-    }
-
-    componentDidUpdate() {
-        console.log('did update');
-        // AsyncStorage
-        //     .setItem('@Gomodoro:state', JSON.stringify({
-        //         sync: this.state.sync,
-        //         items: this.state.items,
-        //     }))
-        //     .Catch(err => console.error(err))
-        //     .then(() => console.log('Saved state.'));
     }
 
     render() {
@@ -66,50 +41,39 @@ export default class App extends React.Component {
                 : <SafeAreaView>
 
                     <SearchBar
+                        value={this.state.search.text}
                         placeholder="Tasks"
                         maxLength={20}
-                        onChange={this.handleSearch}
+                        onChange={this.handleSearch.bind(this)}
+                        onCancel={this.handleCancel.bind(this)}
                     />
 
                     <List>
-                        <List.Item onPress={this.handleFetch}>Test</List.Item>
-                        <List.Item>Test</List.Item>
-                        <List.Item>Test</List.Item>
-                        <List.Item>Test</List.Item>
-                        <List.Item>Test</List.Item>
-                        <List.Item>Test</List.Item>
+                        {this.state.search.results.map((item, i) =>
+                            <List.Item
+                                key={i}
+                                onClick={this.handleClick.bind(this, i)}>
+                                {item.content}
+                            </List.Item>)
+                        }
                     </List>
-                    <Button onClick={this.handleFetch}>Remove</Button>
-                    <Button onClick={this.handleShow}>Show</Button>
                 </SafeAreaView>}
         </LocaleProvider>;
     }
 
-    /**
-     * Fetches items in todoist using the latest sync token stored in the state,
-     * and after fetching, it updates the sync token on the state.
-     */
-    handleFetch = () => {
-        AsyncStorage
-            .removeItem(Config.storeKey)
-            .then(x => console.log('delete', x));
-    }
-
-    handleShow = () => {
-        AsyncStorage
-            .getItem(Config.storeKey)
-            .then(x => console.log('show', x));
-    }
-
     handleSearch = (text) => {
-        // console.log('state', this.state);
-        // const results = this.state.items
-        //     .map(item => {
-        //         console.log(item);
-        //         return item;
-        //     })
-        //     .filter(item => item.content.toLowerCase().indexOf(text.toLowerCase()) !== -1);
-        // console.log('---->', results);
+        if (text.length === 0) return this.handleCancel();
+        const results = this.state.items
+            .filter(item => item.content.toLowerCase().indexOf(text.toLowerCase()) !== -1)
+            .slice(0, 15);
+        return this.setState({ search: { text, results } });
+    }
+
+    handleCancel = () => this.setState({ search: { text: '', results: [] } });
+
+    handleClick = (index) => {
+        this.setState({ selected: this.state.search.results[index] });
+        this.handleCancel();
     }
 
 }
