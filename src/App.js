@@ -1,5 +1,6 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, Text, View, Button } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import { Button } from 'antd-mobile';
 
 import Config from './config.json';
 
@@ -55,8 +56,10 @@ export default class App extends React.Component {
         return (
             <View style={styles.container}>
                 <Button
-                    title="Fetch"
-                    onPress={this.handleFetch} />
+                    type="primary"
+                    onPress={this.handleFetch}>
+                    Fetch
+                </Button>
                 <Text style={styles.text}>{this.state.count}</Text>
             </View>
         );
