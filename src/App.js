@@ -1,19 +1,31 @@
 import React from 'react';
-import { AsyncStorage, SafeAreaView } from 'react-native';
-import { SearchBar, LocaleProvider, List } from 'antd-mobile';
+import Markdown from 'react-native-simple-markdown';
 import EnUS from 'antd-mobile/lib/locale-provider/en_US';
+import { AsyncStorage, SafeAreaView, StyleSheet} from 'react-native';
+import { SearchBar, LocaleProvider, List, View, Text, Button } from 'antd-mobile';
+
 import Config from './config.json';
 import Todoist from './util/todoist';
+
+const Styles = StyleSheet.create({
+    container: { padding: 10, margin: 10 },
+    mdText: { fontSize: 18, lineHeight: 18 },
+    mdLink: { textDecorationLine: 'underline' },
+    time: { fontSize: 80, textAlign: 'center', fontWeight: 'bold' },
+});
 
 const State = {
     sync: null,
     items: null,
     selected: null,
+    timer: 1500, // 25 min
     search: {
         text: '',
         results: [],
     },
 };
+
+const Interval = null;
 
 export default class App extends React.Component {
 
@@ -35,11 +47,12 @@ export default class App extends React.Component {
     }
 
     render() {
-        return <LocaleProvider locale={EnUS}>
-            {this.state.sync === null
-                ? <SafeAreaView />
-                : <SafeAreaView>
+        // TODO: Add a proper loader.
+        if (this.state.sync === null) return <SafeAreaView />;
 
+        return <LocaleProvider locale={EnUS}>
+            {this.state.selected === null
+                ? <SafeAreaView>
                     <SearchBar
                         value={this.state.search.text}
                         placeholder="Tasks"
@@ -47,17 +60,35 @@ export default class App extends React.Component {
                         onChange={this.handleSearch.bind(this)}
                         onCancel={this.handleCancel.bind(this)}
                     />
-
                     <List>
                         {this.state.search.results.map((item, i) =>
                             <List.Item
                                 key={i}
                                 onClick={this.handleClick.bind(this, i)}>
-                                {item.content}
+                                <Markdown>{item.content}</Markdown>
                             </List.Item>)
                         }
                     </List>
-                </SafeAreaView>}
+                </SafeAreaView>
+                : <SafeAreaView>
+                    <View style={Styles.container}>
+                        <Markdown
+                            whitelist={['link', 'strong']}
+                            styles={{ link: Styles.mdLink, text: Styles.mdText }}>
+                            {this.state.selected.content}
+                        </Markdown>
+                    </View>
+                    <View style={Styles.container}>
+                        <Text style={Styles.time}>25:00</Text>
+                    </View>
+                    <View style={Styles.container}>
+                        <Button type="primary">Done</Button>
+                    </View>
+                    <View style={Styles.container}>
+                        <Button type="warning">Pause</Button>
+                    </View>
+                </SafeAreaView>
+            }
         </LocaleProvider>;
     }
 
