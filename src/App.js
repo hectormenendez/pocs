@@ -1,11 +1,11 @@
 import React from 'react';
 import Markdown from 'react-native-simple-markdown';
 import EnUS from 'antd-mobile/lib/locale-provider/en_US';
-import { AsyncStorage, SafeAreaView, StyleSheet} from 'react-native';
+import { AsyncStorage, SafeAreaView, StyleSheet } from 'react-native';
 import { SearchBar, LocaleProvider, List, View, Text, Button } from 'antd-mobile';
 
-import Config from './config.json';
-import Todoist from './util/todoist';
+import Config from '~/config.json';
+import Todoist from '~/util/todoist';
 
 const Styles = StyleSheet.create({
     container: { padding: 10, margin: 10 },

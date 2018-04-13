@@ -1,7 +1,13 @@
 {
     "presets": ["babel-preset-expo"],
     "plugins": [
-        ["import", { "libraryName": "antd-mobile" }]
+        ["babel-plugin-root-import", {
+            "rootPathPrefix": "~",
+            "rootPathSuffix": "src"
+        }],
+        ["import", {
+            "libraryName": "antd-mobile"
+        }]
     ],
     "env": {
         "development": {

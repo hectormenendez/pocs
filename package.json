@@ -23,6 +23,7 @@
     "devDependencies": {
         "@gik/eslint-config-react": "0.0.6",
         "babel-plugin-import": "^1.7.0",
+        "babel-plugin-root-import": "^5.1.0",
         "eslint": "^4.19.1",
         "jest-expo": "26.0.0",
         "react-native-scripts": "1.13.1",
