@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, View, Button } from 'react-native';
 
 import Config from './config.json';
 
@@ -34,7 +34,21 @@ export default class App extends React.Component {
     };
 
     componentDidMount() {
-        // TODO: Move initial fetch to here.
+        AsyncStorage
+            .getItem('@Gomodoro:state')
+            .then(string => JSON.parse(string))
+            .then(state => this.setState(state));
+    }
+
+    componentDidUpdate() {
+        console.log('did update');
+        // AsyncStorage
+        //     .setItem('@Gomodoro:state', JSON.stringify({
+        //         sync: this.state.sync,
+        //         items: this.state.items,
+        //     }))
+        //     .catch(err => console.error(err))
+        //     .then(() => console.log('Saved state.'));
     }
 
     render() {
@@ -48,6 +62,10 @@ export default class App extends React.Component {
         );
     }
 
+    /**
+     * Fetches items in todoist using the latest sync token stored in the state,
+     * and after fetching, it updates the sync token on the state.
+     */
     handleFetch = () => {
         // Convert body into x-www-form-urlencoded
         const body = Object
@@ -57,8 +75,10 @@ export default class App extends React.Component {
         fetch(Config.endpoint, { ...Request, body })
             .then(response => response.json())
             .then(({ sync_token: sync, items }) => {
-                this.setState({ sync, items: items.concat[items] });
-                console.log(this.state);
+                this.setState(prevState => ({
+                    sync,
+                    items: prevState.items.concat(items),
+                }));
             });
     }
 }
