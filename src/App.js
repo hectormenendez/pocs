@@ -11,21 +11,29 @@ const Styles = StyleSheet.create({
     container: { padding: 10, margin: 10 },
     mdText: { fontSize: 18, lineHeight: 18 },
     mdLink: { textDecorationLine: 'underline' },
-    time: { fontSize: 80, textAlign: 'center', fontWeight: 'bold' },
+    time: {
+        fontSize: 80,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontFamily: 'Menlo',
+    },
 });
 
 const State = {
     sync: null,
     items: null,
     selected: null,
-    timer: 1500, // 25 min
+    timer: {
+        ms: 25 * 60 * 1000,
+        text: '25:00',
+    },
     search: {
         text: '',
         results: [],
     },
 };
 
-const Interval = null;
+let Interval;
 
 export default class App extends React.Component {
 
@@ -44,6 +52,10 @@ export default class App extends React.Component {
             })
             .then(data => this.setState(data))
             .catch(err => console.error(err));
+    }
+
+    componentWillUnmount() {
+        Interval = null;
     }
 
     render() {
@@ -79,7 +91,7 @@ export default class App extends React.Component {
                         </Markdown>
                     </View>
                     <View style={Styles.container}>
-                        <Text style={Styles.time}>25:00</Text>
+                        <Text style={Styles.time}>{this.state.timer.text}</Text>
                     </View>
                     <View style={Styles.container}>
                         <Button type="primary">Done</Button>
@@ -105,6 +117,12 @@ export default class App extends React.Component {
     handleClick = (index) => {
         this.setState({ selected: this.state.search.results[index] });
         this.handleCancel();
+        Interval = setInterval(() => {
+            const timer = this.state.timer.ms - 1000;
+            const min = Math.floor(timer / 60000).toString().padStart(2, '0');
+            const sec = ((timer % 60000) / 1000).toString().padStart(2, '0');
+            this.setState({ timer: { ms: timer, text: `${min}:${sec}` } });
+        }, 1000);
     }
 
 }
