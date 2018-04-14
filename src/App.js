@@ -1,20 +1,31 @@
+// Modules (production)
 import React from 'react';
-import { Provider } from 'react-redux';
+import { SafeAreaView } from 'react-native';
 import { createStore as CreateStore, combineReducers as CombineReducers } from 'redux';
+import { Provider } from 'react-redux';
 import { composeWithDevTools as ComposeWithDevTools } from 'redux-devtools-extension';
 
-import { Reducers as ReducersCount } from '~/states/count';
-import PageHome from '~/pages/count';
+import { Reducers as ReducersTodoist } from '~/states/todoist';
+import Loading from '~/components/loading';
 
 const Reducers = CombineReducers({
-    count: ReducersCount,
+    todoist: ReducersTodoist,
 });
 
-const ComposedEnhancers = ComposeWithDevTools({})();
-const State = {};
+const Store = CreateStore(
+    Reducers,
+    {}, // Initial State
+    __DEV__ && ComposeWithDevTools({})(), // eslint-disable-line no-undef
+);
 
-const Store = CreateStore(Reducers, State, ComposedEnhancers);
+export const Component = () => {
 
-export default () => <Provider store={Store}>
-    <PageHome />
-</Provider>;
+    const state = Store.getState();
+
+    return <Provider store={Store}>
+        <Loading />
+    </Provider>;
+}
+
+Object.defineProperty(Component, 'name', { value: 'App' });
+export default Component;
