@@ -1,4 +1,4 @@
-import Factory from '~/util/factory';
+import Factory from '~/utils/factory';
 
 export const Name = 'COUNT';
 

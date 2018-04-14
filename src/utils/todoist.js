@@ -1,6 +1,6 @@
 
 // TODO: Use root-import
-import { todoist as Config } from '../config.json';
+import { todoist as Config } from '~/utils/config.json';
 
 const Request = {
     method: 'POST',
