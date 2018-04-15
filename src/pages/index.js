@@ -1,19 +1,18 @@
 import React from 'react';
 import { connect as Connect } from 'react-redux';
-import { Text } from 'react-native';
 
+import { Types as TypesSelected } from '~/states/selected';
 import PageSelectItem from '~/pages/select-item';
 import PageSelectTime from '~/pages/select-time';
-import { Types as TypesSelected } from '~/states/selected';
+import PageTimer from '~/pages/timer';
 
 export const Component = ({ selected }) => {
 
     const { item, time } = selected;
-
     return <React.Fragment>
         {!time && !item && <PageSelectItem/>}
         {!time && item && <PageSelectTime/>}
-        {time && item && <Text>Yaaaaaaas</Text>}
+        {time && item && <PageTimer/>}
     </React.Fragment>;
 };
 
