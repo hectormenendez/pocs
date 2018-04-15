@@ -9,7 +9,8 @@ import { composeWithDevTools as ComposeWithDevTools } from 'redux-devtools-exten
 
 import { Reducers as ReducersTodoist } from '~/states/todoist';
 import { Reducers as ReducersSelected } from '~/states/selected';
-import PageSelect from '~/pages/select';
+
+import PageIndex from '~/pages';
 
 const Reducers = CombineReducers({
     todoist: ReducersTodoist,
@@ -25,10 +26,9 @@ const Store = CreateStore(
 export const Component = () =>
     <Provider store={Store}>
         <LocaleProvider locale={Locale}>
-            <PageSelect/>
+            <PageIndex />
         </LocaleProvider>
     </Provider>;
 
 Object.defineProperty(Component, 'name', { value: 'App' });
-
 export default Component;
