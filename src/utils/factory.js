@@ -41,10 +41,7 @@ export const FactoryReducers = (State, prefix, Actions) =>
             .filter(key => key === type);
         if (!match.length) return state;
         const action = Actions[match[0].replace(`${prefix}/`, '')];
-        return {
-            ...state,
-            ...action.reducer(state, payload),
-        };
+        return action.reducer(state, payload);
     };
 
 export default { actions: FactoryActions, reducers: FactoryReducers };
