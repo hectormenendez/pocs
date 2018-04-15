@@ -10,8 +10,9 @@ export const Style = StyleSheet.create({
     },
 });
 
-export const Name = () => <View style={Style.container}>
+export const Component = () => <View style={Style.container}>
     <ActivityIndicator size="large" />
 </View>;
 
-export default Name;
+Object.defineProperty(Component, 'name', { value: 'Component.Loading' });
+export default Component;
