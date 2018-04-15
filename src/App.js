@@ -1,15 +1,19 @@
 // Modules (production)
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import Locale from 'antd-mobile/lib/locale-provider/en_US';
 import { createStore as CreateStore, combineReducers as CombineReducers } from 'redux';
+import { LocaleProvider } from 'antd-mobile';
 import { Provider } from 'react-redux';
+
 import { composeWithDevTools as ComposeWithDevTools } from 'redux-devtools-extension';
 
 import { Reducers as ReducersTodoist } from '~/states/todoist';
-import Loading from '~/components/loading';
+import { Reducers as ReducersSelected } from '~/states/selected';
+import PageSelect from '~/pages/select';
 
 const Reducers = CombineReducers({
     todoist: ReducersTodoist,
+    selected: ReducersSelected,
 });
 
 const Store = CreateStore(
@@ -18,14 +22,13 @@ const Store = CreateStore(
     __DEV__ && ComposeWithDevTools({})(), // eslint-disable-line no-undef
 );
 
-export const Component = () => {
-
-    const state = Store.getState();
-
-    return <Provider store={Store}>
-        <Loading />
+export const Component = () =>
+    <Provider store={Store}>
+        <LocaleProvider locale={Locale}>
+            <PageSelect/>
+        </LocaleProvider>
     </Provider>;
-}
 
 Object.defineProperty(Component, 'name', { value: 'App' });
+
 export default Component;

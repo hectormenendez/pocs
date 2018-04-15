@@ -1,14 +1,17 @@
 import Factory from '~/utils/factory';
 
-export const Name = 'COUNT';
+export const Name = 'TODOIST';
 
 export const State = {
-    value: 0,
+    sync: null,
+    items: [],
 };
 
 export const Actions = Factory.actions(Name, {
-    INCREMENT: state => ({ value: state.value + 1 }),
-    DECREMENT: state => ({ value: state.value - 1 }),
+    ADD: (state, { sync, items }) => ({
+        sync,
+        items: state.items.concat(items),
+    }),
 });
 
 export const Reducers = Factory.reducers(State, Name, Actions);

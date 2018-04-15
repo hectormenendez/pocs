@@ -16,6 +16,7 @@
     "dependencies": {
         "antd-mobile": "^2.1.8",
         "expo": "^26.0.0",
+        "prop-types": "^15.6.1",
         "react": "^16.3.1",
         "react-native": "github:expo/react-native#sdk-26.0.0",
         "react-native-simple-markdown": "^1.1.0",
