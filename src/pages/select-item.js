@@ -91,7 +91,7 @@ export class Component extends React.Component {
 
 }
 
-Component.name = 'Page.Select';
+Component.name = 'Page.SelectItem';
 
 Component.propTypes = {
     todoist: TypesTodoist,

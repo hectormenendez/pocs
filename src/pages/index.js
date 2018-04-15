@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect as Connect } from 'react-redux';
+import { Text } from 'react-native';
 
 import PageSelectItem from '~/pages/select-item';
 import PageSelectTime from '~/pages/select-time';
@@ -12,6 +13,7 @@ export const Component = ({ selected }) => {
     return <React.Fragment>
         {!time && !item && <PageSelectItem/>}
         {!time && item && <PageSelectTime/>}
+        {time && item && <Text>Yaaaaaaas</Text>}
     </React.Fragment>;
 };
 
