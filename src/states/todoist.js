@@ -1,6 +1,12 @@
+import PropTypes from 'prop-types';
 import Factory from '~/utils/factory';
 
 export const Name = 'TODOIST';
+
+export const Types = PropTypes.shape({
+    sync: PropTypes.string,
+    items: PropTypes.array.isRequired,
+});
 
 export const State = {
     sync: null,
@@ -8,7 +14,7 @@ export const State = {
 };
 
 export const Actions = Factory.actions(Name, {
-    ADD: (state, { sync, items }) => ({
+    add: (state, { sync, items }) => ({
         sync,
         items: state.items.concat(items),
     }),

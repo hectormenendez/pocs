@@ -8,8 +8,8 @@ import Markdown from 'react-native-simple-markdown';
 import Config from '~/utils/config.json';
 import Todoist from '~/utils/todoist';
 import ComponentLoading from '~/components/loading';
-import { Actions as ActionsTodoist } from '~/states/todoist';
-import { Actions as ActionsSelected } from '~/states/selected';
+import { Actions as ActionsTodoist, Types as TypesTodoist } from '~/states/todoist';
+import { Actions as ActionsSelected, Types as TypesSelected} from '~/states/selected';
 
 export const Style = StyleSheet.create({
     container: { backgroundColor: '#efeff4' },
@@ -92,12 +92,10 @@ export class Component extends React.Component {
 }
 
 Component.name = 'Page.Select';
+
 Component.propTypes = {
-    todoist: PropTypes.shape({
-        sync: PropTypes.string,
-        items: PropTypes.array.isRequired,
-    }),
-    selected: PropTypes.object,
+    todoist: TypesTodoist,
+    selected: TypesSelected,
     doAdd: PropTypes.func.isRequired,
     doSelect: PropTypes.func.isRequired,
 };
@@ -110,7 +108,7 @@ export default Connect(
         selected: state.selected,
     }),
     dispatch => ({
-        doAdd: payload => dispatch(ActionsTodoist.ADD(payload)),
-        doSelect: payload => dispatch(ActionsSelected.SET(payload)),
+        doAdd: payload => dispatch(ActionsTodoist.add(payload)),
+        doSelect: payload => dispatch(ActionsSelected.setItem(payload)),
     }),
 )(Component);
