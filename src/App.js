@@ -1,9 +1,14 @@
 // Modules (production)
 import React from 'react';
 import Locale from 'antd-mobile/lib/locale-provider/en_US';
-import { createStore as CreateStore, combineReducers as CombineReducers } from 'redux';
+import Thunk from 'redux-thunk';
 import { LocaleProvider } from 'antd-mobile';
 import { Provider } from 'react-redux';
+import {
+    createStore as CreateStore,
+    combineReducers as CombineReducers,
+    applyMiddleware as ApplyMiddleware,
+} from 'redux';
 
 import { composeWithDevTools as ComposeWithDevTools } from 'redux-devtools-extension';
 
@@ -12,15 +17,20 @@ import { Reducers as ReducersSelected } from '~/states/selected';
 
 import PageIndex from '~/pages';
 
-const Reducers = CombineReducers({
-    todoist: ReducersTodoist,
-    selected: ReducersSelected,
-});
+const ReduxMiddleware = ApplyMiddleware(Thunk);
 
 const Store = CreateStore(
-    Reducers,
-    {}, // Initial State
-    __DEV__ && ComposeWithDevTools({})(), // eslint-disable-line no-undef
+    // Root reducer
+    CombineReducers({
+        todoist: ReducersTodoist,
+        selected: ReducersSelected,
+    }),
+    // initial state
+    {},
+    // Middleware
+    __DEV__ // eslint-disable-line no-undef
+        ? ComposeWithDevTools({})(ReduxMiddleware)
+        : ReduxMiddleware,
 );
 
 export const Component = () =>

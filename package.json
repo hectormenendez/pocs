@@ -20,7 +20,8 @@
         "react": "^16.3.1",
         "react-native": "github:expo/react-native#sdk-26.0.0",
         "react-native-simple-markdown": "^1.1.0",
-        "react-redux": "^5.0.7"
+        "react-redux": "^5.0.7",
+        "redux-thunk": "^2.2.0"
     },
     "devDependencies": {
         "@gik/eslint-config-react": "0.0.6",

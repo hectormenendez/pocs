@@ -9,7 +9,7 @@ import Config from '~/utils/config.json';
 import Todoist from '~/utils/todoist';
 import ComponentLoading from '~/components/loading';
 import { Actions as ActionsTodoist, Types as TypesTodoist } from '~/states/todoist';
-import { Actions as ActionsSelected, Types as TypesSelected} from '~/states/selected';
+import { Actions as ActionsSelected, Types as TypesSelected } from '~/states/selected';
 
 export const Style = StyleSheet.create({
     container: { backgroundColor: '#efeff4' },
@@ -22,31 +22,39 @@ export const State = {
 
 export class Component extends React.Component {
 
+    static name = 'Page.SelectItem';
+
+    static propTypes = {
+        todoist: TypesTodoist,
+        selected: TypesSelected,
+        dispatch: PropTypes.func.isRequired, // Added by redux-thunk
+    };
+
     state = State;
 
     componentDidMount() {
-        // AsyncStorage.removeItem(Config.storeKey);
-        // debugger;
         AsyncStorage
             .getItem(Config.storeKey)
-            // if we have a stored value, populate the global state
-            // but still ask for new items on todoist to update the sate.
+            // if we have a stored value, populate the global state using it
+            // but ask for the difference since the last time we synced.
             .then((storedValue) => {
                 let syncID = '*';
-                if (storedValue !== null) {
+                if (storedValue) {
                     const todoist = JSON.parse(storedValue);
                     syncID = todoist.sync;
-                    this.props.doAdd(todoist);
+                    this.props.dispatch(ActionsTodoist.add(todoist));
                 }
                 return Todoist(syncID);
             })
             // Store the fetched dat in the global state.
-            .then(data => this.props.doAdd(data))
-            // Save the results of the operation to the storage.
-            .then(() => {
-                const { todoist } = this.props;
-                return AsyncStorage.setItem(Config.storeKey, JSON.stringify(todoist));
+            .then((data) => {
+                this.props.dispatch(ActionsTodoist.add(data));
             })
+            // Save the results of the operation to the storage.
+            .then(() => AsyncStorage.setItem(
+                Config.storeKey,
+                JSON.stringify(this.props.todoist),
+            ))
             .catch((err) => { throw err; });
     }
 
@@ -74,7 +82,7 @@ export class Component extends React.Component {
     }
 
     onSelect = (index) => {
-        this.props.doSelect(this.state.results[index]);
+        this.props.dispatch(ActionsSelected.setItem(this.state.results[index]));
         this.onCancel();
     }
 
@@ -91,24 +99,10 @@ export class Component extends React.Component {
 
 }
 
-Component.name = 'Page.SelectItem';
-
-Component.propTypes = {
-    todoist: TypesTodoist,
-    selected: TypesSelected,
-    doAdd: PropTypes.func.isRequired,
-    doSelect: PropTypes.func.isRequired,
-};
-
-
-// Connect and expose the managed state and the dispatchers this component will use.
+// Connect and expose the store parts needed
 export default Connect(
-    state => ({
-        todoist: state.todoist,
-        selected: state.selected,
-    }),
-    dispatch => ({
-        doAdd: payload => dispatch(ActionsTodoist.add(payload)),
-        doSelect: payload => dispatch(ActionsSelected.setItem(payload)),
+    store => ({
+        todoist: store.todoist,
+        selected: store.selected,
     }),
 )(Component);

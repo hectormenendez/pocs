@@ -13,11 +13,21 @@ export const State = {
     time: null, // Float
 };
 
-export const Actions = Factory.actions(Name, {
-    setItem: (state, item) => ({ time: State.time, item }),
-    setTime: (state, time) => ({ ...state, time }),
-    del: () => State,
-});
+export const { Actions, Reducers } = Factory(State, {
 
+    setItem: {
+        action: (type, payload) => dispatch => dispatch({ type, payload }),
+        reducer: (state, item) => ({ time: State.time, item }),
+    },
 
-export const Reducers = Factory.reducers(State, Name, Actions);
+    setTime: {
+        action: (type, payload) => dispatch => dispatch({ type, payload }),
+        reducer: (state, time) => ({ ...state, time }),
+    },
+
+    del: {
+        action: (type, payload) => dispatch => dispatch({ type, payload }),
+        reducer: () => State,
+    },
+
+}, Name);

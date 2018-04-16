@@ -1,47 +1,36 @@
-/**
- * Shorthand to create Redux actions.
- * for example:
- *     FactorActions('TEST', {
- *         ONE: (state, payload) => ({ value: state.value  + 1 })
- *     });
- * would generate an action named: 'TEST/ONE'.
- * NOTE: The action will have the reducer attached to it in a hidden property, so it can
- *       be used by the `FactoryReducers` method.
- *
- * @param {string} prefix - A prefix for all the generated actions.
- * @param {Object} Actions - An object containing the reducers to be used and
- *                           their corresponding action name.
- */
-export const FactoryActions = (prefix, Actions) => Object
-    .keys(Actions)
-    .map(name => ({ name, reducer: Actions[name] }))
-    .reduce((acc, { name, reducer }) => {
-        const action = payload => ({ type: `${prefix}/${name}`, payload });
-        Object.defineProperty(action, 'reducer', {
-            enumerable: false,
-            writable: false,
-            value: reducer,
-        });
-        return { ...acc, [name]: action };
-    }, {});
+import PropTypes from 'prop-types';
 
+export default function FactoryRedux(initState, declarations, prefix) {
+    PropTypes.checkPropTypes(
+        {
+            initState: PropTypes.any.isRequired,
+            declarations: PropTypes.objectOf(PropTypes.shape({
+                action: PropTypes.func.isRequired,
+                reducer: PropTypes.func.isRequired,
+            })),
+            prefix: PropTypes.string,
+        },
+        { initState, declarations, prefix },
+        'arguments',
+        'FactoryRedux',
+    );
+    const keys = Object.keys(declarations);
+    const prefixer = value => prefix ? `${prefix}/${value}` : value;
+    return {
 
-/**
- * Shorthand for creating Reducers from given FactoryActions.
- *
- * @param {string} State - The initial state for the reducer.
- * @param {string} prefix - A prefix used in the actions.
- * @param {Actions} Actions - An Actions object created by the FactoryActions method.
- */
-export const FactoryReducers = (State, prefix, Actions) =>
-    (state = State, { type, payload }) => {
-        const match = Object
-            .keys(Actions)
-            .map(key => `${prefix}/${key}`)
-            .filter(key => key === type);
-        if (!match.length) return state;
-        const action = Actions[match[0].replace(`${prefix}/`, '')];
-        return action.reducer(state, payload);
+        Actions: keys.reduce((acc, key) => {
+            const type = prefixer(key);
+            const fabricatedAction = declarations[key].action.bind(null, type);
+            return { ...acc, [key]: fabricatedAction };
+        }, {}),
+
+        Reducers: function fabricatedReducers(prevState = initState, { type, payload }) {
+            const match = keys
+                .map(key => ({ key: prefixer(key), reducer: declarations[key].reducer }))
+                .filter(({ key }) => key === type);
+            // No matching declaration found, this is most likely @@INIT, return state.
+            if (!match.length) return prevState;
+            return match[0].reducer(prevState, payload);
+        },
     };
-
-export default { actions: FactoryActions, reducers: FactoryReducers };
+}

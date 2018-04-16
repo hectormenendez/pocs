@@ -43,6 +43,12 @@ export const State = {
 
 export class Component extends React.Component {
 
+    static name = 'Pages.Timer';
+
+    static propTypes = {
+        selected: TypesSelected,
+    };
+
     state = State;
 
     componentDidMount() {
@@ -99,12 +105,6 @@ export class Component extends React.Component {
     }
 }
 
-Component.name = 'Pages.Timer';
-
-Component.propTypes = {
-    selected: TypesSelected,
-};
-
 export default Connect(
-    state => ({ selected: state.selected }),
+    store => ({ selected: store.selected }),
 )(Component);

@@ -5,7 +5,7 @@ export const Name = 'TODOIST';
 
 export const Types = PropTypes.shape({
     sync: PropTypes.string,
-    items: PropTypes.array.isRequired,
+    // items: PropTypes.array.isRequired,
 });
 
 export const State = {
@@ -13,11 +13,12 @@ export const State = {
     items: [],
 };
 
-export const Actions = Factory.actions(Name, {
-    add: (state, { sync, items }) => ({
-        sync,
-        items: state.items.concat(items),
-    }),
-});
-
-export const Reducers = Factory.reducers(State, Name, Actions);
+export const { Actions, Reducers } = Factory(State, {
+    add: {
+        action: (type, payload) => dispatch => dispatch({ type, payload }),
+        reducer: (prevState, payload) => ({
+            sync: payload.sync,
+            items: prevState.items.concat(payload.items),
+        }),
+    },
+}, Name);

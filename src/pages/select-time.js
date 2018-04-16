@@ -35,37 +35,34 @@ export const Style = StyleSheet.create({
     },
 });
 
-export const Component = ({ doSelect }) =>
-    <SafeAreaView style={Style.container}>
+export const Component = ({ dispatch }) => {
+    const setTime = time => dispatch(ActionsSelected.setTime(time));
+    return <SafeAreaView style={Style.container}>
         <Button
             style={[Style.button, Style.button1]}
-            onClick={doSelect.bind(null, 25 * 60 * 1000)}>
+            onClick={ setTime.bind(this, 25 * 60 * 1000) }>
             25min
         </Button>
         <Button
             style={[Style.button, Style.button2]}
-            onClick={doSelect.bind(null, 50 * 60 * 1000)}>
+            onClick={ setTime.bind(this, 50 * 60 * 1000) }>
             50min
         </Button>
         <Button
             style={[Style.button, Style.button3]}
-            onClick={doSelect.bind(null, 75 * 60 * 1000)}>
+            onClick={ setTime.bind(this, 75 * 60 * 1000) }>
             75min
         </Button>
         <Button
             style={[Style.button, Style.button4]}
-            onClick={doSelect.bind(null, 90 * 60 * 1000)}>
+            onClick={ setTime.bind(this, 90 * 60 * 1000) }>
             90min
         </Button>
     </SafeAreaView>;
+};
 
 Component.name = 'Page.SelectTime';
 
-Component.propTypes = { doSelect: PropTypes.func.isRequired };
+Component.propTypes = { dispatch: PropTypes.func.isRequired };
 
-export default Connect(
-    null,
-    dispatch => ({
-        doSelect: payload => dispatch(ActionsSelected.setTime(payload)),
-    }),
-)(Component);
+export default Connect()(Component);
