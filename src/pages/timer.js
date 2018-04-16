@@ -7,6 +7,7 @@ import { View, Button, Text } from 'antd-mobile';
 
 import { MilliToHuman } from '~/utils/time';
 import { Types as TypesSelected, Actions as ActionsSelected } from '~/stores/selected';
+import { Actions as ActionsTodoist } from '~/stores/todoist';
 
 export const Style = StyleSheet.create({
     container: {
@@ -80,7 +81,7 @@ export class Component extends React.Component {
                 <Text style={timeStyle}>{this.state.text}</Text>
             </View>
             <View style={Style.element}>
-                <Button type="primary">Done</Button>
+                <Button type="primary" onClick={this.onDone}>Done</Button>
             </View>
             <View style={Style.element}>
                 <Button onClick={this.onPause}>
@@ -108,6 +109,16 @@ export class Component extends React.Component {
 
     onCancel = () => this.props.dispatch(ActionsSelected.reset());
 
+    onDone = () => this.props
+        .dispatch(ActionsTodoist.itemComplete({
+            item: this.props.selected.item,
+            time: {
+                orig: this.props.selected.time,
+                curr: this.state.time,
+            },
+            expired: this.state.direction !== -1,
+        }))
+        .then(() => this.onCancel());
 }
 
 export default Connect(
