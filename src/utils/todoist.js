@@ -1,5 +1,5 @@
+import UUID from 'uuid/v4';
 import { todoist as Config } from '~/utils/config.json';
-
 
 export const API = (body) => {
     const fullBody = { token: Config.token, ...body };
@@ -31,13 +31,16 @@ export const API = (body) => {
         .catch((error) => { throw error; });
 };
 
-export const Read = (syncToken, types) => API(
-    {
-        sync_token: syncToken,
-        resource_types: JSON.stringify(types),
-    })
-    .then((json) => {
-        const sync = json.sync_token;
-        delete json.sync_token; // eslint-disable-line no-param-reassign
-        return { sync, ...json };
-    });
+export const Read = (syncToken, types) => API({
+    sync_token: syncToken,
+    resource_types: JSON.stringify(types),
+});
+
+export const Write = commands => API({
+    commands: JSON.stringify(commands.map(([type, args]) => ({
+        type,
+        args,
+        uuid: UUID(),
+        temp_id: UUID(),
+    }))),
+});
