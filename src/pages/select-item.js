@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect as Connect } from 'react-redux';
-import { StyleSheet, SafeAreaView, AsyncStorage } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import { SearchBar, List } from 'antd-mobile';
 import Markdown from 'react-native-simple-markdown';
 
-import Config from '~/utils/config.json';
-import Todoist from '~/utils/todoist';
 import ComponentLoading from '~/components/loading';
 import { Actions as ActionsTodoist, Types as TypesTodoist } from '~/stores/todoist';
 import { Actions as ActionsSelected, Types as TypesSelected } from '~/stores/selected';
@@ -33,29 +31,7 @@ export class Component extends React.Component {
     state = State;
 
     componentDidMount() {
-        AsyncStorage
-            .getItem(Config.storeKey)
-            // if we have a stored value, populate the global state using it
-            // but ask for the difference since the last time we synced.
-            .then((storedValue) => {
-                let syncID = '*';
-                if (storedValue) {
-                    const todoist = JSON.parse(storedValue);
-                    syncID = todoist.sync;
-                    this.props.dispatch(ActionsTodoist.add(todoist));
-                }
-                return Todoist(syncID);
-            })
-            // Store the fetched dat in the global state.
-            .then((data) => {
-                this.props.dispatch(ActionsTodoist.add(data));
-            })
-            // Save the results of the operation to the storage.
-            .then(() => AsyncStorage.setItem(
-                Config.storeKey,
-                JSON.stringify(this.props.todoist),
-            ))
-            .catch((err) => { throw err; });
+        this.props.dispatch(ActionsTodoist.itemsFetch());
     }
 
     render () {
