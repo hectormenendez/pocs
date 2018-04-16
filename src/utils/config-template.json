@@ -2,6 +2,6 @@
     "storeKey": "@Gomodoro:state",
     "todoist": {
         "token": "",
-        "endpoint": "https://todoist.com/api/v7/sync"
+        "endpoint": "https://todoist.com/api/v7"
     }
 }

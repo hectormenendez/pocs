@@ -1,23 +1,22 @@
-
-// TODO: Use root-import
 import { todoist as Config } from '~/utils/config.json';
 
-const Request = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: {
-        token: Config.token,
-        resource_types: JSON.stringify(['items']),
-    },
-};
+export function Sync(syncToken) {
 
-export default (syncToken) => {
+    const request = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: Object
+            .entries({
+                token: Config.token,
+                resource_types: JSON.stringify(['items']),
+                sync_token: syncToken,
+            })
+            .reduce((acc, [k, v]) => acc.concat(`${k}=${encodeURIComponent(v)}`), [])
+            .join('&'),
+    };
+
     // Convert body into x-www-form-urlencoded
-    const body = Object
-        .entries(Object.assign({ sync_token: syncToken }, Request.body))
-        .reduce((acc, [k, v]) => acc.concat(`${k}=${encodeURIComponent(v)}`), [])
-        .join('&');
-    return fetch(Config.endpoint, { ...Request, body })
+    return fetch(`${Config.endpoint}/sync`, request)
         .then(response => response.json())
         .then(({ sync_token: sync, items }) => ({ sync, items }));
-};
+}

@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native';
 
 import Config from '~/utils/config.json';
 
-import Todoist from '~/utils/todoist';
+import { Sync } from '~/utils/todoist';
 import { Factory } from '~/utils/redux';
 
 export const Name = 'TODOIST';
@@ -25,13 +25,13 @@ export const { Actions, Reducers } = Factory(State, {
         action: type => dispatch => AsyncStorage
             .getItem(Config.storeKey)
             .then((storedValue) => {
-                let syncID = '*';
+                let id = '*';
                 if (storedValue) {
                     const state = JSON.parse(storedValue);
-                    syncID = state.sync;
+                    id = state.sync;
                     dispatch({ type, payload: state });
                 }
-                return Todoist(syncID);
+                return Sync(id);
             })
             .then(({ sync, items }) => dispatch({ type, payload: { sync, items } })),
         reducer: (prevState, { sync, items }) => {
