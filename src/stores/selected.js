@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Factory from '~/utils/factory';
+import { Factory } from '~/utils/redux';
 
 export const Name = 'SELECTED';
 
@@ -9,8 +9,8 @@ export const Types = PropTypes.shape({
 });
 
 export const State = {
-    item: null, // String
-    time: null, // Float
+    item: null,
+    time: null,
 };
 
 export const { Actions, Reducers } = Factory(State, {

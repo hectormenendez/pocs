@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect as Connect } from 'react-redux';
 
-import { Types as TypesSelected } from '~/states/selected';
+import { Types as TypesSelected } from '~/stores/selected';
 import PageSelectItem from '~/pages/select-item';
 import PageSelectTime from '~/pages/select-time';
 import PageTimer from '~/pages/timer';

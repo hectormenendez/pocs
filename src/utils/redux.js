@@ -1,6 +1,25 @@
 import PropTypes from 'prop-types';
+import Thunk from 'redux-thunk';
+import { composeWithDevTools as ComposeWithDevTools } from 'redux-devtools-extension';
+import {
+    createStore as CreateStore,
+    combineReducers as CombineReducers,
+    applyMiddleware as ApplyMiddleware,
+} from 'redux';
 
-export default function FactoryRedux(initState, declarations, prefix) {
+const ReduxMiddleware = ApplyMiddleware(Thunk);
+
+export function Store(reducers, initStore) {
+    return CreateStore(
+        CombineReducers(reducers), // Root reducer
+        initStore,
+        __DEV__ // eslint-disable-line no-undef
+            ? ComposeWithDevTools({})(ReduxMiddleware)
+            : ReduxMiddleware,
+    );
+}
+
+export function Factory(initState, declarations, prefix) {
     PropTypes.checkPropTypes(
         {
             initState: PropTypes.any.isRequired,

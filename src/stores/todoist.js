@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import Factory from '~/utils/factory';
+import { Factory } from '~/utils/redux';
 
 export const Name = 'TODOIST';
 
 export const Types = PropTypes.shape({
     sync: PropTypes.string,
-    // items: PropTypes.array.isRequired,
+    items: PropTypes.array.isRequired,
 });
 
 export const State = {

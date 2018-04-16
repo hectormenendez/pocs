@@ -4,7 +4,7 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 import { Button } from 'antd-mobile';
 import { connect as Connect } from 'react-redux';
 
-import { Actions as ActionsSelected } from '~/states/selected';
+import { Actions as ActionsSelected } from '~/stores/selected';
 
 export const Style = StyleSheet.create({
     container: {

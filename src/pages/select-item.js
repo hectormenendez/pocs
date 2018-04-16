@@ -8,8 +8,8 @@ import Markdown from 'react-native-simple-markdown';
 import Config from '~/utils/config.json';
 import Todoist from '~/utils/todoist';
 import ComponentLoading from '~/components/loading';
-import { Actions as ActionsTodoist, Types as TypesTodoist } from '~/states/todoist';
-import { Actions as ActionsSelected, Types as TypesSelected } from '~/states/selected';
+import { Actions as ActionsTodoist, Types as TypesTodoist } from '~/stores/todoist';
+import { Actions as ActionsSelected, Types as TypesSelected } from '~/stores/selected';
 
 export const Style = StyleSheet.create({
     container: { backgroundColor: '#efeff4' },

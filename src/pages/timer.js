@@ -4,7 +4,7 @@ import Markdown from 'react-native-simple-markdown';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { View, Button, Text } from 'antd-mobile';
 
-import { Types as TypesSelected } from '~/states/selected';
+import { Types as TypesSelected } from '~/stores/selected';
 import { MilliToHuman } from '~/utils/time';
 
 export const Style = StyleSheet.create({
