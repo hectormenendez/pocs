@@ -25,8 +25,8 @@ export const { Actions, Reducers } = Factory(State, {
         reducer: (state, time) => ({ ...state, time }),
     },
 
-    del: {
-        action: (type, payload) => dispatch => dispatch({ type, payload }),
+    reset: {
+        action: type => dispatch => dispatch({ type }),
         reducer: () => State,
     },
 

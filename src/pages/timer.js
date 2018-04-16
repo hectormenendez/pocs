@@ -1,11 +1,12 @@
 import React from 'react';
-import { connect as Connect } from 'react-redux';
 import Markdown from 'react-native-simple-markdown';
+import PropTypes from 'prop-types';
+import { connect as Connect } from 'react-redux';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { View, Button, Text } from 'antd-mobile';
 
-import { Types as TypesSelected } from '~/stores/selected';
 import { MilliToHuman } from '~/utils/time';
+import { Types as TypesSelected, Actions as ActionsSelected } from '~/stores/selected';
 
 export const Style = StyleSheet.create({
     container: {
@@ -47,6 +48,7 @@ export class Component extends React.Component {
 
     static propTypes = {
         selected: TypesSelected,
+        dispatch: PropTypes.func.isRequired,
     };
 
     state = State;
@@ -55,7 +57,7 @@ export class Component extends React.Component {
         this.setState({
             time: this.props.selected.time,
             text: MilliToHuman(this.props.selected.time),
-            interval: setInterval(this.onInterval.bind(this), 1000),
+            interval: setInterval(this.onInterval, 1000),
         });
     }
 
@@ -81,14 +83,17 @@ export class Component extends React.Component {
                 <Button type="primary">Done</Button>
             </View>
             <View style={Style.element}>
-                <Button onClick={this.onPause.bind(this)}>
+                <Button onClick={this.onPause}>
                     {this.state.interval ? 'Pause' : 'Resume' }
                 </Button>
+            </View>
+            <View style={Style.element}>
+                <Button type="warning" onClick={this.onCancel}>Cancel</Button>
             </View>
         </SafeAreaView>;
     }
 
-    onInterval() {
+    onInterval = () => {
         const time = this.state.time + (1000 * this.state.direction);
         this.setState({
             time,
@@ -97,12 +102,12 @@ export class Component extends React.Component {
         });
     }
 
-    onPause() {
-        if (!this.state.interval)
-            this.setState({ interval: setInterval(this.onInterval.bind(this), 1000) });
-        else
-            this.setState({ interval: clearInterval(this.state.interval) });
-    }
+    onPause = () => this.state.interval
+        ? this.setState({ interval: clearInterval(this.state.interval) })
+        : this.setState({ interval: setInterval(this.onInterval, 1000) });
+
+    onCancel = () => this.props.dispatch(ActionsSelected.reset());
+
 }
 
 export default Connect(
