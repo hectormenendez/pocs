@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native';
 
 import Config from '~/utils/config.json';
 
-import { Sync } from '~/utils/todoist';
+import { Read } from '~/utils/todoist';
 import { Factory } from '~/utils/redux';
 
 export const Name = 'TODOIST';
@@ -20,25 +20,29 @@ export const State = {
 
 export const { Actions, Reducers } = Factory(State, {
 
-    // first get items on local storage, then call todoist for updates.
     itemsFetch: {
         action: type => dispatch => AsyncStorage
+            // Determine if there's something on the storage
             .getItem(Config.storeKey)
-            .then((storedValue) => {
-                let id = '*';
-                if (storedValue) {
-                    const state = JSON.parse(storedValue);
-                    id = state.sync;
-                    dispatch({ type, payload: state });
-                }
-                return Sync(id);
-            })
-            .then(({ sync, items }) => dispatch({ type, payload: { sync, items } })),
-        reducer: (prevState, { sync, items }) => {
-            const nextState = { sync, items: prevState.items.concat(items) };
-            AsyncStorage.setItem(Config.storeKey, JSON.stringify(nextState));
-            return nextState;
-        },
+            .then(serializedStorage => serializedStorage
+                ? JSON.parse(serializedStorage) // storage found, unserialize it.
+                : { sync: '*', items: [] }, // no previous storage, setup first fetch.
+            )
+            // Combine the storage and the updated states
+            .then(storage => Read(storage.sync, ['items'])
+                .then(({ sync, items }) => ({
+                    sync,
+                    items: storage.items.concat(items),
+                })),
+            )
+            // Update the storage with the new merged state.
+            .then(payload => AsyncStorage
+                .setItem(Config.storeKey, JSON.stringify(payload))
+                .then(() => dispatch({ type, payload })),
+            ),
+
+        // Since the action did all the operations, just replace the store.
+        reducer: (prevState, payload) => payload,
     },
 
 }, Name);
