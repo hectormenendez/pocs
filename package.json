@@ -1,5 +1,5 @@
 {
-    "name": "poc-pomodoro",
+    "name": "Gomodoro",
     "version": "0.0.1",
     "private": true,
     "main": "./index.js",
@@ -21,6 +21,7 @@
         "react-native": "github:expo/react-native#sdk-26.0.0",
         "react-native-simple-markdown": "^1.1.0",
         "react-redux": "^5.0.7",
+        "redux": "^3.7.2",
         "redux-thunk": "^2.2.0",
         "uuid": "^3.2.1"
     },
