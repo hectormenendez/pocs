@@ -19,12 +19,12 @@ export const State = {
     items: [],
 };
 
-const getComment= (payload) => {
+const getComment = (payload) => {
     const orig = MilliToHuman(payload.time.orig);
     const time = MilliToHuman(payload.expired
         ? payload.time.orig + payload.time.curr
         : payload.time.orig - payload.time.curr);
-    return `**Estimated:** ${orig} **Actual:** ${time}`
+    return `**Estimated:** ${orig} **Actual:** ${time}`;
 };
 
 export const { Actions, Reducers } = Factory(State, {

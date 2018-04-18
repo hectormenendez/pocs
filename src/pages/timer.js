@@ -2,8 +2,8 @@ import React from 'react';
 import Markdown from 'react-native-simple-markdown';
 import PropTypes from 'prop-types';
 import { connect as Connect } from 'react-redux';
-import { SafeAreaView, StyleSheet } from 'react-native';
-import { View, Button, Text, Flex, WingBlank, WhiteSpace } from 'antd-mobile';
+import { AppState, SafeAreaView, StyleSheet } from 'react-native';
+import { View, Button, Text, Flex, WhiteSpace } from 'antd-mobile';
 
 import { MilliToHuman } from '~/utils/time';
 import { Types as TypesSelected, Actions as ActionsSelected } from '~/stores/selected';
@@ -40,6 +40,8 @@ export const State = {
     text: '00:00',
     interval: null,
     direction: -1,
+    prevAppState: AppState.currentState, // the application state (active / inactive)
+    lastTime: null,
 };
 
 export class Component extends React.Component {
@@ -54,15 +56,19 @@ export class Component extends React.Component {
     state = State;
 
     componentDidMount() {
+        // initalize interval when component loads
         this.setState({
             time: this.props.selected.time,
             text: MilliToHuman(this.props.selected.time),
             interval: setInterval(this.onInterval, 1000),
         });
+        // register a listener for application state changing
+        AppState.addEventListener('change', this.onAppStateChange);
     }
 
     componentWillUnmount() {
         clearInterval(this.state.interval);
+        AppState.removeEventListener('change', this.onAppStateChange);
     }
 
     render () {
@@ -109,6 +115,34 @@ export class Component extends React.Component {
                 </Flex.Item>
             </Flex>
         </SafeAreaView>;
+    }
+
+    onAppStateChange = (nextAppState) => {
+        const { prevAppState } = this.state;
+        if (prevAppState === 'background' && nextAppState === 'active') {
+            // app retuned from inactivity, determine how much time did it spend away.
+            const timeAway = new Date() - this.state.lastTime;
+            if (this.state.direction === -1 && timeAway < this.props.selected.time) {
+                // The time away is still within boundaries
+                this.setState({
+                    time: this.state.time - timeAway,
+                });
+            } else if (this.state.direction === -1) {
+                // The time away exceeds the original estimated.
+                this.setState({
+                    time: timeAway - this.props.selected.time,
+                    direction: 1,
+                });
+            } else {
+                // the user already was past estimated time
+                this.setState({ time: timeAway + this.state.time });
+            }
+        } else if (prevAppState === 'inactive' && nextAppState === 'background') {
+            // app is no longer active, save the date to later use it as reference.
+            this.setState({ lastTime: new Date() });
+        }
+        // keep the app state updated
+        this.setState({ prevAppState: nextAppState });
     }
 
     onInterval = () => {
