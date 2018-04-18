@@ -19,6 +19,14 @@ export const State = {
     items: [],
 };
 
+const getComment= (payload) => {
+    const orig = MilliToHuman(payload.time.orig);
+    const time = MilliToHuman(payload.expired
+        ? payload.time.orig + payload.time.curr
+        : payload.time.orig - payload.time.curr);
+    return `**Estimated:** ${orig} **Actual:** ${time}`
+};
+
 export const { Actions, Reducers } = Factory(State, {
 
     itemsFetch: {
@@ -46,20 +54,24 @@ export const { Actions, Reducers } = Factory(State, {
         reducer: (prevState, payload) => payload,
     },
 
+    itemUpdate: {
+        action: (type, payload) => (dispatch) => {
+            const content = getComment(payload);
+            const tasks = [
+                ['note_add', { content, item_id: payload.item.id }],
+            ];
+            return Write(tasks).then(dispatch({ type }));
+        },
+        reducer: prevState => prevState,
+    },
+
     itemComplete: {
         action: (type, payload) => (dispatch) => {
-            const orig = MilliToHuman(payload.time.orig);
-            const time = MilliToHuman(payload.expired
-                ? payload.time.orig + payload.time.curr
-                : payload.time.orig - payload.time.curr);
+            const content = getComment(payload);
             const tasks = [
-                ['note_add', {
-                    item_id: payload.item.id,
-                    content: `**Estimated:** ${orig} **Actual:** ${time}`,
-                }],
-                ['item_close', { // use this instead of complete for recurring and subtasks
-                    id: payload.item.id,
-                }],
+                ['note_add', { content, item_id: payload.item.id }],
+                // use this instead of complete for recurring and subtasks
+                ['item_close', { id: payload.item.id }],
             ];
             return Write(tasks)
                 // get rid of the item in the storage

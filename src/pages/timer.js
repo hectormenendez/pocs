@@ -3,7 +3,7 @@ import Markdown from 'react-native-simple-markdown';
 import PropTypes from 'prop-types';
 import { connect as Connect } from 'react-redux';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { View, Button, Text } from 'antd-mobile';
+import { View, Button, Text, Flex, WingBlank, WhiteSpace } from 'antd-mobile';
 
 import { MilliToHuman } from '~/utils/time';
 import { Types as TypesSelected, Actions as ActionsSelected } from '~/stores/selected';
@@ -14,10 +14,8 @@ export const Style = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    element: {
-        marginTop: 10,
-        width: '70%',
+        marginRight: 40,
+        marginLeft: 40,
     },
     doubleHeight: {
         marginTop: 40,
@@ -32,6 +30,7 @@ export const Style = StyleSheet.create({
     timeDue: {
         color: '#e75053',
     },
+    spaceRight: { marginRight: 9 },
     mdText: { fontSize: 18, lineHeight: 18 },
     mdLink: { textDecorationLine: 'underline' },
 });
@@ -70,27 +69,45 @@ export class Component extends React.Component {
         const timeStyle = [Style.time]
             .concat(this.state.direction === 1 ? Style.timeDue : []);
         return <SafeAreaView style={Style.container}>
-            <View style={Style.element}>
-                <Markdown
-                    whitelist={['link', 'strong']}
-                    styles={{ link: Style.mdLink, text: Style.mdText }}>
-                    {this.props.selected.item.content}
-                </Markdown>
-            </View>
-            <View style={[Style.element, Style.doubleHeight]}>
+            <Markdown
+                whitelist={['link', 'strong']}
+                styles={{ link: Style.mdLink, text: Style.mdText }}>
+                {this.props.selected.item.content}
+            </Markdown>
+            <WhiteSpace/>
+            <View style={Style.doubleHeight}>
                 <Text style={timeStyle}>{this.state.text}</Text>
             </View>
-            <View style={Style.element}>
-                <Button type="primary" onClick={this.onDone}>Done</Button>
-            </View>
-            <View style={Style.element}>
-                <Button type="warning" onClick={this.onCancel}>Cancel</Button>
-            </View>
-            <View style={Style.element}>
-                <Button onClick={this.onPause}>
-                    {this.state.interval ? 'Pause' : 'Resume' }
-                </Button>
-            </View>
+            <WhiteSpace/>
+            <Flex>
+                <Flex.Item>
+                    <Button style={Style.spaceRight} type="warning" onClick={this.onCancel}>
+                        Cancel
+                    </Button>
+                </Flex.Item>
+                <Flex.Item>
+                    <Button
+                        type="primary"
+                        onClick={this.onAction.bind(this, 'itemComplete')}>
+                        Done
+                    </Button>
+                </Flex.Item>
+            </Flex>
+            <WhiteSpace/>
+            <Flex>
+                <Flex.Item>
+                    <Button style={Style.spaceRight} onClick={this.onPause}>
+                        {this.state.interval ? 'Pause' : 'Resume' }
+                    </Button>
+                </Flex.Item>
+                <Flex.Item>
+                    <Button
+                        type="ghost"
+                        onClick={this.onAction.bind(this, 'itemUpdate')}>
+                        Partial
+                    </Button>
+                </Flex.Item>
+            </Flex>
         </SafeAreaView>;
     }
 
@@ -109,8 +126,8 @@ export class Component extends React.Component {
 
     onCancel = () => this.props.dispatch(ActionsSelected.reset());
 
-    onDone = () => this.props
-        .dispatch(ActionsTodoist.itemComplete({
+    onAction= type => this.props
+        .dispatch(ActionsTodoist[type]({
             item: this.props.selected.item,
             time: {
                 orig: this.props.selected.time,
@@ -119,6 +136,7 @@ export class Component extends React.Component {
             expired: this.state.direction !== -1,
         }))
         .then(() => this.onCancel());
+
 }
 
 export default Connect(
