@@ -84,12 +84,12 @@ export class Component extends React.Component {
                 <Button type="primary" onClick={this.onDone}>Done</Button>
             </View>
             <View style={Style.element}>
+                <Button type="warning" onClick={this.onCancel}>Cancel</Button>
+            </View>
+            <View style={Style.element}>
                 <Button onClick={this.onPause}>
                     {this.state.interval ? 'Pause' : 'Resume' }
                 </Button>
-            </View>
-            <View style={Style.element}>
-                <Button type="warning" onClick={this.onCancel}>Cancel</Button>
             </View>
         </SafeAreaView>;
     }
