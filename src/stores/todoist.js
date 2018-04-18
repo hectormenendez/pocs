@@ -57,9 +57,8 @@ export const { Actions, Reducers } = Factory(State, {
                     item_id: payload.item.id,
                     content: `**Estimated:** ${orig} **Actual:** ${time}`,
                 }],
-                ['item_complete', {
-                    ids: [payload.item.id],
-                    force_history: 1,
+                ['item_close', { // use this instead of complete for recurring and subtasks
+                    id: payload.item.id,
                 }],
             ];
             return Write(tasks)
