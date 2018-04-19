@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, StyleSheet } from 'react-native';
-import { Button } from 'antd-mobile';
+import { SafeAreaView, StyleSheet, Dimensions } from 'react-native';
+import { Button, Flex } from 'antd-mobile';
 import { connect as Connect } from 'react-redux';
 
 import { Actions as ActionsSelected } from '~/stores/selected';
@@ -11,6 +11,8 @@ export const Style = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        marginLeft: 40,
+        marginRight: 40,
     },
     button: {
         marginTop: 20,
@@ -39,21 +41,44 @@ export const Style = StyleSheet.create({
     },
 });
 
-export const Component = ({ dispatch }) => {
-    const setTime = time => dispatch(ActionsSelected.setTime(time * 60 * 1000));
-    return <SafeAreaView style={Style.container}>
-        {[10, 25, 50, 75, 90].map((time, i) =>
-            <Button
-                key={i}
-                style={[Style.button, Style[`button${i}`]]}
-                onClick={setTime.bind(this, time)}>
-                {time}min
-            </Button>,
-        )}
-    </SafeAreaView>;
-};
+const State = { orientation: null };
 
-Component.name = 'Page.SelectTime';
+export class Component extends React.Component {
+
+    state = State;
+
+    componentDidMount() {
+        this.onLayout();
+    }
+
+    render() {
+        return <SafeAreaView
+            style={Style.container}
+            onLayout={this.onLayout}>
+
+            <Flex direction={this.state.orientation === 'landscape' ? 'column' : 'row' }>
+                {[10, 25, 50, 75, 90].map((time, i) => <Flex.Item key={i}>
+                    <Button
+                        style={[Style.button, Style[`button${i}`]]}
+                        onClick={this.onClick.bind(this, time)}>
+                        {time}min
+                    </Button>
+                </Flex.Item>)}
+            </Flex>
+        </SafeAreaView>;
+    }
+
+    onClick = time => this.props.dispatch(ActionsSelected.setTime(time * 60 * 1000));
+
+    onLayout = () => {
+        const { width, height } = Dimensions.get('window');
+        this.setState({
+            orientation: height > width ? 'landscape' : 'portrait',
+        });
+    };
+}
+
+Object.defineProperty(Component, 'name', { value: 'Page.SelectTime' });
 
 Component.propTypes = { dispatch: PropTypes.func.isRequired };
 
