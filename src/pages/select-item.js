@@ -71,7 +71,10 @@ export class Component extends React.Component {
         return this.setState({ text, results });
     }
 
-    onCancel = () => this.setState(State);
+    onCancel = () => {
+        this.setState(State);
+        this.props.dispatch(ActionsTodoist.itemsFetch());
+    }
 
 }
 
