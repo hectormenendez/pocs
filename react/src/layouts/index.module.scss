@@ -16,9 +16,10 @@
 }
 
 .Content {
-    margin: 1em;
+    padding: 1em;
 
     & > section {
+        margin: 1em 0;
         padding: 1em;
         background: #fff;
     }

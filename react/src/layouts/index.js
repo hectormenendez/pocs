@@ -1,13 +1,18 @@
 import React from 'react';
-import { Layout, Row, Col } from 'antd';
+import { Layout } from 'antd';
 
 import GoogleAPI from '~/utils/gapi';
+
+import { Route, Switch as RouteSwitch } from 'react-router-dom';
+
 import Loader from '~/components/loader';
 import Login from '~/components/login';
-import Logout from '~/components/logout';
-import Router from '~/components/router';
+import Accounts from '~/layouts/accounts';
+import Transfers from '~/layouts/transfers';
 
-import Styles from './index.module.scss';
+import Header from './header';
+import Footer from './footer';
+import Content from './content';
 
 // default state
 const State = {
@@ -36,27 +41,28 @@ export default class ComponentLayout extends React.Component {
         return !this.state.isGoogleReady
             ? <Loader />
             : <Layout>
-
-                <Layout.Header className={Styles.Header}>
-                    <Row>
-                        <Col span={12} className={Styles.HeaderLeft}>
-                            <h1>PoC</h1>
-                        </Col>
-                        <Col span={12} className={Styles.HeaderRight}>
-                            {this.state.isUserAuthenticated
-                                && <Logout onClick={this.handleAuthLogout} /> }
-                        </Col>
-                    </Row>
-                </Layout.Header>
-
+                <Header/>
                 {!this.state.isUserAuthenticated
                     ? <Login onClick={this.handleAuthLogin}/>
-                    : <Router />
+                    : <RouteSwitch>
+                        <Route
+                            name="home"
+                            path="/"
+                            exact={true}
+                            component={Content}/>
+                        <Route
+                            name="accounts"
+                            path="/accounts"
+                            exact={true}
+                            component={Accounts}/>
+                        <Route
+                            name="transfers"
+                            path="/transfers"
+                            exact={true}
+                            component={Transfers}/>
+                    </RouteSwitch>
                 }
-
-                <Layout.Footer className={Styles.Footer}>
-                    Footer
-                </Layout.Footer>
+                <Footer/>
             </Layout>;
     }
 
@@ -71,3 +77,9 @@ export default class ComponentLayout extends React.Component {
     handleAuthLogout = () => GoogleAPI()
         .then(gapi => gapi.auth2.getAuthInstance().signOut());
 }
+// <Layout.Content className={Styles.Content}>
+//                         <Breadcrumbs/>
+//                         <section>
+//                             <Router />
+//                         </section>
+//                     </Layout.Content>

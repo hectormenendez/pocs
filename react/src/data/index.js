@@ -4,7 +4,6 @@ const Context = React.createContext();
 
 // Initial state
 const State = {
-    test: 'hola mundo',
 };
 
 export class Provider extends React.Component {
