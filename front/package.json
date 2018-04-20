@@ -9,22 +9,23 @@
         "eject": "react-app-rewired eject"
     },
     "dependencies": {
-        "antd": "^3.4.0",
-        "react": "^16.3.1",
-        "react-dom": "^16.3.1",
+        "@gik/redux-factory": "0.0.3",
+        "antd": "^3.4.1",
+        "prop-types": "^15.6.1",
+        "react": "^16.3.2",
+        "react-dom": "^16.3.2",
         "react-router-dom": "^4.2.2"
     },
     "devDependencies": {
-        "@gik/eslint-config-react": "0.0.4",
+        "@gik/eslint-config-react": "0.0.6",
         "babel-plugin-import": "^1.7.0",
         "babel-plugin-root-import": "^5.1.0",
         "eslint": "^4.19.1",
-        "eslint-import-resolver-babel-plugin-root-import": "^1.1.1",
         "node-sass": "^4.8.3",
-        "react-app-rewire-css-modules": "github:codebandits/react-app-rewire-css-modules",
+        "react-app-rewire-css-modules": "codebandits/react-app-rewire-css-modules",
         "react-app-rewire-less": "^2.1.1",
         "react-app-rewired": "^1.5.0",
         "react-scripts": "1.1.4",
-        "sass-loader": "^6.0.7"
+        "sass-loader": "^7.0.1"
     }
 }
