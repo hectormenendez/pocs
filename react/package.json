@@ -1,6 +1,6 @@
 {
-    "name": "poc.gscripts-react",
-    "version": "0.1.0",
+    "name": "moneymanager",
+    "version": "0.0.3",
     "private": true,
     "scripts": {
         "start": "react-app-rewired start",
