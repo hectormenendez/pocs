@@ -1,26 +1,29 @@
 import React from 'react';
 import { Layout, Input, InputNumber, Select } from 'antd';
+import { Connect } from '@gik/redux-factory';
 
-import GoogleAPI from '~/utils/gapi';
 import Formatters from '~/utils/formatters';
 import Parsers from '~/utils/parsers';
+import { Actions as ActionsGoogle } from '~/stores/google';
+import { Content as StyleContent } from '~/pages/index.module.scss';
 
-import { Content as StyleContent } from '~/layouts/index.module.scss';
 import Style from './index.module.css';
 
 const State = {
     types: null,
 };
 
-export default class ComponentAccounts extends React.Component {
+export class Component extends React.Component {
 
     state = State;
 
     componentDidMount() {
-        // Fetch the types from the spreadsheet
-        GoogleAPI()
-            .then(gapi => gapi.shorthands.run({ func: 'getTypes' }))
-            .then(response => this.setState({ types: response }));
+        this.props
+            .dispatch(ActionsGoogle.run({
+                scriptId: 'M_VxGmzjDQco4epsaDzbnidEPgpVJ72BN',
+                method: 'getTypes',
+            }))
+            .then(types => this.setState({ types }));
     }
 
     render() {
@@ -87,3 +90,5 @@ export default class ComponentAccounts extends React.Component {
     }
 
 }
+
+export default Connect()(Component);
