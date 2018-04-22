@@ -1,0 +1,8 @@
+/front/build
+/front/src/settings/google.js
+
+node_modules
+
+.DS_*
+.tern-*
+*.log*

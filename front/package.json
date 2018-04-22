@@ -9,7 +9,7 @@
         "eject": "react-app-rewired eject"
     },
     "dependencies": {
-        "@gik/redux-factory": "0.0.6",
+        "@gik/redux-factory": "0.0.7",
         "antd": "^3.4.1",
         "history": "^4.7.2",
         "prop-types": "^15.6.1",
