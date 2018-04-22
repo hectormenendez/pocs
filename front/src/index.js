@@ -11,12 +11,13 @@ import {
 
 import RegisterServiceWorker from '~/utils/registerServiceWorker';
 import GoogleAPI from '~/utils/gapi';
+import { API as SettingsGoogle } from '~/settings/google';
+import SettingsRoutes from '~/settings/routes';
+import ComponentLoader from '~/components/loader';
+import Pages from '~/pages';
+import { Reducers as ReducersError } from '~/stores/error';
 import { Reducers as ReducersGoogle, Actions as ActionsGoogle } from '~/stores/google';
 import { Reducers as ReducersRoutes, Actions as ActionsRoutes } from '~/stores/routes';
-
-import Pages from '~/pages';
-import SettingsGoogle from '~/settings/google';
-import SettingsRoutes from '~/settings/routes';
 
 const history = History();
 
@@ -24,31 +25,45 @@ const store = Store(
     { // reducers
         google: ReducersGoogle,
         routes: ReducersRoutes,
+        error: ReducersError,
     },
-    { // Initial state
-        google: null,
-        routes: null,
-    },
+    // Initial state
+    {},
+    // Middleware
     [ReduxRouterMiddleware(history)],
 );
 
-GoogleAPI(SettingsGoogle).then((gapi) => {
+class App extends React.Component {
 
-    // initialize the Google API for scripts once its loaded
-    store.dispatch(ActionsGoogle.init(gapi));
+    state = { ready: false };
 
-    // Initilize the routes
-    store.dispatch(ActionsRoutes.init(SettingsRoutes));
+    componentDidMount() {
+        GoogleAPI(SettingsGoogle).then((gapi) => {
+            // initialize the Google API for scripts once its loaded
+            store.dispatch(ActionsGoogle.init(gapi));
+            // Initilize the routes
+            store.dispatch(ActionsRoutes.init(SettingsRoutes));
+            // force an update
+            this.setState({ ready: true });
+        });
+    }
 
-    ReactDOM.render(
-        <Provider store={store}>
+    // eslint-disable-next-line class-methods-use-this
+    render() {
+        if (!this.state.ready) return <ComponentLoader/>;
+        return <Provider store={store}>
             <LocaleProvider locale={LocaleEnUS}>
                 <ReduxRouter history={history}>
-                    <Pages />
+                    <Pages/>
                 </ReduxRouter>
             </LocaleProvider>
-        </Provider>,
-        document.getElementsByTagName('main')[0],
-    );
-});
+        </Provider>;
+    }
+
+}
+
+ReactDOM.render(
+    <App/>,
+    document.getElementsByTagName('main')[0],
+);
 RegisterServiceWorker();

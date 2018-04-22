@@ -15,7 +15,7 @@ export default function Load(settings) {
     const el = document.getElementById('__GoogleAPI__');
     if (el && GoogleAPI) return Promise.resolve(GoogleAPI);
     if (el && !GoogleAPI) return Promise.reject(new Error('Already requested GoogleAPI.'));
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const script = document.createElement('script');
         script.id = '__GoogleAPI__';
         script.src = 'https://apis.google.com/js/api.js';
@@ -23,6 +23,7 @@ export default function Load(settings) {
         // when loaded, initialize the client.
         script.onload = () => window.gapi.load('client:auth2', () => window.gapi.client
             .init(settings)
+            .catch(err => reject(err))
             .then(() => {
                 GoogleAPI = window.gapi;
                 window.gapi = undefined;

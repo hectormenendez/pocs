@@ -1,4 +1,4 @@
-export default {
+export const API = {
     // Credentials needed to access the service
     apiKey: '',
     clientId: '',
@@ -12,3 +12,11 @@ export default {
         'https://www.googleapis.com/auth/spreadsheets',
     ].join(' '),
 };
+
+export const Scripts = {
+
+    // methodName: 'methodId',
+
+};
+
+export default { api: API, scripts: Scripts };

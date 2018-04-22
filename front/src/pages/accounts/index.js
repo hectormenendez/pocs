@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Layout, Input, InputNumber, Select } from 'antd';
 import { Connect } from '@gik/redux-factory';
 
@@ -15,15 +16,16 @@ const State = {
 
 export class Component extends React.Component {
 
+    static propTypes = {
+        dispatch: PropTypes.func.isRequired,
+    }
+
     state = State;
 
     componentDidMount() {
         this.props
-            .dispatch(ActionsGoogle.run({
-                scriptId: 'M_VxGmzjDQco4epsaDzbnidEPgpVJ72BN',
-                method: 'getTypes',
-            }))
-            .then(types => this.setState({ types }));
+            .dispatch(ActionsGoogle.run({ method: 'getTypes' }))
+            .then(types => types && this.setState({ types }));
     }
 
     render() {
