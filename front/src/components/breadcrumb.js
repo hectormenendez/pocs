@@ -9,13 +9,13 @@ const Titles = routes => routes.reduce((acc, { path, title, routes: nested }) =>
     .filter(Boolean),
 []);
 
-export const Component = ({ routes, pathname }) => {
+export const Component = ({ routes, pathname, className }) => {
 
     const parts = pathname.split('/').filter(Boolean);
     const titles = Titles(routes)
         .reduce((acc, { path, title }) => ({ ...acc, [path]: title }), {});
 
-    return <Breadcrumb>
+    return <Breadcrumb className={className}>
 
         <Breadcrumb.Item>
             <Link to="/">{titles['/']}</Link>
@@ -33,6 +33,7 @@ export const Component = ({ routes, pathname }) => {
 Component.propTypes = {
     routes: PropTypes.array.isRequired,
     pathname: PropTypes.string.isRequired,
+    className: PropTypes.string,
 };
 
 Object.defineProperty(Component, 'name', { value: 'ComponentBreadcrumb' });

@@ -19,6 +19,8 @@ import { Reducers as ReducersError } from '~/stores/error';
 import { Reducers as ReducersGoogle, Actions as ActionsGoogle } from '~/stores/google';
 import { Reducers as ReducersRoutes, Actions as ActionsRoutes } from '~/stores/routes';
 
+import './index.css';
+
 const history = History();
 
 const store = Store(

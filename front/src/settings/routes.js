@@ -6,11 +6,13 @@ export default [
         path: '/',
         title: 'Home',
         exact: true,
+        icon: 'home',
         component: Home,
     },
     {
         path: '/accounts',
         title: 'Accounts',
+        icon: 'idcard',
         component: Accounts,
     },
 ];
