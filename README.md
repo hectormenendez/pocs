@@ -5,11 +5,35 @@ Simple ReactNative app for tracking time of your Todoist apps.
 - Only tested on iOS.
 
 ### Installation
-It's using [create-react-native-app](https://github.com/react-community/create-react-native-app) so, just follow the instructions there.
-
-#### Create a configuration file
-Create the file using the following command and fill in a Todoist secret key, so the app can use the API.
-
-``` bash
-cp src/utils/config-template.json src/utils/config.json
+```bash
+yarn # Normally I advocate for npm, but for this project, yarn is less buggy.
 ```
+
+### Development
+- Using the terminal
+  - Start the development server in a terminal window or tab.
+    ```bash
+    yarn start --reset-cache
+    ```
+  - Install / run the expo ap into the simulator.
+    ```bash
+    yarn run ios
+    ```
+
+- Using the [`Expo XDE`](https://github.com/expo/xde/releases).
+
+### Deployment
+
+- Start the expo server in a terminal window.
+```bash
+yarn start --reset-cache
+```
+- In another terminal window:
+```bash
+npm i -g exp # only if it's not installed already
+exp login # only if you're not logged in already
+exp build:ios # I've only tried letting expo manage credentials
+# Answer the questions and download the ipa.
+```
+- Install or open `Application Loader` from itunes connect.
+- Upload the generated IPA to either distribute it via TestFlight or submit it to the store.

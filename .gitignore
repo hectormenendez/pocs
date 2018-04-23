@@ -1,6 +1,7 @@
 
 # The local configuration
-config.json
+/src/utils/config.json
+/build/
 
 .expo/
 
