@@ -14,5 +14,4 @@ export const Component = () => <View style={Style.container}>
     <ActivityIndicator size="large" />
 </View>;
 
-Object.defineProperty(Component, 'name', { value: 'Component.Loading' });
 export default Component;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect as Connect } from 'react-redux';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView, Platform } from 'react-native';
 import { SearchBar, List } from 'antd-mobile';
 import Markdown from 'react-native-simple-markdown';
 
@@ -10,8 +10,11 @@ import { Actions as ActionsTodoist, Types as TypesTodoist } from '~/stores/todoi
 import { Actions as ActionsSelected, Types as TypesSelected } from '~/stores/selected';
 
 export const Style = StyleSheet.create({
-    container: { backgroundColor: '#efeff4' },
-});
+    container: {
+        backgroundColor: '#efeff4',
+        ...Platform.select({ android: { paddingTop: 24 } }),
+    },
+})
 
 export const State = {
     text: '',

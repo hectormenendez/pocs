@@ -9,6 +9,9 @@ import { Store as ReduxStore } from '~/utils/redux';
 import { Reducers as ReducersTodoist } from '~/stores/todoist';
 import { Reducers as ReducersSelected } from '~/stores/selected';
 
+// These are mostly for android.
+import '~/utils/polyfills';
+
 const Store = ReduxStore({
     todoist: ReducersTodoist,
     selected: ReducersSelected,
@@ -21,5 +24,4 @@ export const Component = () =>
         </LocaleProvider>
     </Provider>;
 
-Object.defineProperty(Component, 'name', { value: 'App' });
 export default Component;

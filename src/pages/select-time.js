@@ -45,6 +45,11 @@ const State = { orientation: null };
 
 export class Component extends React.Component {
 
+    static name = 'Page.SelectTime';
+    static propTypes = {
+        dispatch: PropTypes.func.isRequired,
+    };
+
     state = State;
 
     componentDidMount() {
@@ -78,8 +83,5 @@ export class Component extends React.Component {
     };
 }
 
-Object.defineProperty(Component, 'name', { value: 'Page.SelectTime' });
-
-Component.propTypes = { dispatch: PropTypes.func.isRequired };
 
 export default Connect()(Component);

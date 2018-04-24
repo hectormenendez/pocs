@@ -2,7 +2,7 @@
     "expo": {
         "name": "Gomodoro",
         "icon": "./resources/icon.png",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "slug": "gomodoro",
         "privacy": "unlisted",
         "sdkVersion": "26.0.0",

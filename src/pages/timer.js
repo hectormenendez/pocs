@@ -2,7 +2,7 @@ import React from 'react';
 import Markdown from 'react-native-simple-markdown';
 import PropTypes from 'prop-types';
 import { connect as Connect } from 'react-redux';
-import { AppState, SafeAreaView, StyleSheet } from 'react-native';
+import { AppState, SafeAreaView, StyleSheet, Platform } from 'react-native';
 import { View, Button, Text, Flex, WhiteSpace } from 'antd-mobile';
 
 import { MilliToHuman } from '~/utils/time';
@@ -25,7 +25,7 @@ export const Style = StyleSheet.create({
         fontSize: 80,
         textAlign: 'center',
         fontWeight: 'bold',
-        fontFamily: 'Menlo',
+        ...Platform.select({ ios: { fontFamily: 'Menlo' } }),
     },
     timeDue: {
         color: '#e75053',
@@ -119,6 +119,7 @@ export class Component extends React.Component {
 
     onAppStateChange = (nextAppState) => {
         const { prevAppState } = this.state;
+        console.log(prevAppState, nextAppState);
         if (prevAppState === 'background' && nextAppState === 'active') {
             // app retuned from inactivity, determine how much time did it spend away.
             const timeAway = new Date() - this.state.lastTime;
@@ -137,7 +138,7 @@ export class Component extends React.Component {
                 // the user already was past estimated time
                 this.setState({ time: timeAway + this.state.time });
             }
-        } else if (prevAppState === 'inactive' && nextAppState === 'background') {
+        } else if (nextAppState === 'background') {
             // app is no longer active, save the date to later use it as reference.
             this.setState({ lastTime: new Date() });
         }
