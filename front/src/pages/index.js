@@ -54,7 +54,7 @@ export class Component extends React.Component {
                 collapsed={this.state.siderCollapsed}
                 onCollapse={this.onSider}>
 
-                <h1 className={Styles.Header}>MoneyManager</h1>
+                <h1 className={Styles.Header}>Marmaja</h1>
 
                 <Menu
                     className={Styles.Menu}
