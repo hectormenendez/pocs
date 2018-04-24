@@ -1,0 +1,25 @@
+{
+    "name": "gomodoro.back",
+    "version": "0.0.1",
+    "description": "The backend for Gomodoro.",
+    "main": "src/index.js",
+    "author": "Hector Menendez <hector@gik.mx>",
+    "license": "MIT",
+    "directories": {
+        "src": "./src",
+        "out": "./build"
+    },
+    "scripts": {
+        "build": "gik-npm lint src && gik-npm build",
+        "test": "gik-npm build && node ./build",
+        "start": "gik-npm start 'yarn test'"
+    },
+    "dependencies": {
+        "rxjs": "^6.0.0-beta.4"
+    },
+    "devDependencies": {
+        "@gik/eslint-config-node": "^0.0.5",
+        "eslint": "^4.19.1",
+        "npm": "^6.0.0"
+    }
+}
