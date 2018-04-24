@@ -1,0 +1,6 @@
+{
+    "todoist": {
+        "token": "",
+        "endpoint": "https://todoist.com/api/v7"
+    }
+}
