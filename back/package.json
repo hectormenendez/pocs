@@ -11,11 +11,11 @@
     },
     "scripts": {
         "build": "gik-npm lint src && gik-npm build",
-        "test": "gik-npm build && node ./build",
+        "test": "gik-npm build && node --inspect ./build",
         "start": "gik-npm start 'yarn test'"
     },
     "dependencies": {
-        "rxjs": "^6.0.0-beta.4",
+        "rxjs": "^5.5.10",
         "todoist-js": "^0.3.1"
     },
     "devDependencies": {
