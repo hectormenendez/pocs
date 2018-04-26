@@ -11,7 +11,8 @@
         "eject": "react-native-scripts eject",
         "android": "react-native-scripts android",
         "ios": "react-native-scripts ios",
-        "test": "jest"
+        "test": "jest",
+        "debug": "open \"rndebugger://set-debugger-loc?host=localhost&port=19001\""
     },
     "dependencies": {
         "antd-mobile": "^2.1.8",
