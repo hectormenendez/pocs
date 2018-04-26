@@ -1,20 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect as Connect } from 'react-redux';
-import { StyleSheet, SafeAreaView, Platform } from 'react-native';
-import { SearchBar, List } from 'antd-mobile';
+import { SafeAreaView, View } from 'react-native';
+import { Button, Flex, SearchBar, List } from 'antd-mobile';
 import Markdown from 'react-native-simple-markdown';
 
 import ComponentLoading from '~/components/loading';
 import { Actions as ActionsTodoist, Types as TypesTodoist } from '~/stores/todoist';
 import { Actions as ActionsSelected, Types as TypesSelected } from '~/stores/selected';
 
-export const Style = StyleSheet.create({
-    container: {
-        backgroundColor: '#efeff4',
-        ...Platform.select({ android: { paddingTop: 24 } }),
-    },
-})
+import Style from './style';
 
 export const State = {
     text: '',
@@ -38,26 +33,44 @@ export class Component extends React.Component {
     }
 
     render () {
-        return !this.props.todoist.items.length
-            ? <ComponentLoading />
-            : <SafeAreaView style={Style.container}>
-                <SearchBar
-                    value={this.state.text}
-                    placeholder="Tasks"
-                    maxLength={20}
-                    onChange={this.onSearch.bind(this)}
-                    onCancel={this.onCancel.bind(this)}
-                />
-                <List>
-                    {this.state.results.map((result, i) =>
-                        <List.Item
-                            key={i}
-                            onClick={this.onSelect.bind(this, i)}>
-                            <Markdown>{result.content}</Markdown>
-                        </List.Item>)
-                    }
-                </List>
-            </SafeAreaView>;
+
+        if (!this.props.todoist.items.length) return <ComponentLoading/>;
+
+        return <SafeAreaView style={Style.Container}>
+
+            <Flex
+                style={Style.ContainerFlex}
+                direction="column"
+                justify="between"
+                align="start"
+                wrap="nowrap">
+
+                <View style={Style.ContainerTextArea}>
+                    <SearchBar
+                        value={this.state.text}
+                        placeholder="Tasks"
+                        maxLength={20}
+                        onChange={this.onSearch.bind(this)}
+                        onCancel={this.onCancel.bind(this)}
+                    />
+                    <List>
+                        {this.state.results.map((result, i) =>
+                            <List.Item
+                                key={i}
+                                onClick={this.onSelect.bind(this, i)}>
+                                <Markdown>{result.content}</Markdown>
+                            </List.Item>)
+                        }
+                    </List>
+                </View>
+
+                <View style={Style.ContainerContent}>
+                    <Button type="ghost" onClick={this.onCancel}>Sync</Button>
+                </View>
+
+            </Flex>
+
+        </SafeAreaView>;
     }
 
     onSelect = (index) => {
