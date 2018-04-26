@@ -1,7 +1,7 @@
 {
     "expo": {
         "name": "Gomodoro",
-        "icon": "./resources/icon.png",
+        "icon": "./resources/ios/icon.png",
         "version": "0.0.5",
         "slug": "gomodoro",
         "privacy": "unlisted",
