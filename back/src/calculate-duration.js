@@ -13,7 +13,7 @@ const getDuration = (item, duration = { est: [], act: [] }) => {
             node.notes
                 // iterate each note to find time notation marks.
                 .map(({ content }) => content
-                    .match(/\d{2}:\d{2}/g)
+                    .match(/\d+:\d+/g)
                     .map((text) => {
                         const [mm, ss] = text.split(':');
                         return { mm, ss };
