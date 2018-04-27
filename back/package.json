@@ -11,7 +11,7 @@
     },
     "scripts": {
         "build": "gik-npm lint src && gik-npm build",
-        "test": "gik-npm build && node --inspect ./build",
+        "test": "npm run build && node --inspect ./build",
         "start": "gik-npm start 'yarn test'"
     },
     "dependencies": {

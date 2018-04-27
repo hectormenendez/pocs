@@ -27,7 +27,7 @@ const getGomodoros = (item, gomodoros = []) => {
         .reduce((acc, cur) => acc + cur, 0);
     // Which of the label values is the closest to sum?
     const value = Vals.sort((a, b) => Math.abs(sum - a) - Math.abs(sum - b))[0];
-    console.log('[ real gomodoros: %s approx: %s ]', sum, value);
+    process.stdout.write(`[ real gomodoros: ${sum} approx: ${value} ]`);
     const label = Config.labels.filter(cfg => cfg.value === value).shift();
     if (!label) throw new Error(`No label found for value: ${value}`);
     // Set the corresponding label.
