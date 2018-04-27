@@ -1,0 +1,21 @@
+{
+    "name": "marmaja.back",
+    "version": "0.0.1",
+    "description": "The google scripts backend for Marmaja.",
+    "main": "src/Code.js",
+    "author": "Héctor Menéndez <hector@gik.mx>",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "pull": "cd ./src && clasp pull",
+        "push": "cd ./src && clasp push",
+        "start": "npx nodemon -w ./src -e *.js -V --exec 'npm run push'"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@gik/eslint-config": "^0.0.6",
+        "eslint": "^4.19.1",
+        "eslint-config-google": "^0.9.1",
+        "nodemon": "^1.17.3"
+    }
+}
