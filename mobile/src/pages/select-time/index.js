@@ -1,14 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, SafeAreaView, Dimensions, Image, TouchableHighlight, Text } from 'react-native';
 import { Flex } from 'antd-mobile';
 import { connect as Connect } from 'react-redux';
+import {
+    View,
+    SafeAreaView,
+    Dimensions,
+    Image,
+    TouchableHighlight,
+    Text,
+    StyleSheet,
+} from 'react-native';
 
 import { Actions as ActionsSelected } from '~/stores/selected';
 import { Gomodoro1, Gomodoro2, Gomodoro3, Gomodoro5, Gomodoro8 } from '~/media';
-import Style from './style';
 
-const State = { orientation: null };
+import StyleProps from './style';
+
+export const Style = StyleSheet.create(StyleProps);
+export const State = { orientation: null };
 
 const Images = {
     1: Gomodoro1,
@@ -37,22 +47,31 @@ export class Component extends React.Component {
             onLayout={this.onLayout}>
 
             <Flex direction={this.state.orientation === 'landscape' ? 'column' : 'row' }>
-                {[1, 2, 3, 5, 8].map((unit, i) => <Flex.Item key={i}>
-                    <TouchableHighlight onPress={this.onClick.bind(this, unit)}>
-                        <View style={Style.ButtonContainer}>
-                            <Image source={Images[unit]} style={Style.ButtonImage} />
-                            <Text
-                                style={[Style[`ButtonText${unit}`], Style.ButtonText]}>
-                                {unit}
-                            </Text>
-                        </View>
-                    </TouchableHighlight>
-                </Flex.Item>)}
+
+                {[1, 2, 3, 5, 8].map((unit, i) =>
+                    <Flex.Item key={i}>
+
+                        <TouchableHighlight
+                            style={Style.ContainerTouchable}
+                            onPress={this.onClick.bind(this, unit)}>
+
+                            <View style={Style.ContainerButton}>
+                                <Image source={Images[unit]} style={Style.ButtonImage} />
+                                <Text
+                                    style={[Style[`ButtonText${unit}`], Style.ButtonText]}>
+                                    {unit}
+                                </Text>
+                            </View>
+
+                        </TouchableHighlight>
+
+                    </Flex.Item>)}
+
             </Flex>
         </SafeAreaView>;
     }
 
-    onClick = time => this.props.dispatch(ActionsSelected.setTime(time * 60 * 1000));
+    onClick = time => this.props.dispatch(ActionsSelected.setTime(time));
 
     onLayout = () => {
         const { width, height } = Dimensions.get('window');

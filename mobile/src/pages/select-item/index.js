@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect as Connect } from 'react-redux';
-import { SafeAreaView, View } from 'react-native';
+import { StyleSheet, SafeAreaView, View } from 'react-native';
 import { Button, Flex, SearchBar, List } from 'antd-mobile';
 import Markdown from 'react-native-simple-markdown';
 
@@ -9,7 +9,9 @@ import ComponentLoading from '~/components/loading';
 import { Actions as ActionsTodoist, Types as TypesTodoist } from '~/stores/todoist';
 import { Actions as ActionsSelected, Types as TypesSelected } from '~/stores/selected';
 
-import Style from './style';
+import StyleProps from './style';
+
+export const Style = StyleSheet.create(StyleProps);
 
 export const State = {
     text: '',

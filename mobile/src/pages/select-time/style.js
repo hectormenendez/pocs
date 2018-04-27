@@ -1,6 +1,8 @@
-import { StyleSheet, Platform } from 'react-native';
+import { Platform } from 'react-native';
 
-export default StyleSheet.create({
+import { Background } from '~/style';
+
+export default {
 
     Container: {
         flex: 1,
@@ -10,22 +12,25 @@ export default StyleSheet.create({
         marginRight: 40,
         ...Platform.select({
             android: {
-                marginTop: 10,
-                marginBottom: 10,
+                marginTop: 24,
+                marginBottom: 24,
             },
         }),
     },
 
-    ButtonContainer: {
+    ContainerTouchable: {
+        marginTop: 10,
+    },
+
+    ContainerButton: {
         position: 'relative',
+        backgroundColor: '#ffffff',
         ...Platform.select({
             android: {
                 width: 100,
                 height: 92,
-                marginTop: 24,
             },
             ios: {
-                marginTop: 20,
                 width: 120,
                 height: 111,
             },
@@ -81,4 +86,4 @@ export default StyleSheet.create({
         height: '100%',
     },
 
-});
+};

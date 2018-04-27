@@ -9,6 +9,8 @@ import { MilliToHuman } from '~/utils/time';
 
 export const Name = 'TODOIST';
 
+export const StoreKey = `${Config.storeKey}:${Name}`;
+
 export const Types = PropTypes.shape({
     sync: PropTypes.string,
     items: PropTypes.array.isRequired,
@@ -18,6 +20,7 @@ export const State = {
     sync: null,
     items: [],
 };
+
 
 const getComment = (payload) => {
     const orig = MilliToHuman(payload.time.orig);
@@ -32,7 +35,7 @@ export const { Actions, Reducers } = Factory(State, {
     itemsFetch: {
         action: type => dispatch => AsyncStorage
             // Determine if there's something on the storage
-            .getItem(Config.storeKey)
+            .getItem(StoreKey)
             .then(serializedStorage => serializedStorage
                 ? JSON.parse(serializedStorage) // storage found, unserialize it.
                 : { sync: '*', items: [] }, // no previous storage, setup first fetch.
@@ -46,7 +49,7 @@ export const { Actions, Reducers } = Factory(State, {
             )
             // Update the storage with the new merged state.
             .then(payload => AsyncStorage
-                .setItem(Config.storeKey, JSON.stringify(payload))
+                .setItem(StoreKey, JSON.stringify(payload))
                 .then(() => dispatch({ type, payload })),
             ),
 

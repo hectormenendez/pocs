@@ -1,9 +1,11 @@
-import { StyleSheet, Platform } from 'react-native';
+import { Platform } from 'react-native';
 
-export default StyleSheet.create({
+import { Background } from '~/style';
+
+export default {
 
     Container: {
-        backgroundColor: '#efeff4',
+        ...Background,
         ...Platform.select({ android: { paddingTop: 24 } }),
     },
 
@@ -24,5 +26,5 @@ export default StyleSheet.create({
         ...Platform.select({ android: { paddingBottom: 24 } }),
     },
 
-});
+};
 
