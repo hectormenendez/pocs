@@ -57,8 +57,7 @@ export class Component extends React.Component {
 
                             <View style={Style.ContainerButton}>
                                 <Image source={Images[unit]} style={Style.ButtonImage} />
-                                <Text
-                                    style={[Style[`ButtonText${unit}`], Style.ButtonText]}>
+                                <Text style={[Style[`ButtonText${unit}`], Style.ButtonText]}>
                                     {unit}
                                 </Text>
                             </View>

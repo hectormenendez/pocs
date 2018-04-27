@@ -39,12 +39,21 @@ export const { Actions, Reducers } = Factory(State, {
     },
 
     set: {
-        action: (type, payload) => (dispatch) => {
-            const state = { ...State, ...payload };
-            AsyncStorage
-                .setItem(StoreKey, JSON.stringify(state))
-                .then(() => dispatch({ type, payload: state }));
-        },
+        action: (type, payload) => dispatch => dispatch(Actions.get())
+            .then(({ payload: state }) => {
+                // determine the average time using the new information
+                const nextState = Object
+                    .keys(payload)
+                    .reduce((acc, key) => ({
+                        [key]: Math.ceil((
+                            state[key] +
+                            ((payload[key] / 1000) / 60)
+                        ) / 2),
+                    }), state);
+                return AsyncStorage
+                    .setItem(StoreKey, JSON.stringify(nextState))
+                    .then(() => dispatch({ type, payload: nextState }));
+            }),
 
         reducer: (prevState, state) => state,
     },

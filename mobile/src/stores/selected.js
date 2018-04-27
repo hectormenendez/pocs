@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 
-import { Store } from '~/App';
 import { Factory } from '~/utils/redux';
 import { Actions as ActionsGomodoro } from '~/stores/gomodoro';
 
@@ -9,14 +8,13 @@ export const Name = 'SELECTED';
 export const Types = PropTypes.shape({
     item: PropTypes.object,
     time: PropTypes.number,
+    gomodoro: PropTypes.number,
 });
 
 export const State = {
     item: null,
-    gomodoro: {
-        time: null,
-        unit: null,
-    },
+    time: null,
+    gomodoro: null,
 };
 
 export const { Actions, Reducers } = Factory(State, {
@@ -29,14 +27,16 @@ export const { Actions, Reducers } = Factory(State, {
     // The user selected a gomodoro, obtain the corresponding time and set it.
     setTime: {
 
-        action: (type, gomodoro) => dispatch => Store
-            .dispatch(ActionsGomodoro.get())
+        action: (type, gomodoro) => dispatch => dispatch(ActionsGomodoro.get())
             .then(({ payload: gomodoros }) => dispatch({
                 type,
-                payload: gomodoros[gomodoro] * 60 * 1000,
+                payload: {
+                    gomodoro,
+                    time: gomodoros[gomodoro] * 60 * 1000,
+                },
             })),
 
-        reducer: (prevState, time) => ({ ...prevState, time }),
+        reducer: (prevState, { time, gomodoro }) => ({ ...prevState, time, gomodoro }),
 
     },
 
