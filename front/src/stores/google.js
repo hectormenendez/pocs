@@ -56,12 +56,32 @@ export const { Actions, Reducers } = Factory(State, {
             const scriptId = ScriptsGoogle[method];
             return GoogleAPI.client.script.scripts
                 .run({ scriptId, resource: { function: method, params, devMode } })
-                .then(({ result }) => result.response.result)
+                .then(({ result }) => {
+                    if (result.error) {
+                        return dispatch(ActionsErrors.show({
+                            name: `ErrorGoogleAPI: ${result.error.message}`,
+                            message: result.error.details[0].errorMessage,
+                        }));
+                    }
+                    return result.response.result;
+                })
                 // if an error is found, dispatch it and return null to the caller.
                 .catch((response) => {
+                    /* eslint-disable prefer-destructuring */
+                    let name;
+                    let message;
+                    if (response instanceof Error) {
+                        name = response.name;
+                        message = response.message;
+                        console.error(response);
+                    } else if (response.result) {
+                        name = response.result.error.status;
+                        message = response.result.error.message;
+                    }
+                    /* eslint-enable prefer-destructuring */
                     dispatch(ActionsErrors.show({
-                        name: `ErrorGoogleAPI: ${response.result.error.status}`,
-                        message: response.result.error.message,
+                        name: `ErrorGoogleAPI: ${name}`,
+                        message,
                     }));
                     return null;
                 });

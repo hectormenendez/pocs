@@ -101,7 +101,8 @@ export class Component extends React.Component {
                     { error && <Alert
                         type="error"
                         message={error.name}
-                        description={error.message} /> }
+                        description={error.message} />
+                    }
 
                     { !error && isSignedIn &&
                         <Routes routes={routes} /> }
