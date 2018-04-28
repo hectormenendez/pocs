@@ -15,7 +15,6 @@
     "devDependencies": {
         "@gik/eslint-config": "^0.0.6",
         "eslint": "^4.19.1",
-        "eslint-config-google": "^0.9.1",
         "nodemon": "^1.17.3"
     }
 }
