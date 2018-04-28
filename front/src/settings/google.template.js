@@ -13,10 +13,6 @@ export const API = {
     ].join(' '),
 };
 
-export const Scripts = {
+export const ScriptId = '';
 
-    // methodName: 'methodId',
-
-};
-
-export default { api: API, scripts: Scripts };
+export const DevMode = false;
