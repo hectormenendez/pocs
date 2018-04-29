@@ -26,12 +26,12 @@
  */
 
 /**
- * @function utilGetSheet
+ * @function utilsGetSheet
  * @description Shorthand to obtain a Sheet by name.
  * @param {!string} name - The name of the sheet to retrieve,
  * @returns {Sheet} The specified sheet.
  */
-function utilGetSheet(name) {
+function utilsGetSheet(name) {
     if (typeof name !== 'string' || !name.length) throw new Error('[getSheet] name');
     return SpreadsheetApp
         .getActiveSpreadsheet()
@@ -39,13 +39,13 @@ function utilGetSheet(name) {
 }
 
 /**
- * @function utilGetSheet
+ * @function utilsGetSheet
  * @description Convert a values matrix into a JSON-compliant object.
  * @param {!Array} keys - The property names to be used as headers of given values.
  * @param {!Object[][]} values - Values obtained from a getRange() method.
  * @returns {Object} - A key-value representation.
  */
-function utilValuesToObject(keys, values) {
+function utilsValuesToObject(keys, values) {
     return values.reduce(function reducerRows(rows, cols) {
         const row = Object
             .keys(cols)
