@@ -55,7 +55,11 @@ export const { Actions, Reducers } = Factory(State, {
         action: (type, { method, params }) => dispatch => GoogleAPI
             .client.script.scripts.run({
                 scriptId: ScriptId,
-                resource: { function: method, params, devMode: DevMode },
+                resource: {
+                    function: method,
+                    parameters: params,
+                    devMode: DevMode,
+                },
             })
             .then(({ result }) => {
                 if (result.error) {

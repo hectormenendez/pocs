@@ -17,7 +17,7 @@ export class Component extends React.Component {
 
     componentDidMount() {
         this.props
-            .dispatch(ActionsGoogle.run({ method: 'accounttypesGet' }))
+            .dispatch(ActionsGoogle.run({ method: 'get', params: ['state'] }))
             .then(response => response && this.setState({ response }));
     }
 
