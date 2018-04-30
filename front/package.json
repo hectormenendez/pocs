@@ -12,6 +12,7 @@
         "@gik/redux-factory": "0.0.7",
         "antd": "^3.4.1",
         "history": "^4.7.2",
+        "moment": "^2.22.1",
         "prop-types": "^15.6.1",
         "react": "^16.3.2",
         "react-dom": "^16.3.2",

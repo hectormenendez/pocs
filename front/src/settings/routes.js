@@ -1,6 +1,6 @@
 import Home from '~/pages/home';
 import Accounts from '~/pages/accounts';
-import Test from '~/pages/test';
+import Transactions from '~/pages/transactions';
 
 export default [
     {
@@ -17,9 +17,9 @@ export default [
         component: Accounts,
     },
     {
-        path: '/test',
-        title: 'Test',
-        icon: 'idcard',
-        component: Test,
+        path: '/transactions',
+        title: 'Transactions',
+        icon: 'swap',
+        component: Transactions,
     },
 ];
