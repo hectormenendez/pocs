@@ -1,71 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LocaleEnUS from 'antd/lib/locale-provider/en_US';
-import History from 'history/createBrowserHistory';
-import { Store, Provider } from '@gik/redux-factory';
-import { LocaleProvider } from 'antd';
-import {
-    ConnectedRouter as ReduxRouter,
-    routerMiddleware as ReduxRouterMiddleware,
-} from 'react-router-redux';
+import CreateHistory from 'history/createBrowserHistory';
+import { AppContainer } from 'react-hot-loader';
+import { routerMiddleware as ReduxRouterMiddleware } from 'react-router-redux';
+import { Store as CreateStore } from '@gik/redux-factory';
 
+import App from '~/app';
 import RegisterServiceWorker from '~/utils/registerServiceWorker';
-import GoogleAPI from '~/utils/gapi';
-import { API as SettingsGoogle } from '~/settings/google';
-import SettingsRoutes from '~/settings/routes';
-import ComponentLoader from '~/components/loader';
-import Pages from '~/pages';
-import { Reducers as ReducersError } from '~/stores/error';
-import { Reducers as ReducersGoogle, Actions as ActionsGoogle } from '~/stores/google';
-import { Reducers as ReducersRoutes, Actions as ActionsRoutes } from '~/stores/routes';
+import { Reducers } from '~/stores';
 
-import './index.css';
+export const History = CreateHistory();
+export const Store = CreateStore(Reducers, {}, [ReduxRouterMiddleware(History)]);
 
-const history = History();
+const render = (Component) => {
+    ReactDOM.render(
+        <AppContainer>
+            <Component/>
+        </AppContainer>,
+        document.getElementsByTagName('main')[0],
+    );
+};
 
-const store = Store(
-    { // reducers
-        google: ReducersGoogle,
-        routes: ReducersRoutes,
-        error: ReducersError,
-    },
-    // Initial state
-    {},
-    // Middleware
-    [ReduxRouterMiddleware(history)],
-);
+render(App);
 
-class App extends React.Component {
-
-    state = { ready: false };
-
-    componentDidMount() {
-        GoogleAPI(SettingsGoogle).then((gapi) => {
-            // initialize the Google API for scripts once its loaded
-            store.dispatch(ActionsGoogle.init(gapi));
-            // Initilize the routes
-            store.dispatch(ActionsRoutes.init(SettingsRoutes));
-            // force an update
-            this.setState({ ready: true });
-        });
-    }
-
-    // eslint-disable-next-line class-methods-use-this
-    render() {
-        if (!this.state.ready) return <ComponentLoader/>;
-        return <Provider store={store}>
-            <LocaleProvider locale={LocaleEnUS}>
-                <ReduxRouter history={history}>
-                    <Pages/>
-                </ReduxRouter>
-            </LocaleProvider>
-        </Provider>;
-    }
-
+if (module.hot) {
+    module.hot.accept('./app', () => { render(App); });
+    module.hot.accept('./stores/index', () => {
+        const { Reducers: NextReducers } = require('./stores');
+        Store.replaceReducer(NextReducers);
+    });
 }
 
-ReactDOM.render(
-    <App/>,
-    document.getElementsByTagName('main')[0],
-);
 RegisterServiceWorker();

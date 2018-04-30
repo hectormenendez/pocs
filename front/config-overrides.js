@@ -1,10 +1,13 @@
 const { injectBabelPlugin: RewireInject } = require('react-app-rewired');
 const RewireLess = require('react-app-rewire-less');
 const RewireCssModules = require('react-app-rewire-css-modules');
+const RewireHotReload = require('react-app-rewire-hot-loader') ;
 
+/* eslint-disable no-param-reassign */
 module.exports = function override(config, env) {
 
-    /* eslint-disable no-param-reassign */
+    // Enable hot reloading, preserving state.
+    config = RewireHotReload(config, env);
 
     // Only load Components that are actually being used.
     config = RewireInject(['import', {
@@ -29,8 +32,6 @@ module.exports = function override(config, env) {
         },
     })(config, env);
 
-
     return config;
-
-    /* eslint-enable no-param-reassign */
 };
+/* eslint-enable no-param-reassign */
