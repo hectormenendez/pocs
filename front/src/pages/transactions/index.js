@@ -2,9 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { Connect } from '@gik/redux-factory';
-import { Row, Col, Button, Form, Alert, Input, InputNumber, DatePicker, TimePicker, Select } from 'antd';
+import {
+    Row,
+    Col,
+    Button,
+    Form,
+    Alert,
+    Input,
+    InputNumber,
+    DatePicker,
+    TimePicker,
+    Select,
+} from 'antd';
 
+import { Component as FormExample } from '~/components/antd-form-example';
 // import { Actions as ActionsGoogle } from '~/stores/google';
+
 import Style from './index.module.scss';
 
 const formatTime = 'HH:mm';
@@ -20,12 +33,20 @@ export class Component extends React.Component {
     state = State;
 
     componentDidMount() {
+        console.log(this.props);
         // this.props
         //     .dispatch(ActionsGoogle.run({ method: 'get', params: ['state'] }))
         //     .then(response => response && this.setState({ response }));
     }
 
     render() {
+
+        // const {
+        //     getFieldDecorator: fieldSet, // Adds validation behaviour to the field
+        //     getFieldError: fieldError, // returns an error if the field is invalid.
+        //     isFieldTouched: fieldEdited, // was the trigger event fired on the field?
+        // } = this.props.form;
+
         return <React.Fragment>
             <Alert
                 type="success"
@@ -157,7 +178,27 @@ export class Component extends React.Component {
 
     onNumberFormat = value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     onNumberParse = value => value.replace(/\$\s?|(,*)/g, '');
+
+    onSubmit = (event) => {
+        event.preventDefault();
+        console.log('onSubmit');
+        return false;
+    }
 }
 
-export default Connect()(Component);
+export const FormHandledComponent = Form.create({
+
+    mapPropstoFields(props) {
+        console.log('mapPropstoFields', props);
+        return {};
+    },
+
+    onFieldsChange(props, fields) {
+        console.log('onFieldsChange', props, fields);
+        return null;
+    },
+
+})(FormExample);
+
+export default Connect()(FormHandledComponent);
 
