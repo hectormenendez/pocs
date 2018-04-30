@@ -8,6 +8,22 @@ function configsGet(name) {
     const config = {};
 
     /**
+     * @typedef {Object} Setting
+     * @description A type for the transaction.
+     * @property {!string} id - An unique identifier.
+     * @property {mixed}  value - The setting value.
+     * @property {string} description - A text describing the setting.
+     */
+    config.Settings = {
+        range: 'A:C',
+        keys: [
+            'id',
+            'value',
+            'description',
+        ],
+    };
+
+    /**
      * @typedef {Object} TransactionType
      * @description A type for the transaction.
      * @property {!string} id - An unique identifier.

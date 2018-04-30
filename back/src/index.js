@@ -3,6 +3,7 @@
 function get(name) {
     switch (name) {
         case 'state': return {
+            settings: settingsGet(),
             owners: {
                 list: ownersGet(),
             },
