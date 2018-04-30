@@ -12,7 +12,6 @@ import {
     InputNumber,
     DatePicker,
     TimePicker,
-    Select,
 } from 'antd';
 
 import ComponentLoader from '~/components/loader';
@@ -28,15 +27,17 @@ const State = {
     response: {
         from: null,
         to: null,
-        description: null,
-        success: null,
     },
+    success: null,
 };
 
 export class Component extends React.Component {
 
     static propTypes = {
+        ...Form.propTypes,
         dispatch: PropTypes.func.isRequired,
+        formatTime: PropTypes.string.isRequired,
+        formatDate: PropTypes.string.isRequired,
     };
 
     static defaultProps = {
@@ -55,30 +56,33 @@ export class Component extends React.Component {
     }
 
     render() {
-
-        console.log('config', this.state.config);
-        console.log('response', this.state.response);
-
         if (!this.state.config.loaded) return <ComponentLoader />;
 
-        const { getFieldDecorator: decorator } = this.props.form;
+        const moment = Moment();
+        const required = { rules: [{ required: true, message: 'Required' }] };
+
+        const {
+            formatDate,
+            formatTime,
+            form: {
+                getFieldDecorator: decorator,
+            },
+        } = this.props;
+
         const {
             response: {
                 from: rFrom,
                 to: rTo,
-                description: rDesc,
-                sucess: rSuccess,
             },
             config: {
                 settings: cSettings,
-                loaded: cLoaded,
                 owners: cOwners,
                 accounts: cAccounts,
                 currencies: cCurrencies,
                 transactions: {
                     envelopes: cEnvelopes,
                     categories: cCategories,
-                }
+                },
             },
         } = this.state;
 
@@ -133,20 +137,12 @@ export class Component extends React.Component {
                         <ComponentSelect
                             placeholder="Categories"
                             list={cCategories}
-                            decorator={decorator('category', {
-                                rules: [
-                                    { required: true, message: 'Required' },
-                                ],
-                            })}
+                            decorator={decorator('category', required)}
                         />
                         <ComponentSelect
                             placeholder="Envelopes"
                             list={cEnvelopes}
-                            decorator={decorator('envelope', {
-                                rules: [
-                                    { required: true, message: 'Required' },
-                                ],
-                            })}
+                            decorator={decorator('envelope', required)}
                         />
                         <Form.Item>
                             <Input.TextArea
@@ -156,7 +152,7 @@ export class Component extends React.Component {
                                 maxLength={140}
                                 placeholder="Note"
                                 className={Style.TextArea}
-                            />
+                                    />
                         </Form.Item>
                         <Row gutter={8}>
                             <Col span={8}>
@@ -164,43 +160,54 @@ export class Component extends React.Component {
                                     useIds={true}
                                     list={cCurrencies.list}
                                     decorator={decorator('currency', {
+                                        ...required,
                                         initialValue: cSettings.currency,
-                                        rules: [
-                                            { required: true, message: 'Required' },
-                                        ],
                                     })}
                                 />
                             </Col>
                             <Col span={16}>
                                 <Form.Item>
-                                    <InputNumber
-                                        step={0.1}
-                                        formatter={this.onNumberFormat}
-                                        parser={this.onNumberParse}
-                                        className={Style.fullWidth}
-                                    />
+                                    {
+                                        decorator('amount', required)(
+                                            <InputNumber
+                                                step={0.1}
+                                                precision={2}
+                                                formatter={this.onNumberFormat}
+                                                parser={this.onNumberParse}
+                                                className={Style.fullWidth}
+                                            />,
+                                        )
+                                    }
                                 </Form.Item>
                             </Col>
                         </Row>
                         <Row gutter={8}>
                             <Col span={12}>
                                 <Form.Item>
-                                    <DatePicker
-                                        className={Style.fullWidth}
-                                        format={this.props.formatDate}
-                                        defaultValue={
-                                            Moment('17/05/01', this.props.formatDate)
-                                        }/>
+                                    {
+                                        decorator('date', {
+                                            ...required,
+                                            initialValue: moment,
+                                        })(
+                                            <DatePicker
+                                                className={Style.fullWidth}
+                                                format={formatDate} />,
+                                        )
+                                    }
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
                                 <Form.Item>
-                                    <TimePicker
-                                        className={Style.fullWidth}
-                                        format={this.props.formatTime}
-                                        defaultValue={
-                                            Moment('12:08', this.props.formatTime)
-                                        }/>
+                                    {
+                                        decorator('time', {
+                                            ...required,
+                                            initialValue: moment,
+                                        })(
+                                            <TimePicker
+                                                className={Style.fullWidth}
+                                                format={formatTime} />,
+                                        )
+                                    }
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -265,7 +272,10 @@ export class Component extends React.Component {
     });
 
     onNumberFormat = value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
     onNumberParse = value => value.replace(/\$\s?|(,*)/g, '');
+
+    onCancel = () => this.setState({ ...State, config: this.state.config });
 
     onSubmit = (event) => {
         event.preventDefault();
@@ -274,21 +284,10 @@ export class Component extends React.Component {
         })
         return false;
     }
+
 }
 
-export const FormHandledComponent = Form.create({
-
-    mapPropstoFields(props) {
-        console.log('mapPropstoFields', props);
-        return {};
-    },
-
-    onFieldsChange(props, fields) {
-        console.log('onFieldsChange', props, fields);
-        return null;
-    },
-
-})(Component);
+export const FormHandledComponent = Form.create()(Component);
 
 export default Connect()(FormHandledComponent);
 
