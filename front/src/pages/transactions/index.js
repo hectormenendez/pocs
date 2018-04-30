@@ -17,9 +17,9 @@ import {
 
 import ComponentLoader from '~/components/loader';
 import { Actions as ActionsGoogle } from '~/stores/google';
-// import { Component as FormExample } from '~/components/antd-form-example';
 
 import Style from './index.module.scss';
+import { Component as ComponentSelect } from './select';
 
 const State = {
     config: {
@@ -31,24 +31,6 @@ const State = {
         description: null,
         success: null,
     },
-};
-
-const ComponentSelect = ({ onChange, list, placeholder, decorator }) => {
-    const select = <Select placeholder={placeholder} onChange={onChange}>
-        {list.map(({ id, name }) =>
-            <Select.Option value={id} key={id}>{name}</Select.Option>,
-        )}
-    </Select>;
-    return <Form.Item>
-        {decorator ? decorator(select) : select}
-    </Form.Item>;
-};
-
-ComponentSelect.propTypes = {
-    list: PropTypes.array.isRequired,
-    placeholder: PropTypes.string,
-    onChange: PropTypes.func,
-    decorator: PropTypes.func,
 };
 
 export class Component extends React.Component {
@@ -88,6 +70,7 @@ export class Component extends React.Component {
                 sucess: rSuccess,
             },
             config: {
+                settings: cSettings,
                 loaded: cLoaded,
                 owners: cOwners,
                 accounts: cAccounts,
@@ -178,20 +161,15 @@ export class Component extends React.Component {
                         <Row gutter={8}>
                             <Col span={8}>
                                 <ComponentSelect
+                                    useIds={true}
                                     list={cCurrencies.list}
                                     decorator={decorator('currency', {
-                                        initialValue: 'MXN',
+                                        initialValue: cSettings.currency,
                                         rules: [
                                             { required: true, message: 'Required' },
                                         ],
                                     })}
                                 />
-                                <Form.Item>
-                                    <Select defaultValue="MXN">
-                                        <Select.Option value="MXN">MXN</Select.Option>
-                                        <Select.Option value="CAD">CAD</Select.Option>
-                                    </Select>
-                                </Form.Item>
                             </Col>
                             <Col span={16}>
                                 <Form.Item>
