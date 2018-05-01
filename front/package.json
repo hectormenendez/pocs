@@ -2,6 +2,7 @@
     "name": "Marmaja",
     "version": "0.0.3",
     "private": true,
+    "homepage": "http://localhost/marmaja",
     "scripts": {
         "start": "PORT=8000 react-app-rewired start",
         "build": "react-app-rewired build",
