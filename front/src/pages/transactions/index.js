@@ -83,7 +83,7 @@ export class Component extends React.Component {
                 <Alert
                     className={Style.Alert}
                     type="success"
-                    message="test"
+                    message={success}
                     showIcon={true}
                     closable={true}
                 />
@@ -301,19 +301,35 @@ export class Component extends React.Component {
                 ].join(' '),
                 `${this.props.formatDate} ${this.props.formatTime}`,
             ).toDate().getTime();
-            const payload = {
-                amount,
-                category,
-                currency,
-                envelope,
-                from,
-                to,
-                date,
-                description,
-                type: this.state.config.transactions.types[0].id,
-            };
-            console.log(payload);
-            return true;
+
+            this.setState({ loaded: false });
+
+            // TODO: This should be done on the store file
+            return this.props
+                .dispatch(ActionsGoogle.run({
+                    method: 'transactionsPost',
+                    params: [[{
+                        amount,
+                        category,
+                        currency,
+                        envelope,
+                        from,
+                        to,
+                        date,
+                        description,
+                        type: this.state.config.transactions.types[0].id,
+                    }]],
+                }))
+                .then((response) => {
+                    // TODO: Error validation.
+                    if (!response) throw new Error('Unhandled response');
+                    this.setState({
+                        loaded: true,
+                        success: 'Transaction added succesfully',
+                        response: State.response,
+                    });
+                    setTimeout(() => this.setState({ success: false }), 3000);
+                });
         }).bind(this));
     }
 
