@@ -24,6 +24,36 @@ function configsGet(name) {
     };
 
     /**
+     * @typedef {Object} Transaction
+     * @description A type for the transaction.
+     * @property {!string} id - An unique identifier.
+     * @property {!number} date - The date when the transaction was made.
+     * @property {!string} from - The id for the account originating the transaction.
+     * @property {!string} to - The id for the destination account of the transaction.
+     * @property {!string} currency - The id of the currency used for the transaction.
+     * @property {!number} amount - The amount of money transactioned.
+     * @property {string} description - A text describing the transaction type.
+     * @property {!string} type - The id of the type of the transaction.
+     * @property {!string} category - The id of the category of the transaction.
+     * @property {!string} envelope - The id of the envelope of the transaction.
+     */
+    config.Transactions = {
+        range: 'A:J',
+        keys: [
+            'id',
+            'date',
+            'from',
+            'to',
+            'currency',
+            'amount',
+            'description',
+            'type',
+            'category',
+            'envelope',
+        ],
+    };
+
+    /**
      * @typedef {Object} TransactionType
      * @description A type for the transaction.
      * @property {!string} id - An unique identifier.
