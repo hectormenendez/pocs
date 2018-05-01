@@ -148,7 +148,7 @@ export class Component extends React.Component {
                         />
                         <Form.Item>
                             {
-                                decorator('description', {})(
+                                decorator('description', required)(
                                     <Input.TextArea
                                         autosize={{ minRows: 2, maxRows: 4 }}
                                         autoComplete="off"
