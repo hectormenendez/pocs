@@ -2,39 +2,56 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Form } from 'antd';
 
-export const Component = (props) => {
 
-    const {
-        onChange,
-        list,
-        placeholder,
-        decorator,
-        useIds,
-    } = props;
+export class ComponentSelect extends React.Component {
 
-    const select = <Select placeholder={placeholder} onChange={onChange}>
-        {list.map(({ id, name }) =>
-            <Select.Option value={id} key={id}>
-                {useIds ? id : name}
-            </Select.Option>,
-        )}
-    </Select>;
+    static defaultProps = {
+        useIds: false,
+    };
 
-    return <Form.Item>
-        {decorator ? decorator(select) : select}
-    </Form.Item>;
-};
+    static propTypes = {
+        list: PropTypes.array.isRequired,
+        useIds: PropTypes.bool.isRequired,
+        placeholder: PropTypes.string,
+        onChange: PropTypes.func,
+        decorator: PropTypes.func,
+        value: PropTypes.node,
+    };
 
-Component.defaultProps = {
-    useIds: false,
-};
+    render() {
+        const {
+            onChange,
+            list,
+            placeholder,
+            decorator,
+            useIds,
+            value,
+        } = this.props;
 
-Component.propTypes = {
-    list: PropTypes.array.isRequired,
-    placeholder: PropTypes.string,
-    onChange: PropTypes.func,
-    decorator: PropTypes.func,
-    useIds: PropTypes.bool.isRequired,
-};
+        // The value property only can be used without decorator.
+        const common = { placeholder, onChange };
+        const props = { ...common };
+        if (!decorator && value !== undefined) props.value = value;
 
-export default Component;
+        const options = list.map(({ id, name }) => <Select.Option value={id} key={id}>
+            {useIds ? id : name}
+        </Select.Option>);
+
+
+        return <Form.Item>
+            { decorator
+                ? decorator(
+                    <Select {...common}>
+                        {options}
+                    </Select>,
+                  )
+                : <Select {...props}>
+                    {options}
+                  </Select>
+            }
+        </Form.Item>;
+    }
+
+}
+
+export default ComponentSelect;

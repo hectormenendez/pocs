@@ -18,18 +18,21 @@ import ComponentLoader from '~/components/loader';
 import { Actions as ActionsGoogle } from '~/stores/google';
 
 import Style from './index.module.scss';
-import { Component as ComponentSelect } from './select';
+import ComponentSelect from './select';
 
 const State = {
-    config: {
-        loaded: null,
-    },
+    loaded: null,
+    config: null,
+    success: null,
     response: {
-        from: null,
+        // set to undefined so the input would show the placeholder, but can also be set
+        // to null to reset the current selection.
+        from: undefined,
         to: null,
     },
-    success: null,
 };
+
+// TODO: Load new settings after each add and cancel?
 
 export class Component extends React.Component {
 
@@ -50,13 +53,12 @@ export class Component extends React.Component {
     componentDidMount() {
         this.props
             .dispatch(ActionsGoogle.run({ method: 'get', params: ['state'] }))
-            .then(config => config && this.setState({
-                config: { ...config, loaded: true },
-            }));
+            .then(config => config && this.setState({ loaded: true, config }));
     }
 
     render() {
-        if (!this.state.config.loaded) return <ComponentLoader />;
+
+        if (!this.state.loaded) return <ComponentLoader />;
 
         const moment = Moment();
         const required = { rules: [{ required: true, message: 'Required' }] };
@@ -64,84 +66,79 @@ export class Component extends React.Component {
         const {
             formatDate,
             formatTime,
-            form: {
-                getFieldDecorator: decorator,
-            },
+            form: { getFieldDecorator: decorator },
         } = this.props;
 
         const {
-            response: {
-                from: rFrom,
-                to: rTo,
-            },
+            success,
+            response: { from, to },
             config: {
-                settings: cSettings,
-                owners: cOwners,
-                accounts: cAccounts,
-                currencies: cCurrencies,
-                transactions: {
-                    envelopes: cEnvelopes,
-                    categories: cCategories,
-                },
+                settings, owners, accounts, currencies,
+                transactions: { envelopes, categories },
             },
         } = this.state;
 
-
         return <React.Fragment>
-            { this.state.success &&
+            { success &&
                 <Alert
+                    className={Style.Alert}
                     type="success"
-                    showIcon={true}
                     message="test"
+                    showIcon={true}
                     closable={true}
-                    style={{ marginBottom: '1em' }}
                 />
             }
-            <Form onSubmit={this.onSubmit} >
 
+            <Form onSubmit={this.onSubmit} >
                 <fieldset>
                     <label>From</label>
                     <ComponentSelect
                         placeholder="Owner"
-                        list={cOwners.list}
+                        list={owners.list}
+                        value={!from ? from : from.owner}
                         onChange={this.onFromOwner}
                     />
-                    { rFrom && rFrom.owner &&
+                    { from && from.owner &&
                         <ComponentSelect
                             placeholder="Account"
-                            list={cAccounts.list.filter(({ owner }) => owner === rFrom.owner)}
+                            list={
+                                accounts.list.filter(({ owner }) => owner === from.owner)
+                            }
                             onChange={this.onFromAccount}
                         />
                     }
                 </fieldset>
 
-                { rFrom && rFrom.ready && <fieldset>
-                    <label>To</label>
-                    <ComponentSelect
-                        placeholder="Owner"
-                        list={cOwners.list}
-                        onChange={this.onToOwner}
-                    />
-                    { rTo && rTo.owner &&
+                { from && from.ready &&
+                    <fieldset>
+                        <label>To</label>
                         <ComponentSelect
-                            placeholder="Account"
-                            list={cAccounts.list.filter(({ owner }) => owner === rTo.owner)}
-                            onChange={this.onToAccount}
+                            placeholder="Owner"
+                            list={owners.list}
+                            onChange={this.onToOwner}
                         />
-                    }
-                </fieldset> }
+                        { to && to.owner &&
+                            <ComponentSelect
+                                placeholder="Account"
+                                list={
+                                    accounts.list.filter(({ owner }) => owner === to.owner)
+                                }
+                                onChange={this.onToAccount}
+                            />
+                        }
+                    </fieldset> }
 
-                { rFrom && rFrom.ready && rTo && rTo.ready && <React.Fragment>
+                { from && from.ready && to && to.ready && <React.Fragment>
                     <fieldset>
                         <label>Description</label>
                         <ComponentSelect
                             placeholder="Categories"
-                            list={cCategories}
+                            list={categories}
                             decorator={decorator('category', required)}
                         />
                         <ComponentSelect
                             placeholder="Envelopes"
-                            list={cEnvelopes}
+                            list={envelopes}
                             decorator={decorator('envelope', required)}
                         />
                         <Form.Item>
@@ -158,10 +155,10 @@ export class Component extends React.Component {
                             <Col span={8}>
                                 <ComponentSelect
                                     useIds={true}
-                                    list={cCurrencies.list}
+                                    list={currencies.list}
                                     decorator={decorator('currency', {
                                         ...required,
-                                        initialValue: cSettings.currency,
+                                        initialValue: settings.currency,
                                     })}
                                 />
                             </Col>
@@ -213,7 +210,7 @@ export class Component extends React.Component {
                         </Row>
                     </fieldset>
 
-                    <Row gutter={8} style={{ marginTop: '1.5em' }}>
+                    <Row gutter={8} className={Style.ContainerButtons}>
                         <Col span={8}>
                             <Button
                                 className={Style.fullWidth}
@@ -275,14 +272,32 @@ export class Component extends React.Component {
 
     onNumberParse = value => value.replace(/\$\s?|(,*)/g, '');
 
-    onCancel = () => this.setState({ ...State, config: this.state.config });
+    onCancel = () => this.setState({
+        loaded: true,
+        config: this.state.config,
+        response: { from: null },
+    });
 
     onSubmit = (event) => {
         event.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log('onSubmit', err, values);
-        })
-        return false;
+        this.props.form.validateFieldsAndScroll((function callback(err, values) {
+            if (err) return false;
+            const { amount, category, currency, envelope } = values;
+            const from = this.state.response.from.account;
+            const to = this.state.response.to.account;
+            const date = Moment(
+                [
+                    values.date.format(this.props.formatDate),
+                    values.time.format(this.props.formatTime),
+                ].join(' '),
+                `${this.props.formatDate} ${this.props.formatTime}`,
+            ).toDate().getTime();
+            const payload = {
+                amount, category, currency, envelope, from, to, date,
+            };
+            console.log(payload);
+            return true;
+        }).bind(this));
     }
 
 }
@@ -290,4 +305,5 @@ export class Component extends React.Component {
 export const FormHandledComponent = Form.create()(Component);
 
 export default Connect()(FormHandledComponent);
+
 
