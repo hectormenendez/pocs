@@ -94,12 +94,14 @@ export class Component extends React.Component {
                     <label>From</label>
                     <ComponentSelect
                         placeholder="Owner"
+                        showSearch={true}
                         list={owners.list}
                         value={!from ? from : from.owner}
                         onChange={this.onFromOwner}
                     />
                     { from && from.owner &&
                         <ComponentSelect
+                            showSearch={true}
                             placeholder="Account"
                             list={
                                 accounts.list.filter(({ owner }) => owner === from.owner)
@@ -113,6 +115,7 @@ export class Component extends React.Component {
                     <fieldset>
                         <label>To</label>
                         <ComponentSelect
+                            showSearch={true}
                             placeholder="Owner"
                             list={owners.list}
                             onChange={this.onToOwner}
@@ -132,11 +135,13 @@ export class Component extends React.Component {
                     <fieldset>
                         <label>Description</label>
                         <ComponentSelect
+                            showSearch={true}
                             placeholder="Categories"
                             list={categories}
                             decorator={decorator('category', required)}
                         />
                         <ComponentSelect
+                            showSearch={true}
                             placeholder="Envelopes"
                             list={envelopes}
                             decorator={decorator('envelope', required)}

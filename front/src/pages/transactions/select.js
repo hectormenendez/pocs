@@ -7,11 +7,13 @@ export class ComponentSelect extends React.Component {
 
     static defaultProps = {
         useIds: false,
+        showSearch: false,
     };
 
     static propTypes = {
         list: PropTypes.array.isRequired,
         useIds: PropTypes.bool.isRequired,
+        showSearch: PropTypes.bool.isRequired,
         placeholder: PropTypes.string,
         onChange: PropTypes.func,
         decorator: PropTypes.func,
@@ -26,10 +28,19 @@ export class ComponentSelect extends React.Component {
             decorator,
             useIds,
             value,
+            showSearch,
         } = this.props;
 
-        // The value property only can be used without decorator.
         const common = { placeholder, onChange };
+
+        if (showSearch) Object.assign(common, { // eslint-disable-line curly
+            showSearch,
+            optionFilterProp: 'children',
+            filterOptions: (input, option) =>
+                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+        });
+
+        // The value property only can be used without decorator.
         const props = { ...common };
         if (!decorator && value !== undefined) props.value = value;
 
