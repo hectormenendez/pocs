@@ -147,14 +147,18 @@ export class Component extends React.Component {
                             decorator={decorator('envelope', required)}
                         />
                         <Form.Item>
-                            <Input.TextArea
-                                autosize={{ minRows: 2, maxRows: 4 }}
-                                autoComplete="off"
-                                minLength={0}
-                                maxLength={140}
-                                placeholder="Note"
-                                className={Style.TextArea}
-                                    />
+                            {
+                                decorator('description', {})(
+                                    <Input.TextArea
+                                        autosize={{ minRows: 2, maxRows: 4 }}
+                                        autoComplete="off"
+                                        minLength={0}
+                                        maxLength={140}
+                                        placeholder="Note"
+                                        className={Style.TextArea}
+                                    />,
+                                )
+                            }
                         </Form.Item>
                         <Row gutter={8}>
                             <Col span={8}>
@@ -287,7 +291,7 @@ export class Component extends React.Component {
         event.preventDefault();
         this.props.form.validateFieldsAndScroll((function callback(err, values) {
             if (err) return false;
-            const { amount, category, currency, envelope } = values;
+            const { amount, category, currency, envelope, description } = values;
             const from = this.state.response.from.account;
             const to = this.state.response.to.account;
             const date = Moment(
@@ -298,7 +302,15 @@ export class Component extends React.Component {
                 `${this.props.formatDate} ${this.props.formatTime}`,
             ).toDate().getTime();
             const payload = {
-                amount, category, currency, envelope, from, to, date,
+                amount,
+                category,
+                currency,
+                envelope,
+                from,
+                to,
+                date,
+                description,
+                type: this.state.config.transactions.types[0].id,
             };
             console.log(payload);
             return true;
