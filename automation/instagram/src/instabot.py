@@ -1,8 +1,3 @@
-from os import path as Path
-from yaml import load as Load
-from yaml import BaseLoader
+from common import CONF
 
-PATH = Path.dirname(Path.realpath(__file__ + "/.."))
-CONF = Load(open(PATH + "/config.yaml", "r"), Loader=BaseLoader)
-
-print(CONF["user"]["name"])
+print(CONF)
