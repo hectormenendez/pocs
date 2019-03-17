@@ -1,2 +1,7 @@
-/env
 __pycache__
+.vscode
+*.checkpoint
+*.log
+
+/env
+/data
