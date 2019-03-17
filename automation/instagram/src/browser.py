@@ -18,9 +18,13 @@ class Bot():
     def __init__(self):
         # Download Chromium from https://sites.google.com/a/chromium.org/chromedriver/home
         self.driver = Driver.Chrome(PATH + "/env/bin/chromedriver")
-        # wait for the page load.
+        # Wait for the page to be loaded befor looking for elements.
         self.driver.implicitly_wait(30)
 
+    def __get_json(self, url):
+        self.driver.get(url)
+        text = self.driver.find_element_by_tag_name("pre").get_attribute("innerHTML")
+        return Parse(text)
     def quit(self):
         self.driver.quit()
 
@@ -30,6 +34,7 @@ class Bot():
         exit()
 
     def login(self):
+        """ login the configured user to Instagram """
         self.driver.get("{}/accounts/login".format(URL_BASE))
         eUser = self.driver.find_element_by_css_selector("form input[name=username]")
         ePass = self.driver.find_element_by_css_selector("form input[name=password]")
@@ -44,6 +49,7 @@ class Bot():
             self.driver.find_element_by_css_selector("div[role=dialog] button:nth-child(2)").click()
 
     def goto_user(self, username=CONF["user"]["name"]):
+        """ Goes to the specified user page """
         self.driver.get("{}/{}/?__a=1".format(URL_BASE, username))
 
     def get_media(self, id=False, media=False):
@@ -66,42 +72,38 @@ class Bot():
             "caption": media["accessibility_caption"],
         }
 
-    def get_json(self, url):
-        self.driver.get(url)
-        text = self.driver.find_element_by_tag_name("pre").get_attribute("innerHTML")
-        return Parse(text)
-
-    def get_user_followers(self, id=False):
-        def get_query(vars):
-            return (
-                "{}/graphql/query/"
-                "?query_hash=56066f031e6239f35a904ac20c9f37d9"
-                "&variables={}"
-            ).format(URL_BASE, Quote(Stringify(vars)))
-
-        json = self.get_json(get_query({
+    def get_user_followers(self, id=False, page=False, followers=[]):
+        vars = {
             "id": id,
             "include_reel": False,
             "fetch_mutual": False,
             "first": 9999,
-        }))["data"]["user"]["edge_followed_by"]
-
-        followers = []
-        for follower in json["edges"]:
-            follower = follower["node"]
-            followers.append({
-                "id": follower["id"],
-                "nameFull": follower["full_name"],
-                "nameUser": follower["username"],
-                "pic": follower["profile_pic_url"],
-                "private": follower["is_private"],
-                "verified": follower["is_verified"],
-            })
-        print(followers)
-        # TODO: Make a recursive call to get all users according to the value of json["page_info"]
+        }
+        if page:
+            vars["after"] = page
+        json = self.__get_json((
+            "{}/graphql/query/"
+            "?query_hash=56066f031e6239f35a904ac20c9f37d9"
+            "&variables={}"
+        ).format(URL_BASE, Quote(Stringify(vars))))["data"]["user"]["edge_followed_by"]
+        followers = followers + list(map(lambda edge: {
+            "id": edge["node"]["id"],
+            "nameFull": edge["node"]["full_name"],
+            "nameUser": edge["node"]["username"],
+            "pic": edge["node"]["profile_pic_url"],
+            "private": edge["node"]["is_private"],
+            "verified": edge["node"]["is_verified"],
+        }, json["edges"]))
+        if json["page_info"]["has_next_page"]:
+            return self.get_user_followers(
+                id=id,
+                page=json["page_info"]["end_cursor"],
+                followers=followers
+            )
+        return followers
 
     def get_user(self, username=CONF["user"]["name"]):
-        json = self.get_json("{}/{}/?__a=1".format(URL_BASE, username))
+        json = self.__get_json("{}/{}/?__a=1".format(URL_BASE, username))
         user = json["graphql"]["user"]
         # get medias
         medias = []
@@ -127,6 +129,5 @@ class Bot():
 bot = Bot()
 bot.login()
 user = bot.get_user()
-bot.get_user_followers(id=user["id"])
-# print(user)
+followers = bot.get_user_followers(id=user["id"])
 bot.quit()
