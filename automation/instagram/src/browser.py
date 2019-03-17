@@ -1,13 +1,14 @@
+# python libs
+from time import sleep as Sleep
+# virtualenv libs
 from json import loads as Parse, dumps as Stringify
 from urllib.parse import quote_plus as Quote
-
 from selenium import webdriver as Driver
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.common.keys import Keys
-
+# local libs
 from common import CONF, PATH
 
 URL_BASE = "https://www.instagram.com"
+URL_QUERY = URL_BASE + "/graphql/query/?query_hash={}&variables={}"
 
 ERROR = "ERROR: {}"
 ERROR_NOT_IMPLEMENTED = ERROR.format("Not implemented yet")
@@ -15,16 +16,19 @@ ERRROR_EXPECTING = ERROR.format("Expecting {}")
 
 class Bot():
 
-    def __init__(self):
+    def __init__(self, throttle=2):
         # Download Chromium from https://sites.google.com/a/chromium.org/chromedriver/home
         self.driver = Driver.Chrome(PATH + "/env/bin/chromedriver")
         # Wait for the page to be loaded befor looking for elements.
         self.driver.implicitly_wait(30)
+        self.throttle = throttle
 
     def __get_json(self, url):
+        Sleep(self.throttle)
         self.driver.get(url)
         text = self.driver.find_element_by_tag_name("pre").get_attribute("innerHTML")
         return Parse(text)
+
     def quit(self):
         self.driver.quit()
 
@@ -61,46 +65,20 @@ class Bot():
             self.halt(ERROR_NOT_IMPLEMENTED)
         if not media:
             return {}
+        text = False
+        if len(media["edge_media_to_caption"]["edges"]):
+            text = media["edge_media_to_caption"]["edges"][0]["node"]["text"]
         return {
             "id": media["id"],
-            "text": media["edge_media_to_caption"]["edges"][0]["node"]["text"],
+            "text": text,
             "comments": media["edge_media_to_comment"]["count"],
             "likesReal": media["edge_liked_by"]["count"],
             "likesShow": media["edge_media_preview_like"]["count"],
             "isVideo": media["is_video"],
             "pic": media["thumbnail_src"],
-            "caption": media["accessibility_caption"],
+            # TODO: find out why this is not working for all medias
+            # "caption": media["accessibility_caption"],
         }
-
-    def get_user_followers(self, id=False, page=False, followers=[]):
-        vars = {
-            "id": id,
-            "include_reel": False,
-            "fetch_mutual": False,
-            "first": 9999,
-        }
-        if page:
-            vars["after"] = page
-        json = self.__get_json((
-            "{}/graphql/query/"
-            "?query_hash=56066f031e6239f35a904ac20c9f37d9"
-            "&variables={}"
-        ).format(URL_BASE, Quote(Stringify(vars))))["data"]["user"]["edge_followed_by"]
-        followers = followers + list(map(lambda edge: {
-            "id": edge["node"]["id"],
-            "nameFull": edge["node"]["full_name"],
-            "nameUser": edge["node"]["username"],
-            "pic": edge["node"]["profile_pic_url"],
-            "private": edge["node"]["is_private"],
-            "verified": edge["node"]["is_verified"],
-        }, json["edges"]))
-        if json["page_info"]["has_next_page"]:
-            return self.get_user_followers(
-                id=id,
-                page=json["page_info"]["end_cursor"],
-                followers=followers
-            )
-        return followers
 
     def get_user(self, username=CONF["user"]["name"]):
         json = self.__get_json("{}/{}/?__a=1".format(URL_BASE, username))
@@ -125,9 +103,49 @@ class Bot():
             "verified": user["is_verified"],
         }
 
+    def get_user_query(self, id=False, query=False, key=False, page=False, accumulator=[]):
+        vars = {
+            "id": id,
+            "include_reel": False,
+            "fetch_mutual": False,
+            "first": 9999,
+        }
+        if page:
+            vars["after"] = page
+        json = self.__get_json(URL_QUERY.format(query, Quote(Stringify(vars))))
+        json = json["data"]["user"]["edge_" + key]
+        accumulator = accumulator + list(
+            map(lambda edge: self.get_user(edge["node"]["username"]), json["edges"])
+        )
+        if json["page_info"]["has_next_page"]:
+            return self.get_user_query(
+                id=id,
+                query=query,
+                key=key,
+                page=json["page_info"]["end_cursor"],
+                accumulator=accumulator
+            )
+        return accumulator
+
+    def get_user_following(self, id):
+        return self.get_user_query(
+            id=id,
+            query="c56ee0ae1f89cdbd1c89e2bc6b8f3d18",
+            key="follow"
+        )
+
+    def get_user_followers(self, id):
+        return self.get_user_query(
+            id=id,
+            query="56066f031e6239f35a904ac20c9f37d9",
+            key="followed_by"
+        )
+
 
 bot = Bot()
 bot.login()
 user = bot.get_user()
-followers = bot.get_user_followers(id=user["id"])
+user["followers"] = bot.get_user_followers(id=user["id"])
+user["following"] = bot.get_user_following(id=user["id"])
+print(Stringify(user))
 bot.quit()
