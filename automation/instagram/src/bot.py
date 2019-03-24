@@ -62,9 +62,6 @@ class Bot():
         # no more pages return the accumulated value.
         return accumulator
 
-    def quit(self):
-        self.driver.quit()
-
     def halt(self, message=""):
         print(message)
         self.quit()
@@ -195,10 +192,3 @@ class Bot():
         return list(map(mediator, medias))
 
 
-bot = Bot()
-bot.login()
-user = bot.get_user()
-# user["followers"] = bot.get_user_followers(id=user["id"])
-# medias = bot.get_user_medias(id=user["id"])
-
-bot.quit()
