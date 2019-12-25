@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "target": "es2018",
+        "module": "es6",
+        "baseUrl": "./src",
+        "allowSyntheticDefaultImports": true
+    }
+}
