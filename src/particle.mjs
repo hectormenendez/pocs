@@ -1,5 +1,5 @@
 
-import { Hex } from './utils.mjs';
+import { Hex } from './core/utils.mjs';
 
 export const Particles = [];
 
