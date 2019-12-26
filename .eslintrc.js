@@ -17,7 +17,7 @@ module.exports = {
     parser: 'babel-eslint', // Included with @gik
     parserOptions: {
         ecmaVersion: 2018,
-        sourceType: 'script',
+        sourceType: 'module',
         ecmaFeatures: {
             jsx: false,
             generators: false,
@@ -54,6 +54,7 @@ module.exports = {
                     },
                 },
             ],
+            'import/extensions': ['error', { mjs: 'always', js: 'never' }],
             'arrow-parens': ['error', 'always'], // Always require parens on arrow functions
             // Maximum line-width
             'max-len': [
