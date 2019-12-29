@@ -1,0 +1,28 @@
+{
+    "name": "@uyhsbc/api-proxy",
+    "version": "0.0.3",
+    "private": true,
+    "main": "dist/index.js",
+    "contributors": [
+        "Héctor Menéndez <hmenendez@technisys.com>"
+    ],
+    "scripts": {
+        "start": "cross-env DEBUG=proxy,$DEBUG nodemon src --exec babel-node",
+        "build": "rm -Rvf dist && babel src --source-maps -d dist"
+    },
+    "dependencies": {
+        "express": "^4.16.3",
+        "http-proxy-middleware": "^0.19.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.1.0",
+        "@babel/core": "^7.1.0",
+        "@babel/node": "^7.0.0",
+        "@babel/preset-env": "^7.1.0",
+        "@gik/eslint-config-node": "0.0.8",
+        "babel-plugin-root-import": "^6.1.0",
+        "cross-env": "^5.2.0",
+        "eslint": "^5.6.0",
+        "nodemon": "^1.18.4"
+    }
+}
