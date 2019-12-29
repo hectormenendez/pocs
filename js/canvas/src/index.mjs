@@ -1,7 +1,7 @@
 import Canvas from './core/canvas.mjs';
 import Grid from './components/grid.mjs';
 
-const RESOLUTION = 20;
+const RESOLUTION = 10
 
 const canvas = new Canvas(document.getElementsByTagName('canvas')[0]);
 const grid = new Grid({ canvas, size: RESOLUTION, style: 'rgba(0,0,0, 0.1)' });
