@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.9.1",
+    "axios": "^0.19.0",
     "history": "^2.0.0-rc2",
     "re-base": "^1.5.1",
     "react": "^0.14.7",
