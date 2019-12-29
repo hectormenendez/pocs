@@ -1,9 +1,0 @@
-{
-    "presets": ["@babel/env"],
-    "plugins": [
-        ["root-import", {
-            "rootPathSuffix": "src",
-            "rootPathPrefix": "~"
-        }]
-    ]
-}
