@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>ToDo!</title>
+    </head>
+    <style>
+        html, body {
+            height: 100%;
+            margin:0;
+            padding:0;
+        }
+
+        body {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        webview {
+            height: 100%;
+        }
+    </style>
+    <body>
+        <div id="todoist">
+            <webview src="https://todoist.com/app"></webview>
+        </div>
+        <div id="asana">
+            <webview
+                src="https://app.asana.com"
+                preload="./asana.js"></webview>
+        </div>
+    </body>
+</html>

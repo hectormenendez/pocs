@@ -1,0 +1,18 @@
+{
+  "name": "electron.twinview",
+  "version": "0.0.1",
+  "description": "A minimal twinview browser",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=build"
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [],
+  "author": "Héctor Menéndez <etor@gik.m>",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "~1.6.2",
+    "electron-packager": "^8.7.2"
+  }
+}
