@@ -3,8 +3,8 @@ body, html { width:100%; height:100%; padding:0; margin:0; }
 #image     { position:absolute; width:140px; height:180px; left:50%; margin-left:-70px; top:50%; margin-top:-90px; }
 #image div { position:absolute; width:100%; height:100%; cursor:pointer; }
 
-#image div.norm { background:url(/inc/pinya_norm.png); }
-#image div.over { background:url(/inc/pinya_over.png); }
+#image div.norm { background:url(./pinya_norm.png); }
+#image div.over { background:url(./pinya_over.png); }
 
 #count { position:absolute; width:100%; text-align:center; font-size:3em; font-family:sans-serif; color:#CCC; line-height:1.33em; top:50%; margin-top:80px; }
 
