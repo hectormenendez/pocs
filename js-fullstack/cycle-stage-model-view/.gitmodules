@@ -1,4 +1,0 @@
-[submodule "back"]
-	path = back
-	url = ../money.back
-	branch = .
