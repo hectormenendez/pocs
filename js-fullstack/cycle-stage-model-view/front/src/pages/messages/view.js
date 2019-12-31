@@ -1,7 +1,6 @@
 import {html as Html} from 'snabbdom-jsx';
 import Style from './view.css';
 
-
 export default ({user, messages}) => <section>
     <UserInput user={user} />
     <ChatBox user={user} messages={messages}/>

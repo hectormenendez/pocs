@@ -2,24 +2,27 @@ import $ from 'xstream';
 import Debug from 'debug';
 import Socket from 'socket.io-client';
 import SwitchPath from 'switch-path';
-import CreateHistory from 'history/createBrowserHistory';
+import { createBrowserHistory as CreateHistory } from 'history';
 import FeathersDriver from 'cycle-feathers';
 import { run as Run } from '@cycle/run';
 import { makeDOMDriver as DomDriver } from '@cycle/dom';
 import { makeRouterDriver as RouterDriver } from 'cyclic-router';
 
-import Routes$ from './routes';
+import { Router } from './helpers/smv';
+import Routes from './routes';
 
 import './index.css';
+
+localStorage.debug = 'money*'
 
 const debug = Debug('money:index');
 const socket = Socket('http://localhost:3030', { path: '/ws' });
 
 socket.on('connect', function(){
     debug('connected',  { id: socket.id });
-    Routes$.addListener({
+    Router(Routes).addListener({ // returns an observable.
         error: error => { throw error },
-        next : routes => {
+        next: routes => {
             debug('routes', Object.keys(routes));
             onReady(routes, { socket });
         }
@@ -28,9 +31,9 @@ socket.on('connect', function(){
 
 function onReady(routes, { socket }){
     const  drivers = {
-        DOM      : DomDriver(document.getElementsByTagName('main')[0]),
-        Feathers : FeathersDriver(socket),
-        Router   : RouterDriver(CreateHistory(), SwitchPath)
+        DOM: DomDriver(document.getElementsByTagName('main')[0]),
+        Feathers: FeathersDriver(socket),
+        Router: RouterDriver(CreateHistory(), SwitchPath)
     }
     debug('drivers', Object.keys(drivers));
     const app = main.bind(main, routes);
