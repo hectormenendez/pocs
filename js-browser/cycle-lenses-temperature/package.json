@@ -8,7 +8,6 @@
     "cyclejs-test-helpers": "^4.0.0",
     "snabbdom-looks-like": "^1.0.5",
     "snabbdom-pragma": "^2.8.0",
-    "husky": "^1.2.0",
     "lint-staged": "^8.1.0",
     "prettier": "^1.15.3"
   },
@@ -29,11 +28,6 @@
   "prettier": {
     "tabWidth": 4,
     "singleQuote": true
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "nyc": {
     "instrument": false,
