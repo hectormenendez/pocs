@@ -1,83 +1,73 @@
-import xs, { Stream } from 'xstream';
-import { VNode, DOMSource } from '@cycle/dom';
+import $, { Stream as TypeStream } from 'xstream';
 
-import { Sources, Sinks, Reducer } from '../interfaces';
+import { TypeSinks, TypeSources } from '../utils/types';
+import { TypeSink as TypeDOMSink } from '../utils/drivers/dom';
+import { TypeSink as TypeStateSink, TypeValue as TypeStateValue } from '../utils/drivers/state';
 
-export interface State {
+export interface TypeState {
     count: number;
 }
-export const defaultState: State = {
+
+export interface TypeIntent {
+    onIncrement$: TypeStream<null>;
+    onDecrement$: TypeStream<null>;
+    onNavigate$: TypeStream<null>;
+}
+
+export const State: TypeState = {
     count: 0
 };
 
-interface DOMIntent {
-    increment$: Stream<null>;
-    decrement$: Stream<null>;
-    link$: Stream<null>;
-}
-
-export function Counter({ DOM, state }: Sources<State>): Sinks<State> {
-    const { increment$, decrement$, link$ }: DOMIntent = intent(DOM);
-
+export default function Component(sources: TypeSources<TypeState>): TypeSinks<TypeState> {
+    const intent: TypeIntent = Intent(sources);
     return {
-        DOM: view(state.stream),
-        state: model(increment$, decrement$),
-        router: redirect(link$)
+        DOM: sources.state.stream.map(View),
+        state: Model(intent),
+        router: intent.onNavigate$.mapTo('/speaker'),
     };
 }
 
-function model(
-    increment$: Stream<any>,
-    decrement$: Stream<any>
-): Stream<Reducer<State>> {
-    const init$ = xs.of<Reducer<State>>(prevState =>
-        prevState === undefined ? defaultState : prevState
-    );
-
-    const addToState: (n: number) => Reducer<State> = n => state => ({
-        ...state,
-        count: (state as State).count + n
-    });
-    const add$ = increment$.mapTo(addToState(1));
-    const subtract$ = decrement$.mapTo(addToState(-1));
-
-    return xs.merge(init$, add$, subtract$);
+function Intent(sources: TypeSources<TypeState>): TypeIntent {
+    const { DOM } = sources;
+    return {
+        onIncrement$: DOM.select('.increment').events('click'),
+        onDecrement$: DOM.select('.decrement').events('click'),
+        onNavigate$: DOM.select('[data-action="navigate"]').events('click').mapTo(null)
+    };
 }
 
-function view(state$: Stream<State>): Stream<VNode> {
-    return state$.map(({ count }) => (
+function Model(intent: TypeIntent): TypeStateSink<TypeState> {
+    function setCount(n: number) {
+        return (state: TypeState): TypeState => ({
+            ...state,
+            count: state.count + n
+        });
+    }
+    const { onIncrement$, onDecrement$ } = intent;
+    const state$: TypeStream<TypeStateValue<TypeState>> = $
+        .of((state)=> state === undefined ? State : state);
+    return $.merge(
+        state$,
+        onIncrement$.mapTo(setCount(+1)),
+        onDecrement$.mapTo(setCount(-1))
+    );
+}
+
+function View(state: TypeState): TypeDOMSink {
+    const { count } = state;
+    return (
         <div>
             <h2>My Awesome Cycle.js app - Page 1</h2>
             <span>{'Counter: ' + count}</span>
-            <button type="button" className="add">
+            <button type="button" className="increment">
                 Increase
             </button>
-            <button type="button" className="subtract">
+            <button type="button" className="decrement">
                 Decrease
             </button>
             <button type="button" data-action="navigate">
                 Page 2
             </button>
         </div>
-    ));
-}
-
-function intent(DOM: DOMSource): DOMIntent {
-    const increment$ = DOM.select('.add')
-        .events('click')
-        .mapTo(null);
-
-    const decrement$ = DOM.select('.subtract')
-        .events('click')
-        .mapTo(null);
-
-    const link$ = DOM.select('[data-action="navigate"]')
-        .events('click')
-        .mapTo(null);
-
-    return { increment$, decrement$, link$ };
-}
-
-function redirect(link$: Stream<any>): Stream<string> {
-    return link$.mapTo('/speaker');
+    );
 }

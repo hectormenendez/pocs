@@ -1,34 +1,14 @@
-## Your amazing project
+# CycleJS on 2019
 
-Thanks for using the `one-fits-all` flavor.
+Just me trying new stuff in Cycle, my last attempt at this is on `js-fullstack`.
 
-### Using your app
+## Changelog
 
-Run in development mode: `npm start`
-Build a production build: `npm run build`
-Run the unit tests: `npm test`
+- Based upon `create-cycle-app`
+- Modified it to my taste, (but keeping typescript this time for learning purposes)
 
-### Extending the configuration
+## TODO
 
-If you want to add custom config to webpack, you can do it! Just edit the `webpack.config.js` in your app's root directory. It will be merged with the default config.
-
-Example: Adding the progress bar plugin:
-```javascript
-const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-
-module.exports = {
-    plugins: [
-        new ProgressBarPlugin()
-    ]
-}
-```
-Example: Add API proxy for devServer
-```javascript
-module.exports = {
-    devServer: {
-        proxy: {
-            "/api": "http://localhost:3000"
-        }
-    }
-}
-```
+- Still some errors to fix with the typings.
+- Remove all "Type" prefixes from typedefs.
+- Implement https://gitlab.com/staltz/ams Temperature component to learn about lenses.
