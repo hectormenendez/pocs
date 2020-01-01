@@ -52,6 +52,7 @@
     "@cycle/run": "^5.2.0",
     "@cycle/state": "^1.1.0",
     "@cycle/time": "^0.19.0",
+    "@types/node": "^12.12.22",
     "cyclejs-utils": "^4.0.2",
     "cyclic-router": "^6.0.0",
     "switch-path": "^1.2.0",
