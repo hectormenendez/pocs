@@ -12,9 +12,9 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "strictBindCallApply": true,
-    "strictNullChecks": false,
     "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
     "allowJs": true,
     "lib": ["ES6", "ES5", "DOM"]
   },

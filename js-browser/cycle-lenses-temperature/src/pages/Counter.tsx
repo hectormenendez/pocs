@@ -1,25 +1,26 @@
-import $, { Stream as TypeStream } from 'xstream';
+import $ from 'xstream';
 
-import { TypeSinks, TypeSources } from '../utils/types';
-import { TypeSink as TypeDOMSink } from '../utils/drivers/dom';
-import { TypeSink as TypeStateSink, TypeValue as TypeStateValue } from '../utils/drivers/state';
+import { Stream, Sinks, Sources } from '../types';
+import { Value as ValueDOM } from '../types/driver-dom';
+import { Sink as StateSink, Value as StateValue } from '../types/driver-state';
 
-export interface TypeState {
-    count: number;
+export namespace Type {
+    export interface State {
+        count: number;
+    }
+    export interface Intent {
+        onIncrement$: Stream<null>;
+        onDecrement$: Stream<null>;
+        onNavigate$: Stream<null>;
+    }
 }
 
-export interface TypeIntent {
-    onIncrement$: TypeStream<null>;
-    onDecrement$: TypeStream<null>;
-    onNavigate$: TypeStream<null>;
-}
-
-export const State: TypeState = {
+export const State: Type.State = {
     count: 0
 };
 
-export default function Component(sources: TypeSources<TypeState>): TypeSinks<TypeState> {
-    const intent: TypeIntent = Intent(sources);
+export default function Component(sources: Sources<Type.State>): Sinks<Type.State> {
+    const intent: Type.Intent = Intent(sources);
     return {
         DOM: sources.state.stream.map(View),
         state: Model(intent),
@@ -27,24 +28,24 @@ export default function Component(sources: TypeSources<TypeState>): TypeSinks<Ty
     };
 }
 
-function Intent(sources: TypeSources<TypeState>): TypeIntent {
+function Intent(sources: Sources<Type.State>): Type.Intent {
     const { DOM } = sources;
     return {
-        onIncrement$: DOM.select('.increment').events('click'),
-        onDecrement$: DOM.select('.decrement').events('click'),
+        onIncrement$: DOM.select('.increment').events('click').mapTo(null),
+        onDecrement$: DOM.select('.decrement').events('click').mapTo(null),
         onNavigate$: DOM.select('[data-action="navigate"]').events('click').mapTo(null)
     };
 }
 
-function Model(intent: TypeIntent): TypeStateSink<TypeState> {
+function Model(intent: Type.Intent): StateSink<Type.State> {
     function setCount(n: number) {
-        return (state: TypeState): TypeState => ({
+        return (state: Type.State): Type.State => ({
             ...state,
             count: state.count + n
         });
     }
     const { onIncrement$, onDecrement$ } = intent;
-    const state$: TypeStream<TypeStateValue<TypeState>> = $
+    const state$: Stream<StateValue<Type.State>> = $
         .of((state)=> state === undefined ? State : state);
     return $.merge(
         state$,
@@ -53,7 +54,7 @@ function Model(intent: TypeIntent): TypeStateSink<TypeState> {
     );
 }
 
-function View(state: TypeState): TypeDOMSink {
+function View(state: Type.State): ValueDOM {
     const { count } = state;
     return (
         <div>
