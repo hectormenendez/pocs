@@ -1,22 +1,22 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "module": "ES6",
-    "moduleResolution": "node",
-    "target": "ES5",
-    "sourceMap": true,
-    "jsx": "react",
-    "jsxFactory": "Snabbdom.createElement",
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": false,
-    "strictPropertyInitialization": false,
-    "allowJs": true,
-    "lib": ["ES6", "ES5", "DOM"]
-  },
-  "exclude": ["node_modules", "build"]
+    "compileOnSave": false,
+    "compilerOptions": {
+        "module": "esnext",
+        "moduleResolution": "node",
+        "target": "ES5",
+        "sourceMap": true,
+        "jsx": "react",
+        "jsxFactory": "Snabbdom.createElement",
+        "noImplicitReturns": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "strictBindCallApply": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": false,
+        "strictPropertyInitialization": false,
+        "allowJs": true,
+        "lib": ["ES6", "ES5", "DOM"]
+    },
+    "exclude": ["node_modules", "build"]
 }

@@ -8,6 +8,17 @@
             "git add"
         ]
     },
+    "nyc": {
+        "instrument": false,
+        "sourceMap": false,
+        "include": [
+            "src/components"
+        ],
+        "reporter": [
+            "html",
+            "text"
+        ]
+    },
     "one-fits-all": true,
     "scripts": {
         "format": "prettier --write '{src,test}/**/*.{js,jsx,ts,tsx}'",
