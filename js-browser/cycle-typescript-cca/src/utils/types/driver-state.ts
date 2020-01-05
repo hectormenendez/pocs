@@ -1,5 +1,5 @@
 import { Stream } from 'xstream';
-import { StateSource, Reducer } from '@cycle/state'
+import { StateSource, Reducer } from '@cycle/state';
 import { Driver as CycleDriver } from '@cycle/run';
 
 /**

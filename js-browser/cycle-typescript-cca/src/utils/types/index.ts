@@ -2,8 +2,7 @@ import { Source as SourceDOM, Sink as SinkDOM } from './driver-dom';
 import { Source as SourceRouter, Sink as SinkRouter } from './driver-router';
 import { Source as SourceSpeech, Sink as SinkSpeech } from './driver-speech';
 import { Source as SourceState, Sink as SinkState } from './driver-state';
-import { Source as SourceHistory, Sink as SinkHistory, } from './driver-history';
-
+import { Source as SourceHistory, Sink as SinkHistory } from './driver-history';
 
 export { Stream } from 'xstream';
 
@@ -14,7 +13,7 @@ export { Stream } from 'xstream';
 export interface Sources<I> {
     DOM: SourceDOM;
     router: SourceRouter;
-    history?: SourceHistory,
+    history?: SourceHistory;
     speech: SourceSpeech;
     state: SourceState<I>;
 }
@@ -26,7 +25,7 @@ export interface Sources<I> {
 export interface Sinks<I> {
     DOM: SinkDOM;
     router?: SinkRouter;
-    history?: SinkHistory,
+    history?: SinkHistory;
     speech?: SinkSpeech;
     state?: SinkState<I>;
 }

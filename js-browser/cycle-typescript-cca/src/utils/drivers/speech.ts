@@ -11,5 +11,5 @@ export default function Driver(): Driver {
                 window.speechSynthesis.speak(utterance);
             }
         });
-    }
+    };
 }

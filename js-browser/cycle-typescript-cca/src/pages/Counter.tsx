@@ -1,8 +1,8 @@
-import $ from 'xstream';
+import $ from  'xstream';
 
-import { Stream, Sinks, Sources } from '../types';
-import { Value as ValueDOM } from '../types/driver-dom';
-import { Sink as StateSink, Value as StateValue } from '../types/driver-state';
+import { Stream, Sinks, Sources } from '../utils/types';
+import { Value as ValueDOM } from '../utils/types/driver-dom';
+import { Sink as StateSink, Value as StateValue } from '../utils/types/driver-state';
 
 export namespace Type {
     export interface State {

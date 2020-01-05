@@ -1,10 +1,10 @@
 import { run as Run } from '@cycle/run';
 
-import DriverDOM from './drivers/dom';
-import DriverHistory from './drivers/history';
-import DriverSpeech from './drivers/speech';
-import { Wrap as WrapRouter } from './drivers/router';
-import { Wrap as WrapState } from './drivers/state'
+import DriverDOM from './utils/drivers/dom';
+import DriverHistory from './utils/drivers/history';
+import DriverSpeech from './utils/drivers/speech';
+import { Wrap as WrapRouter } from './utils/drivers/router';
+import { Wrap as WrapState } from './utils/drivers/state'
 
 import Router from './components/Router';
 

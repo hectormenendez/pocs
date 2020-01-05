@@ -9,4 +9,4 @@ Just me trying new stuff in Cycle, my last attempt at this is on `js-fullstack`.
 
 ## TODO
 
-- Implement https://gitlab.com/staltz/ams Temperature component to learn about lenses.
+- Alias resolution on webpack, can't make it work. I need it to resolve "~" files.

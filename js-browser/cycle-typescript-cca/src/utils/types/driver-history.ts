@@ -1,6 +1,6 @@
 import { Stream, MemoryStream } from 'xstream';
 import { Driver as DriverCycle } from '@cycle/run';
-import { Location, HistoryInput} from '@cycle/history';
+import { Location, HistoryInput } from '@cycle/history';
 
 /** The signature for the `Source` coming from the `History Driver` */
 export type Source = MemoryStream<Location>;

@@ -1,8 +1,8 @@
 import Isolate from '@cycle/isolate';
 import { extractSinks as SinksGet } from 'cyclejs-utils';
 
-import { Route } from '../types/driver-router';
-import { Stream, Sinks, Sources } from '../types';
+import { Route } from '../utils/types/driver-router';
+import { Stream, Sinks, Sources } from '../utils/types';
 
 import { DriverNames } from '..';
 import Counter, { Type as TypeCounter } from '../pages/Counter';

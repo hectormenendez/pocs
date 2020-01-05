@@ -1,9 +1,9 @@
-import $ from 'xstream';
+import $ from  'xstream';
 import SampleCombine from 'xstream/extra/sampleCombine';
 
-import { Stream, Sinks, Sources } from '../types';
-import { Sink as SinkState } from '../types/driver-state';
-import { Value as ValueDOM } from '../types/driver-dom';
+import { Stream, Sinks, Sources } from '../utils/types';
+import { Sink as SinkState } from '../utils/types/driver-state';
+import { Value as ValueDOM } from '../utils/types/driver-dom';
 
 export namespace Type {
     export interface State {
