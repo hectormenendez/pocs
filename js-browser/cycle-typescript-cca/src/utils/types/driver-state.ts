@@ -1,4 +1,4 @@
-import { Stream } from 'xstream';
+import { Stream, MemoryStream } from 'xstream';
 import { StateSource, Reducer } from '@cycle/state';
 import { Driver as CycleDriver } from '@cycle/run';
 
@@ -18,7 +18,7 @@ export type Value<I> = Reducer<I>;
  * The signature for a `Sink` returning from the `State Driver`
  * @param I An interface containing a `State` object.
  */
-export type Sink<I> = Stream<Value<I>>;
+export type Sink<I> = Stream<Value<I>> | MemoryStream<Value<I>>;
 
 /**
  * The `State Driver` signature.

@@ -1,48 +1,36 @@
 import $ from 'xstream';
-import { Sources, Sinks } from '../utils/types';
+import Isolate from '@cycle/isolate';
+
+import Layout from '../layouts/Main';
 import Routes from '../routes';
+import { Sources, Sinks } from '../utils/types';
 
-export namespace Type {
-    export interface State {}
-}
+export const NAME = 'Home';
 
-export const NAME = 'PagesHome';
-
-export const State = {};
-
-export default function Component(sources: Sources<Type.State>): Sinks<Type.State> {
-    const state$ = sources.state.stream;
-    const vtree$ = state$.map(View);
-
-    const reduce$ = Model({});
-
-    return {
-        DOM: vtree$,
-        state: reduce$,
-    };
-}
-
-function Model(intent) {
-    const reduce$ = $.of(() => State);
-    return reduce$;
-}
-
-function View(state) {
-    return (
-        <component id={NAME}>
-            <header>
-                <nav>
+export default function Component(sources: Sources<null>): Sinks<null> {
+    const Main = Isolate(Layout)({
+        ...sources,
+        props$: $.of({
+            content$: $.of(
+                <component>
+                    <p>Please, select one of the above.</p>
+                    <hr />
+                    <h4>Stuff still pending to finish:</h4>
                     <ul>
-                        {Routes.map((route) => (
-                            <li>
-                                <a href={`${route.path}`}>{route.id}</a>
-                            </li>
-                        ))}
+                        <li>
+                            Make all the pages use this layout (had trouble making it
+                            work with counter, state was not being passed properly)
+                        </li>
+                        <li>
+                            Set the title of every page, using the routes file.
+                        </li>
                     </ul>
-                </nav>
-            </header>
-            <section>Section</section>
-            <footer>Footer</footer>
-        </component>
-    );
+                </component>,
+            ),
+            route: Routes.find(({ id }) => id === NAME),
+        }),
+    });
+    return {
+        DOM: Main.DOM,
+    };
 }
