@@ -1,4 +1,4 @@
-import $ from  'xstream';
+import $ from 'xstream';
 import SampleCombine from 'xstream/extra/sampleCombine';
 
 import { Stream, Sinks, Sources } from '../utils/types';
@@ -18,7 +18,7 @@ export namespace Type {
 }
 
 export const State: Type.State = {
-    text: 'Edit me!'
+    text: 'Edit me!',
 };
 
 export default function Component(sources: Sources<Type.State>): Sinks<Type.State> {
@@ -31,7 +31,7 @@ export default function Component(sources: Sources<Type.State>): Sinks<Type.Stat
         DOM: sources.state.stream.map(View),
         state: state$,
         speech: speech$,
-        router: intent.onNavigate$.mapTo('/counter')
+        router: intent.onNavigate$.mapTo('/counter'),
     };
 }
 
@@ -40,7 +40,7 @@ function Intent(sources: Sources<Type.State>): Type.Intent {
     return {
         onInput$: DOM.select('textarea')
             .events('input')
-            .map(e => {
+            .map((e) => {
                 const target = e.target as HTMLTextAreaElement;
                 return target.value;
             }),
@@ -49,15 +49,15 @@ function Intent(sources: Sources<Type.State>): Type.Intent {
             .mapTo(null),
         onNavigate$: DOM.select('[data-action="navigation"]')
             .events('click')
-            .mapTo(null)
+            .mapTo(null),
     };
 }
 
 function Model(intent: Type.Intent): SinkState<Type.State> {
     const state$ = $.of(() => State);
-    const input$ = intent.onInput$.map(text => (state: Type.State) => ({
+    const input$ = intent.onInput$.map((text) => (state: Type.State) => ({
         ...state,
-        text
+        text,
     }));
     return $.merge(state$, input$);
 }

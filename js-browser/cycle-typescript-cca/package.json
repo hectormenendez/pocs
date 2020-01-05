@@ -8,33 +8,11 @@
             "git add"
         ]
     },
-    "prettier": {
-        "tabWidth": 4,
-        "singleQuote": true
-    },
-    "nyc": {
-        "instrument": false,
-        "sourceMap": false,
-        "include": [
-            "src/components"
-        ],
-        "reporter": [
-            "html",
-            "text"
-        ]
-    },
-    "mocha-webpack": {
-        "include": [
-            "test/**/*.test.{js,jsx,ts,tsx}"
-        ]
-    },
     "one-fits-all": true,
     "scripts": {
         "format": "prettier --write '{src,test}/**/*.{js,jsx,ts,tsx}'",
         "start": "cycle-scripts start",
-        "test": "cycle-scripts test",
         "build": "cycle-scripts build",
-        "eject": "cycle-scripts eject",
         "clean": "cycle-scripts clean"
     },
     "dependencies": {
@@ -44,19 +22,15 @@
         "@cycle/run": "^5.2.0",
         "@cycle/state": "^1.1.0",
         "@cycle/time": "^0.19.0",
-        "@types/node": "^12.12.22",
         "cyclejs-utils": "^4.0.2",
         "cyclic-router": "^6.0.0",
         "switch-path": "^1.2.0",
         "xstream": "^11.7.0"
     },
     "devDependencies": {
-        "@types/mocha": "^5.2.5",
+        "@types/node": "^12.12.24",
         "cycle-scripts-one-fits-all": "7.2.1",
-        "cyclejs-test-helpers": "^4.0.0",
-        "lint-staged": "^8.1.0",
         "prettier": "^1.15.3",
-        "snabbdom-looks-like": "^1.0.5",
         "snabbdom-pragma": "^2.8.0",
         "typescript": "^3.7.4"
     }

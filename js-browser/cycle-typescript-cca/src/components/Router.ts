@@ -9,17 +9,16 @@ import Counter, { Type as TypeCounter } from '../pages/Counter';
 import Speaker, { Type as TypeSpeaker } from '../pages/Speaker';
 
 interface State {
-    counter: TypeCounter.State,
-    speaker: TypeSpeaker.State,
+    counter: TypeCounter.State;
+    speaker: TypeSpeaker.State;
 }
 
 // TODO: Create a Routes file and use it here.
 export default function main(sources: Sources<State>): Sinks<State> {
-
     /**  A stream of available routes each containing a component as a value. */
     const routes$: Stream<Route> = sources.router.define({
         '/': Isolate(Counter, 'counter'),
-        '/speaker': Isolate(Speaker, 'speaker')
+        '/speaker': Isolate(Speaker, 'speaker'),
     });
 
     /** A stream of sinks obtained from running each route component against the router */
@@ -35,6 +34,6 @@ export default function main(sources: Sources<State>): Sinks<State> {
 
     return {
         ...sinks,
-        router: sinks.router.startWith('/')
+        router: sinks.router.startWith('/'),
     };
 }

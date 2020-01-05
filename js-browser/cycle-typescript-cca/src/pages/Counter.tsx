@@ -1,4 +1,4 @@
-import $ from  'xstream';
+import $ from 'xstream';
 
 import { Stream, Sinks, Sources } from '../utils/types';
 import { Value as ValueDOM } from '../utils/types/driver-dom';
@@ -16,7 +16,7 @@ export namespace Type {
 }
 
 export const State: Type.State = {
-    count: 0
+    count: 0,
 };
 
 export default function Component(sources: Sources<Type.State>): Sinks<Type.State> {
@@ -31,9 +31,15 @@ export default function Component(sources: Sources<Type.State>): Sinks<Type.Stat
 function Intent(sources: Sources<Type.State>): Type.Intent {
     const { DOM } = sources;
     return {
-        onIncrement$: DOM.select('.increment').events('click').mapTo(null),
-        onDecrement$: DOM.select('.decrement').events('click').mapTo(null),
-        onNavigate$: DOM.select('[data-action="navigate"]').events('click').mapTo(null)
+        onIncrement$: DOM.select('.increment')
+            .events('click')
+            .mapTo(null),
+        onDecrement$: DOM.select('.decrement')
+            .events('click')
+            .mapTo(null),
+        onNavigate$: DOM.select('[data-action="navigate"]')
+            .events('click')
+            .mapTo(null),
     };
 }
 
@@ -41,16 +47,17 @@ function Model(intent: Type.Intent): StateSink<Type.State> {
     function setCount(n: number) {
         return (state: Type.State): Type.State => ({
             ...state,
-            count: state.count + n
+            count: state.count + n,
         });
     }
     const { onIncrement$, onDecrement$ } = intent;
-    const state$: Stream<StateValue<Type.State>> = $
-        .of((state)=> state === undefined ? State : state);
+    const state$: Stream<StateValue<Type.State>> = $.of((state) =>
+        state === undefined ? State : state,
+    );
     return $.merge(
         state$,
         onIncrement$.mapTo(setCount(+1)),
-        onDecrement$.mapTo(setCount(-1))
+        onDecrement$.mapTo(setCount(-1)),
     );
 }
 

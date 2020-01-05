@@ -9,7 +9,7 @@ export default function Driver(): Driver {
                 }
                 const utterance = new SpeechSynthesisUtterance(value);
                 window.speechSynthesis.speak(utterance);
-            }
+            },
         });
     };
 }
