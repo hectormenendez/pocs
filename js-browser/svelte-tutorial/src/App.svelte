@@ -1,30 +1,34 @@
 <script>
-    export let name = 'World!'
+    import Router from './components/Router.svelte';
+    import Link from './components/Link.svelte';
+
+    import Home from './pages/Home.svelte';
+    import Speech from './pages/Speech.svelte';
+    import Counter from './pages/Counter.svelte';
+
+    const routes = [
+        { path: '/', title: 'Home', page: Home },
+        { path: '/counter', title: 'Counter', page: Counter },
+        { path: '/speech', title: 'Speech', page: Speech },
+    ];
 </script>
 
 <style>
-    main {
-        text-align: center;
-        padding: 1em;
-        max-width: 240px;
-        margin: 0 auto;
+    nav {
+        display: flex;
+        justify-content: space-between;
     }
-
-    h1 {
-        color: #ff3e00;
-        text-transform: uppercase;
-        font-size: 4em;
-        font-weight: 100;
-    }
-
-    @media (min-width: 640px) {
-        main {
-            max-width: none;
-        }
+    nav :global(a) {
+        display: block;
     }
 </style>
 
 <main>
-    <h1>Hello {name}!</h1>
-    <input type="input" name="name" bind:value={name}/>
+    <nav>
+        {#each routes as { path, title }}
+            <Link {path} {title} />
+        {/each}
+    </nav>
+    <!-- The dinamically loaded component will be placed here -->
+    <Router {routes} />
 </main>
