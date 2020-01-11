@@ -2,12 +2,15 @@
 from time import sleep as Sleep
 from functools import reduce as Reduce
 from inspect import currentframe as CurrentFrame, getargvalues as ArgValues
-# virtualenv libs
 from json import loads as Parse, dumps as Stringify
 from urllib.parse import quote_plus as Quote
+
+# pipenv libs
 from selenium import webdriver as Driver
+from selenium.common.exceptions import NoSuchElementException
+
 # local libs
-from common import CONF, PATH
+from lib.common import CONF, PATH
 
 LIMIT = 9999
 URL_BASE = "https://www.instagram.com"
@@ -17,14 +20,13 @@ ERROR = "ERROR: {}"
 ERROR_NOT_IMPLEMENTED = ERROR.format("Not implemented yet")
 ERROR_EXPECTING = ERROR.format("Expecting {}")
 
-
 class Bot():
 
     def __init__(self, throttle=2):
         # Download Chromium from https://sites.google.com/a/chromium.org/chromedriver/home
-        self.driver = Driver.Chrome(PATH + "/env/bin/chromedriver")
+        self.driver = Driver.Chrome("/usr/local/bin/chromedriver")
         # Wait for the page to be loaded befor looking for elements.
-        self.driver.implicitly_wait(30)
+        self.driver.implicitly_wait(throttle)
         self.throttle = throttle
 
     def _get_json(self, url):
@@ -64,7 +66,7 @@ class Bot():
 
     def halt(self, message=""):
         print(message)
-        self.quit()
+        self.driver.quit()
         exit()
 
     def login(self):
@@ -82,6 +84,17 @@ class Bot():
         if self.driver.find_elements_by_css_selector("div[role=dialog]"):
             self.driver.find_element_by_css_selector("div[role=dialog] button:nth-child(2)").click()
 
+    def do_unfollow(self, username):
+        Sleep(self.throttle)
+        self.driver.get("{}/{}".format(URL_BASE, username))
+        try:
+            eButton = self.driver.find_element_by_xpath('//button[text()="Following"]')
+            eButton.click()
+        except NoSuchElementException:
+            return False
+        eButton = self.driver.find_element_by_css_selector("div[role=dialog] button:nth-child(1)")
+        eButton.click()
+
     def goto_user(self, username=CONF["user"]["name"]):
         """ Goes to the specified user page """
         self.driver.get("{}/{}/?__a=1".format(URL_BASE, username))
@@ -97,7 +110,7 @@ class Bot():
             "nameFull": user["full_name"],
             "nameUser": user["username"],
             "countFollowers": user["edge_followed_by"]["count"],
-            "countFolowing": user["edge_follow"]["count"],
+            "countFollowing": user["edge_follow"]["count"],
             "countMedias": user["edge_owner_to_timeline_media"]["count"],
             "business": False if not user["is_business_account"] else user["business_category_name"],
             "private": user["is_private"],
@@ -140,7 +153,7 @@ class Bot():
             "is_ad": media["is_ad"],
         }
 
-    def get_user_following(self, id):
+    def get_user_following(self, id, full=True):
         users = self._get_json_query(
             query="c56ee0ae1f89cdbd1c89e2bc6b8f3d18",
             route=["data", "user", "edge_follow"],
@@ -152,8 +165,8 @@ class Bot():
             },
         )
         # the query returns only a subset of the information,
-        # ask for the full info instead.
-        return list(
+        # ask for the full info instead if the full flag is present
+        return users if not full else list(
             map(lambda user: self.get_user(username=user["username"]), users)
         )
 
@@ -185,10 +198,23 @@ class Bot():
                 "first": 9999,
             },
         )
+
         def mediator(media):
             media = self.get_media(shortcode=media["shortcode"])
             media["user"] = id
             return media
+
         return list(map(mediator, medias))
 
-
+    def get_media_likes(self, shortcode):
+        likes = self._get_json_query(
+            query="e0f59e4a1c8d78d0161873bc2ee7ec44",
+            route=["data", "shortcode_media"],
+            vars={
+                "shortcode": shortcode,
+                "include_reel": False,
+                "first": LIMIT,
+            }
+        )
+        print(Stringify(likes))
+        self.halt()
