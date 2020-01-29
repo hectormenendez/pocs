@@ -1,0 +1,7 @@
+node_modules
+*.DS_
+# This is the file where the apikeys reside, don't add it.
+/binance.json
+# Everything inside the pub folder will be ignored, except index.html
+/pub/**/*.*
+!/pub/**/*.html
