@@ -1,5 +1,6 @@
-<script>
-console.log("Hello World");
+<script lang="ts">
+    const message: string = "Hello World";
+    console.log(message)
 </script>
 
 <main>
