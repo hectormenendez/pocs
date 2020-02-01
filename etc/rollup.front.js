@@ -3,20 +3,40 @@ import PluginNodeResolve from "@rollup/plugin-node-resolve";
 import PluginCommonJS from "@rollup/plugin-commonjs";
 import PluginSvelte from "rollup-plugin-svelte";
 import PluginAnalizer from "rollup-plugin-analyzer";
+import PluginTypeScript from "@wessberg/rollup-plugin-ts";
+import {
+    preprocess as TypeScriptPreprocess,
+    createEnv as TypeScriptEnvironment,
+    readConfigFile as TypeScriptConfig,
+} from "@pyoner/svelte-ts-preprocess";
 
-import { Path, Join, SEP, INDEX_CSS, INDEX_JS } from "./path";
+import { Path, Join, INDEX_CSS, INDEX_JS, INDEX_TS } from "./path";
 
 const { ROLLUP_WATCH } = process.env;
-const SVELTE_NAME = "svelte";
+const NAME = "svelte";
 const isProduction = !ROLLUP_WATCH;
 
+export const TypeScript = {};
+TypeScript.Environment = TypeScriptEnvironment();
+TypeScript.Config = {
+    ...TypeScriptConfig(TypeScript.Environment),
+    allowNonTsExtensions: true,
+};
+TypeScript.Preprocess = TypeScriptPreprocess({
+    env: TypeScript.Environment,
+    compilerOptions: TypeScript.Config,
+});
+
 export default {
-    input: Join(Path.SRC.FRONT, INDEX_JS),
+    input: Join(Path.SRC.FRONT, INDEX_TS),
     output: {
+        sourcemap: true,
+        format: "iife", // immediately invoked function expression
         name: "Svelte",
         file: Join(Path.PUB.FRONT, INDEX_JS),
-        format: "iife", // immediately invoked function expression
-        sourcemap: false,
+    },
+    watch: {
+        clearScreen: false,
     },
     plugins: [
         PluginJson(),
@@ -27,13 +47,16 @@ export default {
             css(css) {
                 css.write(Join(Path.PUB.FRONT, INDEX_CSS));
             },
+            preprocess: TypeScript.Preprocess,
         }),
         PluginNodeResolve({
             browser: true,
             preferBuiltins: true,
             modulesOnly: true,
+            dedupe: (importee) => importee === NAME || importee.startsWith(`${NAME}/`),
         }),
         PluginCommonJS(),
+        PluginTypeScript(),
         PluginAnalizer({ summaryOnly: true }),
     ].concat(
         isProduction
@@ -44,5 +67,4 @@ export default {
                   // TODO: Add Development-only plugins here
               ],
     ),
-    watch: { clearScreen: false },
 };

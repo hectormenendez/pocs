@@ -1,9 +1,10 @@
-<script>
-console.log("Hello World");
+<script lang="ts">
+    let message: [string] = ["Hello World"];
+    message = message.map(m => m.concat("!"))
 </script>
 
 <main>
-    <h1>Hello World</h1>
+    <h1>{message}</h1>
 </main>
 
 <style>
