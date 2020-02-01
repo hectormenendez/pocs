@@ -1,10 +1,10 @@
 <script lang="ts">
-    const message: string = "Hello World";
-    console.log(message)
+    let message: [string] = ["Hello World"];
+    message = message.map(m => m.concat("!"))
 </script>
 
 <main>
-    <h1>Hello World</h1>
+    <h1>{message}</h1>
 </main>
 
 <style>
