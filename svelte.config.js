@@ -1,8 +1,8 @@
-const { preprocess: TypeScriptPreprocess } = require("@pyoner/svelte-ts-preprocess")
+const Preprocess = require("svelte-preprocess");
+const Config = require("./etc/preprocess-config");
 
 
 module.exports = {
     dev: process.env.NODE_ENV !== "production",
-    preprocess: TypeScriptPreprocess(),
+    preprocess: Preprocess(Config),
 };
-
