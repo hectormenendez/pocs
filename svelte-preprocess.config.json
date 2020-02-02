@@ -1,0 +1,10 @@
+{
+    "pug": false,
+    "coffeescript": false,
+    "stylus": false,
+    "scss": true,
+    "postcss": true,
+    "typescript": {
+        "transpileOnly": false
+    }
+}

@@ -7,7 +7,7 @@ import PluginTypeScript from "@wessberg/rollup-plugin-ts";
 import Preprocess from "svelte-preprocess";
 
 import { Path, Join, INDEX_CSS, INDEX_JS, INDEX_TS } from "./path";
-import Config from "./preprocess-config";
+import * as Config from "../svelte-preprocess.config.json";
 
 const { ROLLUP_WATCH } = process.env;
 const NAME = "svelte";
