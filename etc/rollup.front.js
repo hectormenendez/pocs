@@ -4,28 +4,14 @@ import PluginCommonJS from "@rollup/plugin-commonjs";
 import PluginSvelte from "rollup-plugin-svelte";
 import PluginAnalizer from "rollup-plugin-analyzer";
 import PluginTypeScript from "@wessberg/rollup-plugin-ts";
-import {
-    preprocess as TypeScriptPreprocess,
-    createEnv as TypeScriptEnvironment,
-    readConfigFile as TypeScriptConfig,
-} from "@pyoner/svelte-ts-preprocess";
+import Preprocess from "svelte-preprocess";
 
 import { Path, Join, INDEX_CSS, INDEX_JS, INDEX_TS } from "./path";
+import Config from "./preprocess-config";
 
 const { ROLLUP_WATCH } = process.env;
 const NAME = "svelte";
 const isProduction = !ROLLUP_WATCH;
-
-export const TypeScript = {};
-TypeScript.Environment = TypeScriptEnvironment();
-TypeScript.Config = {
-    ...TypeScriptConfig(TypeScript.Environment),
-    allowNonTsExtensions: true,
-};
-TypeScript.Preprocess = TypeScriptPreprocess({
-    env: TypeScript.Environment,
-    compilerOptions: TypeScript.Config,
-});
 
 export default {
     input: Join(Path.SRC.FRONT, INDEX_TS),
@@ -47,7 +33,7 @@ export default {
             css(css) {
                 css.write(Join(Path.PUB.FRONT, INDEX_CSS));
             },
-            preprocess: TypeScript.Preprocess,
+            preprocess: Preprocess(Config),
         }),
         PluginNodeResolve({
             browser: true,
@@ -56,7 +42,9 @@ export default {
             dedupe: (importee) => importee === NAME || importee.startsWith(`${NAME}/`),
         }),
         PluginCommonJS(),
-        PluginTypeScript(),
+        PluginTypeScript({
+            browserslist: false,
+        }),
         PluginAnalizer({ summaryOnly: true }),
     ].concat(
         isProduction

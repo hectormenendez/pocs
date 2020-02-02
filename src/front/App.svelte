@@ -1,20 +1,19 @@
-<script lang="ts">
-    let message: [string] = ["Hello World"];
-    message = message.map(m => m.concat("!"))
+<script lang="typescript">
+    const messages: Array<string> = ["hola", "mundo"];
+    const message: string = messages.map((msg) => `${msg[0].toUpperCase()}${msg.substring(1)}`).join(" ");
 </script>
 
 <main>
-    <h1>{message}</h1>
+    <h1>{message}!</h1>
 </main>
 
-<style>
+<style lang="scss">
     main {
         display: flex;
         background: chocolate;
-    }
-
-    h1 {
-        background: deeppink;
-        color: limegreen;
+        h1 {
+            background: deeppink;
+            color: limegreen;
+        }
     }
 </style>
