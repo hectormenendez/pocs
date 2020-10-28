@@ -1,7 +1,7 @@
 #!/usr/bin/env osascript
 
 -- Juniper Network Connect manipulation script
--- Author: Héctor Menéndez <hmenendez-ext@technisys.com>
+-- Author: Héctor Menéndez <hector@gik.mx>
 
 on run fileName
 
