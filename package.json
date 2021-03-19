@@ -1,0 +1,17 @@
+{
+    "name": "todoist-habits",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "author": "Hector Menendez <hector@gik.mx>",
+    "repository": {
+        "type": "git",
+        "url": "github.etor:hectormenendez/todoist-habits"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "todoist": "^0.4.0"
+    }
+}
