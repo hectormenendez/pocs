@@ -10,14 +10,17 @@ jobs:
   execute:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
+
       - name: Node Setup
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@master
         with:
           node-version: 14
           architecture: x64
+
+      - name: Execute
+        run: echo "-> $API_KEY"
         env:
           API_KEY: ${{ secrets.API_KEY }}
-      - run: echo "-> $API_KEY"
       # - run: npm install
       # - run: npm start
