@@ -1,0 +1,21 @@
+{
+    "name": "todoist-habits",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "author": "Hector Menendez <hector@gik.mx>",
+    "repository": {
+        "type": "git",
+        "url": "github.etor:hectormenendez/todoist-habits"
+    },
+    "scripts": {
+        "start": "node -r dotenv/config todoist-habits.mjs"
+    },
+    "dependencies": {
+        "todoist": "^0.4.0"
+    },
+    "devDependencies": {
+        "dotenv": "^8.2.0"
+    }
+}
