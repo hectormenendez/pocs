@@ -3,6 +3,28 @@
     "include": ["src/**/*"],
     "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
     "compilerOptions": {
-        "strict": true
+        "lib": ["ES2020", "ES7", "ES6", "DOM"],
+        "baseUrl": ".",
+        "outDir": "./dist/",
+        "paths": {
+            "~/*": ["./src/*"],
+        },
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "resolveJsonModule": true,
+        "declaration": false,
+        "sourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "allowJs": true,
+        "types": ["svelte"],
+        "plugins": [
+            { "transform": "typescript-transform-paths" },
+            { "transform": "typescript-transform-paths", "afterDeclarations": true },
+        ]
+
     }
 }
