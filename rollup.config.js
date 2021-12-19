@@ -1,13 +1,90 @@
-import svelte from "rollup-plugin-svelte";
-import commonjs from "@rollup/plugin-commonjs";
-import resolve from "@rollup/plugin-node-resolve";
-import livereload from "rollup-plugin-livereload";
-import { terser } from "rollup-plugin-terser";
-import sveltePreprocess from "svelte-preprocess";
-import typescript from "@rollup/plugin-typescript";
-import css from "rollup-plugin-css-only";
+import $PATH from "path";
+
+import TypeScript from "@rollup/plugin-typescript";
+import Svelte from "rollup-plugin-svelte";
+import SveltePreprocess from "svelte-preprocess";
+import CommonJS from "@rollup/plugin-commonjs";
+import Resolve from "@rollup/plugin-node-resolve";
+import LiveReload from "rollup-plugin-livereload";
+import { terser as Terser } from "rollup-plugin-terser";
+import CSS from "rollup-plugin-css-only";
+import Copy from "rollup-plugin-copy";
+import JSON from "@rollup/plugin-json";
+import Alias from "@rollup/plugin-alias"
+
+import ConfigTS from "./tsconfig.json";
 
 const production = !process.env.ROLLUP_WATCH;
+
+export default {
+    input: "src/main.ts",
+    output: {
+        sourcemap: true,
+        format: "iife",
+        name: "app",
+        file: "dist/bundle.js",
+    },
+    plugins: [
+        JSON(),
+        Copy({
+            targets: [
+                { src: "public/**/*", dest: "dist" },
+                { src: "assets/**/*", dest: "dist" },
+            ]
+        }),
+        Svelte({
+            preprocess: SveltePreprocess({
+                sourceMap: !production,
+                scss: { includePaths: ["src/**/*.scss"] },
+            }),
+            compilerOptions: {
+                // enable run-time checks when not in production
+                dev: !production,
+            },
+        }),
+        // If you have external dependencies installed from
+        // npm, you'll most likely need these plugins. In
+        // some cases you'll need additional configuration -
+        // consult the documentation for details:
+        // https://github.com/rollup/plugins/tree/master/packages/commonjs
+        Resolve({
+            browser: true,
+            dedupe: ["svelte"],
+        }),
+        Alias({ entries: typescriptAlias() }),
+        CommonJS(),
+        TypeScript({
+            sourceMap: true,
+            inlineSources: !production,
+        }),
+        // we'll extract any component CSS out into
+        // a separate file - better for performance
+        CSS({ output: "bundle.css" }),
+        // In dev mode, call `npm run start` once
+        // the bundle has been generated
+        !production && serve(),
+        // Watch the distribution directory and refresh the
+        // browser on changes when not in production
+        !production && LiveReload({ watch: "dist", delay: 200 }),
+        // If we're building for production (npm run build
+        // instead of npm run dev), minify
+        production && Terser({ format: { comments: false } }),
+    ],
+    watch: {
+        clearScreen: false,
+    },
+};
+
+function typescriptAlias() {
+    const { paths } = ConfigTS.compilerOptions;
+    return Object.entries(paths).map(([key, [value]]) => ({
+        replacement: $PATH.resolve(__dirname, repl(value)),
+        find: repl(key),
+    }));
+    function repl(target) {
+        return target.replace("./", "").replace("/*", "");
+    }
+}
 
 function serve() {
     let server;
@@ -29,55 +106,3 @@ function serve() {
         },
     };
 }
-
-export default {
-    input: "src/main.ts",
-    output: {
-        sourcemap: true,
-        format: "iife",
-        name: "app",
-        file: "public/build/bundle.js",
-    },
-    plugins: [
-        svelte({
-            preprocess: sveltePreprocess({ sourceMap: !production }),
-            compilerOptions: {
-                // enable run-time checks when not in production
-                dev: !production,
-            },
-        }),
-        // we'll extract any component CSS out into
-        // a separate file - better for performance
-        css({ output: "bundle.css" }),
-
-        // If you have external dependencies installed from
-        // npm, you'll most likely need these plugins. In
-        // some cases you'll need additional configuration -
-        // consult the documentation for details:
-        // https://github.com/rollup/plugins/tree/master/packages/commonjs
-        resolve({
-            browser: true,
-            dedupe: ["svelte"],
-        }),
-        commonjs(),
-        typescript({
-            sourceMap: !production,
-            inlineSources: !production,
-        }),
-
-        // In dev mode, call `npm run start` once
-        // the bundle has been generated
-        !production && serve(),
-
-        // Watch the `public` directory and refresh the
-        // browser on changes when not in production
-        !production && livereload("public"),
-
-        // If we're building for production (npm run build
-        // instead of npm run dev), minify
-        production && terser(),
-    ],
-    watch: {
-        clearScreen: false,
-    },
-};

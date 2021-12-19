@@ -23,8 +23,13 @@
         "format": "prettier --write --plugin-search-dir=. ./src/**/*.{svelte,ts} ./*.{js,json}",
         "lint": "eslint --fix './src/**/*.{js,ts,svelte}'"
     },
+    "dependencies": {
+        "sirv-cli": "^1.0.0"
+    },
     "devDependencies": {
+        "@rollup/plugin-alias": "^3.1.8",
         "@rollup/plugin-commonjs": "^17.0.0",
+        "@rollup/plugin-json": "^4.1.0",
         "@rollup/plugin-node-resolve": "^11.0.0",
         "@rollup/plugin-typescript": "^8.0.0",
         "@tsconfig/svelte": "^2.0.0",
@@ -38,11 +43,12 @@
         "prettier": "^2.5.1",
         "prettier-plugin-svelte": "^2.5.1",
         "rollup": "^2.3.4",
+        "rollup-plugin-copy": "^3.4.0",
         "rollup-plugin-css-only": "^3.1.0",
         "rollup-plugin-livereload": "^2.0.0",
         "rollup-plugin-svelte": "^7.0.0",
         "rollup-plugin-terser": "^7.0.0",
-        "sirv-cli": "^1.0.0",
+        "sass": "^1.45.0",
         "svelte": "^3.0.0",
         "svelte-check": "^2.0.0",
         "svelte-preprocess": "^4.0.0",
