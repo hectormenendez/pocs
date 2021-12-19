@@ -12,7 +12,7 @@
     ],
     "lint-staged": {
         "*.{js,ts,svelte}": [
-            "cross-env NODE_ENV=production npm run lint"
+            "NODE_ENV=production npm run lint"
         ]
     },
     "scripts": {
@@ -20,7 +20,7 @@
         "dev": "rollup -c -w",
         "build": "rollup -c",
         "check": "svelte-check --tsconfig ./tsconfig.json",
-        "format": "prettier --write ./src/**/*.{js,svelte,html,ts}",
+        "format": "prettier --write --plugin-search-dir=. ./src/**/*.{svelte,ts} ./*.{js,json}",
         "lint": "eslint --fix './src/**/*.{js,ts,svelte}'"
     },
     "devDependencies": {

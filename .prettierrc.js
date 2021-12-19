@@ -10,6 +10,5 @@ module.exports = {
     arrowParens: "always", // Enforce always using parens on arrow functions
     svelteSortOrder: "options-scripts-markup-styles",
     svelteStrictMode: false,
-    svelteBracketNewLine: true,
     svelteIndentScriptAndStyle: true,
 };
