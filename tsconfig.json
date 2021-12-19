@@ -31,5 +31,5 @@
         "rollup.config.js",
         "package.config.js",
         "prettierrc.js"
-    ],
+    ]
 }
