@@ -10,14 +10,14 @@ import { terser as Terser } from "rollup-plugin-terser";
 import CSS from "rollup-plugin-css-only";
 import Copy from "rollup-plugin-copy";
 import JSON from "@rollup/plugin-json";
-import Alias from "@rollup/plugin-alias"
+import Alias from "@rollup/plugin-alias";
 
 import ConfigTS from "./tsconfig.json";
 
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-    input: "src/main.ts",
+    input: "src/main.svelte.ts",
     output: {
         sourcemap: true,
         format: "iife",
@@ -30,7 +30,7 @@ export default {
             targets: [
                 { src: "public/**/*", dest: "dist" },
                 { src: "assets/**/*", dest: "dist" },
-            ]
+            ],
         }),
         Svelte({
             preprocess: SveltePreprocess({
@@ -77,13 +77,12 @@ export default {
 
 function typescriptAlias() {
     const { paths } = ConfigTS.compilerOptions;
-    return Object.entries(paths).map(([key, [value]]) => ({
+    const repl = (target) => target.replace("./", "").replace("/*", "");
+    const result = Object.entries(paths).map(([key, [value]]) => ({
         replacement: $PATH.resolve(__dirname, repl(value)),
         find: repl(key),
     }));
-    function repl(target) {
-        return target.replace("./", "").replace("/*", "");
-    }
+    return result;
 }
 
 function serve() {
@@ -96,7 +95,7 @@ function serve() {
     return {
         writeBundle() {
             if (server) return;
-            server = require("child_process").spawn("npm", ["run", "start", "--", "--dev"], {
+            server = require("child_process").spawn("npm", ["run", "serve:dev"], {
                 stdio: ["ignore", "inherit", "inherit"],
                 shell: true,
             });

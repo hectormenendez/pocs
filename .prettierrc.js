@@ -1,5 +1,4 @@
 module.exports = {
-    plugins: ["prettier-plugin-svelte"],
     printWidth: 100, // breaks line to maintain code's readability
     useTabs: false, // use spaces for indentation
     tabWidth: 4, // use 4 spaces for indentation

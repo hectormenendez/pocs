@@ -1,7 +1,5 @@
 {
     "extends": "@tsconfig/svelte/tsconfig.json",
-    "include": ["src/**/*"],
-    "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
     "compilerOptions": {
         "lib": ["ES2020", "ES7", "ES6", "DOM"],
         "baseUrl": ".",
@@ -25,5 +23,13 @@
             { "transform": "typescript-transform-paths" },
             { "transform": "typescript-transform-paths", "afterDeclarations": true }
         ]
-    }
+    },
+    "exclude": ["node_modules", "dist", ".vscode", ".husky"],
+    "include": [
+        ".eslintrc.js",
+        "src",
+        "rollup.config.js",
+        "package.config.js",
+        "prettierrc.js"
+    ],
 }
