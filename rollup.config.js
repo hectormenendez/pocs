@@ -12,7 +12,7 @@ import Copy from "rollup-plugin-copy";
 import JSON from "@rollup/plugin-json";
 import Alias from "@rollup/plugin-alias";
 
-import ConfigTS from "./tsconfig.json";
+import ConfigTS from "./@www/tsconfig.json";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -27,9 +27,7 @@ export default {
     plugins: [
         JSON(),
         Copy({
-            targets: [
-                { src: "@static/**/*", dest: "dist" },
-            ],
+            targets: [{ src: "@static/**/*", dest: "dist" }],
         }),
         Svelte({
             preprocess: SveltePreprocess({

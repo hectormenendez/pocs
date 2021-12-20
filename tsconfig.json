@@ -1,24 +1,19 @@
 {
-    "extends": "@tsconfig/svelte/tsconfig.json",
     "compilerOptions": {
+        "target": "es2017",
         "lib": ["ES2020", "ES7", "ES6", "DOM"],
-        "baseUrl": ".",
-        "outDir": "./dist/",
-        "paths": {
-            "@www/*": ["./@www/*"]
-        },
-        "typeRoots": [
-            "node_modules/@types"
-        ],
+        "moduleResolution": "node",
+        "typeRoots": ["node_modules/@types"],
         "resolveJsonModule": true,
         "declaration": false,
         "sourceMap": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,
         "noImplicitAny": true,
         "noImplicitThis": true,
         "allowJs": true,
-        "types": ["svelte"],
         "plugins": [
             { "transform": "typescript-transform-paths" },
             { "transform": "typescript-transform-paths", "afterDeclarations": true }
@@ -30,7 +25,7 @@
         "rollup.config.js",
         "package.config.js",
         "prettierrc.js",
-        "@www",
-        "@app"
+        "@app",
+        "@www"
     ]
 }

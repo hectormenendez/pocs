@@ -1,0 +1,13 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "types": ["svelte"],
+        "importsNotUsedAsValues": "error",
+        "isolatedModules": true,
+        "baseUrl": ".",
+        "outDir": "../dist",
+        "paths": {
+            "~": ["./*"]
+        }
+    }
+}
