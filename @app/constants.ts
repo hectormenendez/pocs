@@ -6,7 +6,7 @@ export const EXT = $PATH.extname(__filename);
 
 export const PATH_MAIN = __dirname;
 export const PATH_PRELOAD = $PATH.resolve(PATH_MAIN, `preload${EXT}`);
-export const PATH_DIST = $PATH.resolve(PATH_MAIN, "../dist");
+export const PATH_DIST = $PATH.resolve(PATH_MAIN, "..");
 
 export const WIN_WIDTH = 800 as const;
 export const WIN_HEIGHT = 600 as const;
