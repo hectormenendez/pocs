@@ -17,7 +17,7 @@ import ConfigTS from "./tsconfig.json";
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-    input: "src/main.svelte.ts",
+    input: "@www/main.ts",
     output: {
         sourcemap: true,
         format: "iife",
@@ -28,14 +28,13 @@ export default {
         JSON(),
         Copy({
             targets: [
-                { src: "public/**/*", dest: "dist" },
-                { src: "assets/**/*", dest: "dist" },
+                { src: "@static/**/*", dest: "dist" },
             ],
         }),
         Svelte({
             preprocess: SveltePreprocess({
                 sourceMap: !production,
-                scss: { includePaths: ["src/**/*.scss"] },
+                scss: { includePaths: ["@www/**/*.scss"] },
             }),
             compilerOptions: {
                 // enable run-time checks when not in production

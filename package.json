@@ -16,12 +16,13 @@
         ]
     },
     "scripts": {
+        "postinstall": "husky install",
         "serve": "sirv ./dist --cors",
         "serve:dev": "npm run serve -- --dev",
         "start": "node scripts/clean && rollup -c -w",
         "build": "node scripts/clean && rollup -c",
         "check": "svelte-check --tsconfig ./tsconfig.json",
-        "format": "prettier --write ./src/**/*.{svelte,ts} ./*.{js,json}",
+        "format": "prettier --write ./@{app,@www}/**/*.{svelte,ts} ./*.{js,json}",
         "lint": "eslint --fix '.'"
     },
     "dependencies": {

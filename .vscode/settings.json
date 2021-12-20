@@ -1,12 +1,7 @@
 {
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "html",
-    "vue",
-    "markdown",
-    "svelte"
-  ],
+    "files.exclude": {
+        "@www": true,
+        "@app": true,
+        "@static": true
+    },
 }

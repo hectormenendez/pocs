@@ -5,7 +5,7 @@
         "baseUrl": ".",
         "outDir": "./dist/",
         "paths": {
-            "~/*": ["./src/*"]
+            "@www/*": ["./@www/*"]
         },
         "typeRoots": [
             "node_modules/@types"
@@ -27,9 +27,10 @@
     "exclude": ["node_modules", "dist", ".vscode", ".husky"],
     "include": [
         ".eslintrc.js",
-        "src",
         "rollup.config.js",
         "package.config.js",
-        "prettierrc.js"
+        "prettierrc.js",
+        "@www",
+        "@app"
     ]
 }
