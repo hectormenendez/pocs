@@ -2,7 +2,17 @@
     import Root from "../containers/Root.svelte";
 </script>
 
-<Root name="World">
-    Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte
-    apps.
+<Root>
+    <h1>Hello World</h1>
 </Root>
+
+<style type="scss">
+    h1 {
+        display: inline-block;
+        margin: auto;
+        text-align: center;
+        color: #ff3e00;
+        font-size: 4em;
+        font-weight: 100;
+    }
+</style>
