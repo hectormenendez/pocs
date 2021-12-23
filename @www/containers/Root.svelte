@@ -1,29 +1,28 @@
 <script type="ts">
-    export let name: string;
+    import { onMount } from "svelte";
+
+    export let title = "";
+
+    onMount(handleMount);
+
+    function handleMount() {
+        document.title = title;
+    }
 </script>
 
 <main>
-    <h1>Hello {name}!</h1>
-    <p>
-        <slot />
-    </p>
+    <slot />
 </main>
 
 <style lang="scss">
-    main {
-        text-align: center;
-        padding: 1em;
-        max-width: 240px;
-        margin: 0 auto;
-        @media (min-width: 640px) {
-            max-width: none;
-        }
+    :global(html),
+    :global(body) {
+        height: 100%;
     }
 
-    h1 {
-        color: #ff3e00;
-        text-transform: uppercase;
-        font-size: 4em;
-        font-weight: 100;
+    main {
+        display: flex;
+        flex-direction: row;
+        height: inherit;
     }
 </style>
