@@ -32,6 +32,9 @@ module.exports = {
         {
             files: ["*.svelte"],
             processor: "svelte3/svelte3",
+            rules: {
+                "@typescript-eslint/unbound-method": "off",
+            },
         },
         {
             files: ["*.js"],

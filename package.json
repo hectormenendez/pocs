@@ -25,7 +25,7 @@
         "start:www": "npm run build:www -- -w",
         "start:app": "npm run build:app && electron ./dist/@app/main.js",
         "start": "npm run build && electron ./dist/@app/main.js",
-        "format": "prettier --write ./@{app,www}/**/*.{svelte,ts} ./*.{js,json} || echo",
+        "format": "prettier --write ./@www/**/*.{svelte,ts,json} ./@app/**/*.{ts,json} ./*.{js,json} || echo",
         "check": "eslint --fix '.' && svelte-check --workspace ./@www/ && npm run format"
     },
     "dependencies": {
