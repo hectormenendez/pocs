@@ -1,4 +1,10 @@
 <script context="module" type="ts">
+    import Root from "../../containers/Root.svelte";
+    import Form from "./_Form.svelte";
+    import Timer from "./_Timer.svelte";
+    import { TIME_POMODORO } from "../../constants";
+    // import type { TimerEventDone } from "./_Timer.svelte";
+    import type { FormEventReady } from "./_Form.svelte";
     import type { FormResponseReady } from "./_Form.svelte";
     export type HomeSubject = FormResponseReady;
 
@@ -6,13 +12,6 @@
 </script>
 
 <script type="ts">
-    import Root from "../../containers/Root.svelte";
-    import Form from "./_Form.svelte";
-    import Timer from "./_Timer.svelte";
-    import { TIME_POMODORO } from "../../constants";
-    // import type { TimerEventDone } from "./_Timer.svelte";
-    import type { FormEventReady } from "./_Form.svelte";
-
     let subject: HomeSubject = HOME_INIT_SUBJECT;
 
     function handleReady(ev: FormEventReady) {
@@ -23,7 +22,6 @@
     function handleDone() {
         subject = HOME_INIT_SUBJECT;
     }
-
 </script>
 
 <Root>

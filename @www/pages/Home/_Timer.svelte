@@ -1,4 +1,7 @@
 <script context="module" type="ts">
+    import { TIME_SECOND } from "../../constants";
+    import { onMount, createEventDispatcher } from "svelte";
+
     // eslint-disable-next-line no-undef
     export type TimerInterval = NodeJS.Timeout;
     export type TimerDuration = number;
@@ -13,9 +16,6 @@
 </script>
 
 <script type="ts">
-    import { TIME_SECOND } from "../../constants";
-    import { onMount, createEventDispatcher } from "svelte";
-
     const dispatch = createEventDispatcher<TimerEvents>();
 
     export let duration: TimerDuration;

@@ -1,4 +1,7 @@
 <script context="module" type="ts">
+    import { createEventDispatcher } from "svelte"
+    import type { FormEvent } from "../../types";
+
     export type FormSubject = string | undefined;
     export type FormError = Error | undefined;
     export type FormResponseReady = NonNullable<FormSubject>;
@@ -11,9 +14,6 @@
 </script>
 
 <script type="ts">
-    import { createEventDispatcher } from "svelte"
-    import type { FormEvent } from "../../types";
-
     const dispatch = createEventDispatcher<FormEvents>();
 
     let error: FormError;
