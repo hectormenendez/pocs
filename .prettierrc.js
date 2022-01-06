@@ -8,6 +8,6 @@ module.exports = {
     bracketSpacing: true, // Enforce spacing on bracketed statements
     arrowParens: "always", // Enforce always using parens on arrow functions
     svelteSortOrder: "options-scripts-markup-styles",
-    svelteStrictMode: true,
+    svelteStrictMode: false,
     svelteIndentScriptAndStyle: true,
 };
