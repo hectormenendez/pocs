@@ -1,26 +1,31 @@
 <script context="module" type="ts">
-    const INIT = {
-        ERROR: undefined,
-        SUBJECT: "",
-    } as const;
+    export type FormSubject = string | undefined;
+    export type FormError = Error | undefined;
+    export type FormResponseReady = NonNullable<FormSubject>;
+    export type FormEventReady = CustomEvent<FormResponseReady>;
+    export type FormEvents = {
+        ready: FormResponseReady
+    }
+    export const INIT_ERROR: FormError = undefined;
+    export const INIT_SUBJECT: FormSubject = "";
 </script>
 
 <script type="ts">
     import { createEventDispatcher } from "svelte"
     import type { FormEvent } from "../../types";
 
-    const dispatch = createEventDispatcher<{ ready: string }>();
+    const dispatch = createEventDispatcher<FormEvents>();
 
-    let error: Error | undefined;
-    let subject: string | undefined;
+    let error: FormError;
+    let subject: FormSubject;
 
     handleReset();
 
-    $: isSubmitReady = subject && subject.length > 0;
+    $: isSubmitReady = Boolean(subject && subject.length > 0);
 
     function handleReset() {
-        error = INIT.ERROR;
-        subject = INIT.SUBJECT;
+        error = INIT_ERROR;
+        subject = INIT_SUBJECT;
     }
 
     export function handleSubmit(ev: FormEvent) {

@@ -2,14 +2,22 @@
 <script type="ts">
     import Root from "../../containers/Root.svelte";
     import Form from "./_Form.svelte";
+    import type { FormEventReady, FormResponseReady } from "./_Form.svelte";
 
-    function handleReady(ev: CustomEvent<string>) {
-        console.log("Ready", ev.detail)
+    let subject: FormResponseReady;
+
+    function handleReady(ev: FormEventReady) {
+        const { detail } = ev;
+        subject = detail;
     }
 </script>
 
 <Root>
-    <Form on:ready={handleReady} />
+    {#if !subject}
+        <Form on:ready={handleReady} />
+    {:else}
+        <h1>{subject}</h1>
+    {/if}
 </Root>
 
 <style type="scss">

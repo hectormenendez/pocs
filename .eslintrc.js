@@ -34,6 +34,8 @@ module.exports = {
             processor: "svelte3/svelte3",
             rules: {
                 "@typescript-eslint/unbound-method": "off",
+                // TODO: not working correctly for events (try removing when updating svelte)
+                "@typescript-eslint/no-unsafe-assignment": "off",
             },
         },
         {
