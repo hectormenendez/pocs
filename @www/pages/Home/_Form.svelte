@@ -1,14 +1,13 @@
 <script context="module" type="ts">
-    import { createEventDispatcher } from "svelte"
+    import { createEventDispatcher } from "svelte";
     import type { FormEvent } from "../../types";
 
     export type FormSubject = string | undefined;
     export type FormError = Error | undefined;
     export type FormResponseReady = NonNullable<FormSubject>;
     export type FormEventReady = CustomEvent<FormResponseReady>;
-    export type FormEvents = {
-        ready: FormResponseReady
-    }
+    export type FormEvents = { ready: FormResponseReady };
+
     export const FORM_INIT_ERROR: FormError = undefined;
     export const FORM_INIT_SUBJECT: FormSubject = "";
 </script>
@@ -41,7 +40,7 @@
     }
 </script>
 
-<form on:submit={handleSubmit} autocomplete="off">
+<form on:submit={handleSubmit} autocomplete="off" class={$$props.class}>
     <label for="desc">What are you going to do?</label>
     <input type="text" name="desc" bind:value={subject} />
     <button type="submit" disabled={!isSubmitReady}>Start</button>
@@ -50,56 +49,59 @@
     {/if}
 </form>
 
-
 <style type="scss">
     form {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 1em;
+        border-radius: 0.33em;
+        background-color: #eee;
+        max-width: 640px;
+        min-width: 320px;
+        margin: auto;
+
+        &.flat {
+            border-bottom-left-radius: 0;
+        }
+
+        label {
+            flex-grow: 9;
+            min-width: 100%;
+        }
+
+        input,
+        button {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            padding: 1em;
-            border-radius: 0.33em;
-            background-color: #eee;
-            max-width: 640px;
-            min-width: 320px;
-            margin: auto;
+            line-height: 1.5em;
+            padding: 0.25em 0.5em;
+        }
 
-            label {
-                flex-grow: 9;
-                min-width: 100%;
+        input {
+            flex-grow: 2;
+            background-color: #fff;
+            border-top-left-radius: 0.33em;
+            border-bottom-left-radius: 0.33em;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            align-items: center;
+            background-color: #ccc;
+            border-top-right-radius: 0.33em;
+            border-bottom-right-radius: 0.33em;
+            text-transform: uppercase;
+            padding-right: 0.6em;
+
+            &:active {
+                background-color: #666;
             }
 
-            input,
-            button {
-                display: flex;
-                line-height: 1.5em;
-                padding: 0.25em 0.5em;
-            }
-
-            input {
-                flex-grow: 2;
-                background-color: #fff;
-                border-top-left-radius: 0.33em;
-                border-bottom-left-radius: 0.33em;
-                border: 1px solid #ccc;
-            }
-
-            button {
-                align-items: center;
-                background-color: #ccc;
-                border-top-right-radius: 0.33em;
-                border-bottom-right-radius: 0.33em;
-                text-transform: uppercase;
-                padding-right: 0.6em;
-
-                &:active {
-                    background-color: #666;
-                }
-
-                &:disabled {
-                    opacity: 0.5;
-                    border: 1px solid #aaa;
-                    border-left: 0;
-                }
+            &:disabled {
+                opacity: 0.5;
+                border: 1px solid #aaa;
+                border-left: 0;
             }
         }
+    }
 </style>
