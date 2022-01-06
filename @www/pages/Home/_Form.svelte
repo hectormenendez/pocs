@@ -6,8 +6,8 @@
     export type FormEvents = {
         ready: FormResponseReady
     }
-    export const INIT_ERROR: FormError = undefined;
-    export const INIT_SUBJECT: FormSubject = "";
+    export const FORM_INIT_ERROR: FormError = undefined;
+    export const FORM_INIT_SUBJECT: FormSubject = "";
 </script>
 
 <script type="ts">
@@ -24,8 +24,8 @@
     $: isSubmitReady = Boolean(subject && subject.length > 0);
 
     function handleReset() {
-        error = INIT_ERROR;
-        subject = INIT_SUBJECT;
+        error = FORM_INIT_ERROR;
+        subject = FORM_INIT_SUBJECT;
     }
 
     export function handleSubmit(ev: FormEvent) {

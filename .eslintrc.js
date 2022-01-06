@@ -36,6 +36,7 @@ module.exports = {
                 "@typescript-eslint/unbound-method": "off",
                 // TODO: not working correctly for events (try removing when updating svelte)
                 "@typescript-eslint/no-unsafe-assignment": "off",
+                "@typescript-eslint/no-unsafe-argument": "off",
             },
         },
         {
