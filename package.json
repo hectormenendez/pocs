@@ -23,7 +23,7 @@
         "build:app": "tsc -p ./@app/tsconfig.json",
         "build": "node scripts/clean && npm run build:www && npm run build:app",
         "start:www": "npm run build:www -- -w",
-        "start:app": "npm run build:app && electron ./dist/@app/main.js",
+        "start:app": "npm run build:app && NODE_ENV=production electron ./dist/@app/main.js",
         "start": "npm run build && electron ./dist/@app/main.js",
         "format": "prettier --write ./@www/**/*.{svelte,ts,json} ./@app/**/*.{ts,json} ./*.{js,json} || echo",
         "check": "eslint --fix '.' && svelte-check --workspace ./@www/ && npm run format"
