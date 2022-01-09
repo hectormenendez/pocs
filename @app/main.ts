@@ -26,6 +26,8 @@ function handleWindowCreate() {
         },
     });
 
+    win.setMenu(null);
+
     const loader = WWW_LOCATION.startsWith("http") ? win.loadURL.bind(win) : win.loadFile.bind(win);
     loader(WWW_LOCATION)
         .then(() => {
