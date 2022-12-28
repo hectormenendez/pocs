@@ -1,0 +1,63 @@
+---
+import Meta from "./_meta.astro";
+import Header from "./_header.astro";
+import Footer from "./_footer.astro";
+
+import type { Props as PropsMeta } from "./_meta.astro";
+
+export type Props = {
+    "meta-title": PropsMeta["title"];
+    "meta-description": PropsMeta["description"];
+    class?: string;
+};
+
+const {
+    "meta-title": title,
+    "meta-description": description,
+    class: className = "",
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es-mx">
+    <Meta title={title} description={description} />
+	<body>
+        <Header class="header" />
+        <main class={className}>
+            <slot />
+        </main>
+        <Footer class="footer"/>
+	</body>
+</html>
+
+<style lang="scss">
+    @use "src/utils/normalize";
+    @use "src/utils/root";
+
+    // make sure all elements have a height to inherit from
+    html, body {
+        height: 100%;
+    }
+
+    body {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+            "Header"
+            "Main"
+            "Footer";
+
+        & > .header {
+            grid-area: Header;
+        }
+
+        & > main {
+            grid-area: Main;
+        }
+
+        & > .footer {
+            grid-area: Footer;
+            padding-bottom: 0.5rem;
+        }
+    }
+</style>

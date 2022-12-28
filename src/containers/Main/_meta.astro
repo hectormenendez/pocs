@@ -1,0 +1,30 @@
+---
+import { getTitle } from "src/datasets/title";
+
+export type Props = {
+    title: null | string;
+    description: string;
+};
+
+const { description } = Astro.props;
+const title = getTitle(Astro.props.title);
+---
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <meta charset="UTF-8" />
+
+    <meta name="generator" content={Astro.generator} />
+    <meta
+        name="viewport"
+        content="initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="description" content={description} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <title>{title}</title>
+</head>

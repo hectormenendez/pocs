@@ -1,0 +1,72 @@
+:root {
+    --size-unit: 16px;
+
+    // calc(minRem + (maxRem - minRem) * (100vw - 320px) / (1024px - 320px))
+    // https://modern-fluid-typography.vercel.app/
+    --size-font-ss: clamp(0.625rem, -0.8vw + 1rem, 0.75rem); // from 12px to 10px
+    --size-font-sm: clamp(0.75rem, -0.8vw + 1.1rem, 0.875rem); // from 14px to 12px
+    --size-font-sl: clamp(0.875rem, -0.8vw + 1.2rem, 1rem); // from 16px to 14px
+
+    --size-font-ms: clamp(1rem, -0.7vw + 1.3rem, 1.125rem); // from 18px to 16px
+    --size-font-mm: clamp(1.25rem, -0.7vw + 1.55rem, 1.375rem); // from 22px to 20px
+    --size-font-ml: clamp(1.5, -0.7vw + 1.8rem, 1.625rem); // from 26px to 24px
+
+    --size-font-ls: clamp(2rem, -2vw + 3rem, 2.375rem); // from 38px to 32px
+    --size-font-lm: clamp(3rem, -2vw + 4rem, 3.375rem); // from 54px to 48px
+    --size-font-ll: clamp(4rem, -2vw + 5rem, 4.25rem); // from 68px to 64px
+
+    --color-logo: 50, 50, 50;
+    --color-text: 81, 81, 81;
+    --color-icon: 111, 111, 111;
+
+    --font-family-base: "Lexend", sans-serif;
+
+    --accent: 124, 58, 237;
+    --accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
+}
+
+// https://fonts.googleapis.com/css2?family=Lexend:wght@300;400&display=swap
+
+/* latin-ext */
+@font-face {
+    font-family: "Lexend";
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/lexend/v17/wlpwgwvFAVdoq2_v9aQU4Wc.woff2) format("woff2");
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113,
+        U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+    font-family: "Lexend";
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/lexend/v17/wlpwgwvFAVdoq2_v-6QU.woff2) format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+    font-family: "Lexend";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/lexend/v17/wlpwgwvFAVdoq2_v9aQU4Wc.woff2) format("woff2");
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113,
+        U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+    font-family: "Lexend";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/lexend/v17/wlpwgwvFAVdoq2_v-6QU.woff2) format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

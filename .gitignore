@@ -1,0 +1,12 @@
+# build output
+dist/
+.output/
+
+# dependencies
+node_modules/
+
+# logs
+*.log*
+
+# macOS-specific files
+.DS_Store

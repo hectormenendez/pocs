@@ -1,0 +1,165 @@
+---
+export type Props = {
+    class?: string;
+};
+
+const { class: className } = Astro.props;
+---
+
+<header class={className}>
+    <!-- Logo-->
+    <a href="/">
+        <h1>Home</h1>
+    </a>
+
+    <!-- Menu -->
+    <menu-trigger>
+        <span></span>
+        <span></span>
+    </menu-trigger>
+
+    <menu-body>
+        <ul>
+            <li>
+                <a href="#home">Placeholder</a>
+            </li>
+        </ul>
+    </menu-body>
+</header>
+
+<script>
+    customElements.define(
+        "menu-body",
+        class MenuBody extends HTMLElement {
+            constructor() {
+                super();
+            }
+        },
+    );
+    customElements.define(
+        "menu-trigger",
+        class MenuTrigger extends HTMLElement {
+            constructor() {
+                super();
+                this.addEventListener("click", () => {
+                    const elMenuBody = this.parentElement?.querySelector("menu-body");
+                    elMenuBody?.classList.toggle("active");
+                    this.classList.toggle("active");
+                });
+            }
+        },
+    );
+</script>
+
+<style lang="scss">
+    @use "src/utils/font";
+    @use "src/utils/query";
+
+    header {
+        box-shadow: 0px 1px 0.5em rgb(96 96 96 / 20%);
+        padding: 0.5rem 1rem;
+        // grid
+        display: grid;
+        align-items: center;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "logo icon"
+            "menu menu";
+
+        @include query.md {
+            grid-template-areas: "logo menu";
+        }
+
+        & > a {
+            grid-area: logo;
+            display: block;
+            width: 10rem;
+
+            & > h1 {
+                position: absolute;
+                text-indent: -99rem;
+            }
+        }
+
+        & > menu-trigger {
+            grid-area: icon;
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+            // flex
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            @include query.md {
+                display: none;
+            }
+
+            & > span {
+                display: block;
+                width: 100%;
+                height: 4px;
+                margin: 2px;
+                background-color: rgb(var(--color-icon));
+                transition: transform 0.3s ease;
+            }
+
+            &.active span {
+                &:first-of-type {
+                    transform: rotate(45deg) translateX(5px);
+                }
+                &:last-of-type {
+                    transform: rotate(-45deg) translateX(5px);
+                }
+            }
+        }
+
+        & > menu-body {
+            grid-area: menu;
+            overflow: hidden;
+            // Animation
+            opacity: 0;
+            max-height: 0;
+            padding: 0;
+            margin: 0;
+            transition-property: opacity, margin-bottom, margin-top, max-height;
+            transition-duration: 0.3s;
+            transition-timing-function: ease;
+
+            @include query.md {
+                opacity: 1;
+                overflow: visible;
+                max-height: initial;
+            }
+
+            &.active {
+                opacity: 1;
+                max-height: 100vh;
+                margin-top: 1em;
+                margin-bottom: 1em;
+            }
+
+            & > ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+
+                li {
+                    text-align: right;
+
+                    a {
+                        @include font.base-bold(--size-font-sl);
+                        display: block;
+                        text-decoration: none;
+                        color: rgb(var(--color-icon));
+                        transition: transform 0.3s ease;
+
+                        &:hover {
+                            color: rgb(var(--color-logo));
+                        }
+                    }
+                }
+            }
+        }
+    }
+</style>

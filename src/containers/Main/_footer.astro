@@ -1,0 +1,60 @@
+---
+export type Props = {
+    class?: string;
+};
+
+const { class: className } = Astro.props;
+---
+
+<footer class={className}>
+    <small>
+        <span>Copyright &#169; {new Date().getFullYear()}</span>
+        <a href="https://gik.mx">GIK</a>.
+        <span>Todos los derechos reservados.</span>
+    </small>
+</footer>
+
+<style lang="scss">
+    @use "src/utils/font";
+    @use "src/utils/query";
+
+    footer {
+        align-items: center;
+        padding-top: 1em;
+        // flex
+        display: flex;
+        flex-direction: column;
+
+        @include query.md {
+            flex-direction: row;
+            justify-content: space-between;
+            margin: 0 2em;
+        }
+
+        small {
+            @include font.base-normal(--size-font-ss);
+            display: block;
+            margin: 1.5em auto 0.5em auto;
+            cursor: default;
+            user-select: none;
+
+            @include query.md {
+                text-align: right;
+                margin: 0;
+            }
+
+            &,
+            a {
+                color: rgba(var(--color-icon), 0.7);
+            }
+
+            a {
+                text-decoration: none;
+                font-weight: bolder;
+                &:hover {
+                    color: crimson;
+                }
+            }
+        }
+    }
+</style>
