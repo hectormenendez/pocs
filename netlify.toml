@@ -1,0 +1,3 @@
+[[edge_functions]]
+function = "hello-world"
+path = "/api/hello"
