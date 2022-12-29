@@ -13,4 +13,10 @@ const CONT_TOML = $FS.readFileSync(PATH_TOML, "utf8");
 export function onPreBuild() {
     const content = CONT_TOML.replace("/api", "/apo");
     $FS.writeFileSync(PATH_TOML, content);
+    console.log("--> REPLACED CONT");
+}
+
+export function onEnd() {
+    $FS.writeFileSync(PATH_TOML, CONT_TOML);
+    console.log("--> RESTORED CONT");
 }

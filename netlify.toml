@@ -5,6 +5,9 @@
     framework = "#custom"
     targetPort = 3000
 
+[build]
+    plugins = ["./netlify/plugins/test"]
+
 [[plugins]]
     package = "./netlify/plugins/test"
 
