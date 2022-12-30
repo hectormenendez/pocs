@@ -1,11 +1,11 @@
 [dev]
     autoLaunch = false
-
-    command = "npm run front:build"
+    command = "npm run start:front"
     framework = "#custom"
     targetPort = 3000
 
 [build]
+    command = "npm run build:front"
     plugins = ["dotenv-path"]
 
 [[plugins]]
