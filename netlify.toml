@@ -12,5 +12,5 @@
     package = "./netlify/plugins/dotenv-path"
 
 [[edge_functions]]
-    function = "hello-world"
-    path = "/{{PATHNAME_API}}/hello"
+    function = "user"
+    path = "/{{PATHNAME_API}}/user"
