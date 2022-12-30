@@ -13,4 +13,4 @@
 
 [[edge_functions]]
     function = "hello-world"
-    path = "/api/hello"
+    path = "/{{PATHNAME_API}}/hello"

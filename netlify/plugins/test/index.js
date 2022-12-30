@@ -1,22 +1,23 @@
-import $PATH from "node:path";
-import $FS from "node:fs";
-import { fileURLToPath } from "node:url";
+import * as Dotenv from "dotenv";
 
-const CHARSET = "utf-8";
+Dotenv.config();
 
-const PATH_SELF = $PATH.dirname(fileURLToPath(import.meta.url));
-const PATH_ROOT = $PATH.resolve(PATH_SELF, "../../..");
-const PATH_TOML = $PATH.join(PATH_ROOT, "netlify.toml");
-
-const CONT_TOML = $FS.readFileSync(PATH_TOML, "utf8");
-
-export function onPreBuild() {
-    const content = CONT_TOML.replace("/api", "/apo");
-    $FS.writeFileSync(PATH_TOML, content);
-    console.log("--> REPLACED CONT");
-}
-
-export function onEnd() {
-    $FS.writeFileSync(PATH_TOML, CONT_TOML);
-    console.log("--> RESTORED CONT");
+const RX_ENVVAR = new RegExp("{{([^}]+)}}");
+export function onPreBuild({ netlifyConfig }) {
+    if (!Array.isArray(netlifyConfig.edge_functions)) return;
+    for (const [index, entry] of netlifyConfig.edge_functions.entries()) {
+        const { path } = entry;
+        const match = path.match(RX_ENVVAR);
+        if (!match) continue;
+        const [_, name] = match;
+        if (!process.env[name]) {
+            console.error(`Missing environment variable "${name}"`);
+            process.exit(1);
+        }
+        netlifyConfig.edge_functions[index] = {
+            ...netlifyConfig.edge_functions[index],
+            path: path.replace(RX_ENVVAR, process.env[name]),
+        };
+    }
+    console.log(netlifyConfig.edge_functions);
 }
