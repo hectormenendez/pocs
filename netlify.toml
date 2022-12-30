@@ -6,10 +6,10 @@
     targetPort = 3000
 
 [build]
-    plugins = ["./netlify/plugins/test"]
+    plugins = ["dotenv-path"]
 
 [[plugins]]
-    package = "./netlify/plugins/test"
+    package = "./netlify/plugins/dotenv-path"
 
 [[edge_functions]]
     function = "hello-world"
