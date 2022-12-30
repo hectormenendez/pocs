@@ -1,16 +1,16 @@
 [dev]
     autoLaunch = false
-
-    command = "npm run front:build"
+    command = "npm run start:front"
     framework = "#custom"
     targetPort = 3000
 
 [build]
-    plugins = ["./netlify/plugins/test"]
+    command = "npm run build:front"
+    plugins = ["dotenv-path"]
 
 [[plugins]]
-    package = "./netlify/plugins/test"
+    package = "./netlify/plugins/dotenv-path"
 
 [[edge_functions]]
-    function = "hello-world"
-    path = "/{{PATHNAME_API}}/hello"
+    function = "user"
+    path = "/{{PATHNAME_API}}/user"

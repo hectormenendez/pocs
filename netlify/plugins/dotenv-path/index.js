@@ -19,5 +19,4 @@ export function onPreBuild({ netlifyConfig }) {
             path: path.replace(RX_ENVVAR, process.env[name]),
         };
     }
-    console.log(netlifyConfig.edge_functions);
 }

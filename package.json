@@ -12,11 +12,9 @@
     "scripts": {
         "prepare": "husky install",
         "start": "netlify dev",
-        "build": "npm run front:build",
-        "back:build": "netlify build",
-        "front:start": "astro dev",
-        "front:build": "astro build",
-        "front:preview": "astro preview"
+        "start:front": "astro dev --host",
+        "build": "netlify build",
+        "build:front": "astro build"
     },
     "dependencies": {
         "@astrojs/sitemap": "^1.0.0"
