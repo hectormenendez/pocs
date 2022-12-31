@@ -1,5 +1,5 @@
 {
-    "name": "front",
+    "name": "@etor.dev/front",
     "version": "0.0.1",
     "private": true,
     "type": "module",
