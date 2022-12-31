@@ -1,6 +1,6 @@
 {
     "files.exclude": {
-        "front": true
+        ".vscode": true
     },
     "deno.enable": false
 }
