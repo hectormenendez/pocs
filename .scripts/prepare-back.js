@@ -1,2 +1,4 @@
 // Download Deno binary to node_modules/.bin and chmod +x
-import "./download-deno.js";
+(async () => {
+    await import("./download-deno.js");
+})();

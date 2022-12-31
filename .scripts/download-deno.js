@@ -1,9 +1,10 @@
 import $FS from "node:fs";
 import $PATH from "node:path";
 import $HTTPS from "node:https";
-import $ZLIB from "node:zlib";
+import $HTTP from "node:http";
 import $URL from "node:url";
 import $OS from "node:os";
+import ExtractZip from "extract-zip";
 
 const PATH_SELF = $PATH.dirname($URL.fileURLToPath(import.meta.url));
 const PATH_ROOT = $PATH.resolve(PATH_SELF, "..");
@@ -23,45 +24,15 @@ if (!CONF_DENO_VERSION) {
 }
 
 (async () => {
-    // Download zip file to tmp folder
-    await new Promise((resolve, reject) => {
-        const url = getURL();
-        const writeZip = $FS.createWriteStream(fileDenoZip);
-        log(`Downloading: ${url}`);
-        $HTTPS.get(url, (res) => {
-            res.pipe(writeZip);
-            writeZip.on("error", (err) => {
-                err.message = `Could not download: ${err.message}`;
-                reject(err);
-            });
-            writeZip.on("finish", () => {
-                writeZip.close();
-                log(`Downloaded: ${fileDenoZip}`);
-                resolve(undefined);
-            });
-        });
-    });
-    // Extract the zip to node_modules
-    await new Promise((resolve, reject) => {
-        const unzip = $ZLIB.createDeflate();
-        const readZip = $FS.createReadStream(fileDenoZip);
-        const writeBin = $FS.createWriteStream(fileDenoBin);
-        readZip.pipe(unzip).pipe(writeBin);
-        writeBin.on("error", (err) => {
-            err.message = `Could not unzip: ${err.message}`;
-            reject(err);
-        });
-        writeBin.on("close", () => {
-            $FS.chmod(fileDenoBin, "751", (err) => {
-                if (err) {
-                    err.message = `Could not change permissions: ${err.message}`;
-                    return reject(err);
-                }
-                log(`Unzipped: ${fileDenoBin}`);
-                resolve(undefined);
-            });
-        });
-    });
+    try {
+        await handleDownload(getURL(), fileDenoZip);
+        log(`Extracting: ${PATH_BIN}`);
+        await ExtractZip(fileDenoZip, { dir: PATH_BIN, defaultFileMode: 0o751 });
+        log("Done");
+    } catch (err) {
+        console.error(err.message);
+        process.exit(1);
+    }
 })();
 
 function log(message) {
@@ -74,7 +45,8 @@ function getURL() {
         target = "x86_64-pc-windows-msvc";
     } else {
         if (OS_TYPE === "Darwin") {
-            target = `${OS_UNAME}-apple-darwin`;
+            const prefix = OS_UNAME === "x64" ? "x86_64" : "aarch64";
+            target = `${prefix}-apple-darwin`;
         } else {
             // assuming linux
             if (OS_UNAME === "aarch64") {
@@ -93,4 +65,65 @@ function getURL() {
         "https://github.com/denoland/deno/releases/download",
         `v${CONF_DENO_VERSION}/deno-${target}.zip`,
     ].join("/");
+}
+
+/**
+ * @param error {Error}
+ * @param reject {null | ((message?: any) => void)}
+ */
+function handleRejection(path, reject = null, error = new Error("UNKNOWN")) {
+    $FS.unlink(path, () => {
+        if (!reject) throw error;
+        reject(error);
+    });
+}
+
+/**
+ * @param url {string} - From where?
+ * @param path {string} - path to download!
+ */
+function handleDownload(url, path) {
+    const HANDLER_REQUEST = { "https:": $HTTPS, "http:": $HTTP };
+    log(`Requesting: ${url}`);
+    return new Promise((resolve, reject) => {
+        /** @type {typeof handleRejection} */
+        const handlerRejection = handleRejection.bind(handleRejection, path, reject);
+
+        const { protocol } = new URL(url);
+        /** @type {(typeof $HTTP) | (typeof $HTTPS)} */
+        const handlerRequest = HANDLER_REQUEST[protocol];
+        if (!handlerRequest) {
+            const message = `Invalid protocol "${protocol}", expected: ${Object.keys(
+                HANDLER_REQUEST,
+            ).join(", ")}`;
+            return handlerRejection(new Error(message));
+        }
+        const request = handlerRequest.get(url, (response) => {
+            const { statusCode, headers } = response;
+            if (!statusCode)
+                return handlerRejection(new Error(`Invalid statusCode: ${statusCode}`));
+            // handle errors
+            if (statusCode >= 400) return handlerRejection(new Error(`STATUS = ${statusCode}`));
+            // handle redirections
+            if (statusCode === 302 || statusCode === 301) {
+                if (!headers.location)
+                    return handlerRejection(new Error("No location provided for redirect"));
+                log("Redirect detected.");
+                return handleDownload(headers.location, path)
+                    .then((x) => resolve(x))
+                    .catch(handlerRejection);
+            }
+
+            const stream = $FS.createWriteStream(path);
+            stream.on("error", handlerRejection);
+            stream.on("finish", () => {
+                stream.close();
+                log(`Downloaded: ${path}`);
+                resolve(undefined);
+            });
+
+            response.pipe(stream).on("data", (...args) => console.log("drain!", ...args));
+        });
+        request.on("error", handlerRejection);
+    });
 }
