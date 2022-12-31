@@ -5,7 +5,10 @@
         "node": ">=14.19.0",
         "npm": ">=9.2.0"
     },
-    "os": ["darwin", "linux"],
+    "os": [
+        "darwin",
+        "linux"
+    ],
     "lint-staged": {
         "*.{ts,tsx,astro}": [
             "cross-env NODE_ENV=production eslint --fix",
@@ -15,7 +18,6 @@
     "scripts": {
         "prepare": "husky install"
     },
-    "dependencies": {},
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.47.0",
         "@typescript-eslint/parser": "^5.47.0",
@@ -23,8 +25,12 @@
         "eslint-plugin-astro": "^0.21.1",
         "eslint-plugin-jsx-a11y": "^6.6.1",
         "husky": "^8.0.2",
+        "lerna": "^6.3.0",
         "lint-staged": "^13.1.0",
         "prettier": "^2.8.1",
         "prettier-plugin-astro": "^0.7.0"
-    }
+    },
+    "workspaces": [
+        "front"
+    ]
 }
