@@ -1,6 +1,7 @@
 {
     "name": "@etor.dev/root",
     "private": true,
+    "type": "module",
     "engines": {
         "node": ">=14.19.0",
         "npm": ">=9.2.0"
@@ -15,8 +16,12 @@
             "prettier --write"
         ]
     },
+    "config": {
+        "deno_version": "1.29.0"
+    },
     "scripts": {
         "prepare": "husky install",
+        "postinstall": "node .scripts/prepare-back.js",
         "start:front": "lerna exec --scope=@etor.dev/front -- npm start",
         "build:front": "lerna exec --scope=@etor.dev/front -- npm run build",
         "deploy:front": "netlify deploy --build"
