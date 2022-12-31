@@ -41,6 +41,7 @@
         "prettier-plugin-astro": "^0.7.0"
     },
     "workspaces": [
-        "front"
+        "front",
+        "back/*"
     ]
 }
