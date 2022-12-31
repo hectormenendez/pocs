@@ -1,0 +1,7 @@
+[build]
+    # location for distribution files
+    publish = "front/dist"
+    # command to execute
+    command = "npm run deploy:front"
+    # NOTE: keep this in sync with the one declared on package.json
+    environment = { NODE_VERSION = "14.19.3" }
