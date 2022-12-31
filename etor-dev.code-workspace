@@ -1,0 +1,72 @@
+{
+    "folders": [
+        {
+            "name": "[root]",
+            "path": "./"
+        },
+        {
+            "path": "front"
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "astro-build.astro-vscode",
+            "dbaeumer.vscode-eslint",
+            "esbenp.prettier-vscode",
+            "denoland.vscode-deno",
+            "mrmlnc.vscode-scss"
+        ]
+    },
+    "launch": {
+        "configurations": [
+            {
+                "command": "./node_modules/.bin/astro dev",
+                "name": "Development server",
+                "request": "launch",
+                "type": "node-terminal"
+            }
+        ]
+    },
+    "settings": {
+        "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+        "editor.formatOnSave": true,
+        "editor.rulers": [100],
+        "editor.wordWrapColumn": 100,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.guides.bracketPairs": "active",
+        "editor.matchBrackets": "always",
+        "editor.wordBasedSuggestions": false,
+
+        "files.associations": {
+            "*.mdx": "markdown"
+        },
+
+        "eslint.validate": [
+            "javascript",
+            "javascriptreact",
+            "astro",
+            "typescript",
+            "typescriptreact"
+        ],
+
+        "prettier.documentSelectors": ["**/*.astro"],
+        "prettier.requireConfig": true,
+
+        "[astro]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+
+        "[css]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+
+        "[scss]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+        // "deno.enable": true,
+        // "deno.enablePaths": ["netlify/edge-functions"],
+        // "deno.unstable": true,
+        // "deno.importMap": ".netlify/edge-functions-import-map.json",
+        // "deno.path": "/home/etor/.config/netlify/deno-cli/deno"
+    }
+}
