@@ -65,11 +65,17 @@
 
         "[scss]": {
             "editor.defaultFormatter": "esbenp.prettier-vscode"
-        }
-        // "deno.enable": true,
-        // "deno.enablePaths": ["netlify/edge-functions"],
-        // "deno.unstable": true,
-        // "deno.importMap": ".netlify/edge-functions-import-map.json",
-        // "deno.path": "/home/etor/.config/netlify/deno-cli/deno"
+        },
+        "deno.path": "./node_modules/.bin/deno",
+        "deno.importMap": "./back/imports.json",
+        "deno.enablePaths": ["./back"],
+        "deno.enable": true,
+        "deno.unstable": true,
+        "deno.codeLens.test": true,
+        "deno.testing.enable": false,
+        "deno.lint": true,
+        "deno.suggest.autoImports": true,
+        "deno.suggest.completeFunctionCalls": false,
+        "deno.suggest.imports.autoDiscover": true
     }
 }

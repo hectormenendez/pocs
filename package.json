@@ -8,7 +8,8 @@
     },
     "os": [
         "darwin",
-        "linux"
+        "linux",
+        "windows"
     ],
     "lint-staged": {
         "*.{ts,tsx,astro}": [
