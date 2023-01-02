@@ -23,6 +23,7 @@
     "scripts": {
         "prepare": "husky install",
         "postinstall": "node .scripts/prepare-back.js",
+        "start:back": "lerna exec --scope=@etor.dev/back-* -- npm start",
         "start:front": "lerna exec --scope=@etor.dev/front -- npm start",
         "build:front": "lerna exec --scope=@etor.dev/front -- npm run build",
         "deploy:front": "netlify deploy --build"

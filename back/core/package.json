@@ -3,7 +3,23 @@
     "version": "0.0.1",
     "private": true,
     "type": "module",
-    "scripts": {},
+    "engines": {
+        "node": ">=14.19.0",
+        "npm": ">=9.2.0",
+        "deno": ">=1.29.0"
+    },
+    "os": [
+        "darwin",
+        "linux",
+        "windows"
+    ],
+    "config": {
+        "deno_main": "./main.ts",
+        "deno_flags": "--unstable --import-map=../imports.json"
+    },
+    "scripts": {
+        "start": "deno run $npm_package_config_deno_flags $npm_package_config_deno_main"
+    },
     "dependencies": {},
     "devDependencies": {}
 }
