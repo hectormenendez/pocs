@@ -1,6 +1,7 @@
 {
     "name": "@etor.dev/root",
     "private": true,
+    "version": "0.0.1",
     "type": "module",
     "engines": {
         "node": ">=14.19.0",
@@ -18,15 +19,24 @@
         ]
     },
     "config": {
-        "deno_version": "1.29.0"
+        "deno_version": "1.29.0",
+        "aws_name": "root",
+        "aws_repo": "861968717496.dkr.ecr.us-west-2.amazonaws.com/etor.dev"
     },
     "scripts": {
         "prepare": "husky install",
         "postinstall": "node .scripts/prepare-back.js",
-        "start:back": "lerna exec --scope=@etor.dev/back-* -- npm start",
+        "start": "lerna exec --parallel -- npm start",
+        "start:back": "lerna exec --parallel --scope=@etor.dev/back-* -- npm start",
         "start:front": "lerna exec --scope=@etor.dev/front -- npm start",
+        "build": "TODO",
+        "build:root": "docker build -t ${npm_package_config_aws_repo}:${npm_package_config_aws_name}-v${npm_package_version} .",
         "build:front": "lerna exec --scope=@etor.dev/front -- npm run build",
-        "deploy:front": "netlify deploy --build"
+        "build:back": "lerna exec --scope=@etor.dev/back-* --npm run build",
+        "deploy": "npm run deploy:root && npm run deploy:back && npm run deploy:front",
+        "deploy:root": "npm run build:root && docker push ${npm_package_config_aws_repo}:${npm_package_config_aws_name}-v${npm_package_version}",
+        "deploy:front": "netlify deploy --build",
+        "deploy:back": "lerna exec --scope=@etor.dev/back-* -- npm run deploy"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.47.0",

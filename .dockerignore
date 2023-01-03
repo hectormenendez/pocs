@@ -1,0 +1,13 @@
+.husky/
+node_modules/
+Dockerfile
+**/*.db
+**/*.log
+
+
+
+
+
+
+
+
