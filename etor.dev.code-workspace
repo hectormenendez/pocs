@@ -1,0 +1,81 @@
+{
+    "folders": [
+        {
+            "name": "[root]",
+            "path": "./"
+        },
+        {
+            "path": "front"
+        },
+        {
+            "path": "back"
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "astro-build.astro-vscode",
+            "dbaeumer.vscode-eslint",
+            "esbenp.prettier-vscode",
+            "denoland.vscode-deno",
+            "mrmlnc.vscode-scss"
+        ]
+    },
+    "launch": {
+        "configurations": [
+            {
+                "command": "./node_modules/.bin/astro dev",
+                "name": "Development server",
+                "request": "launch",
+                "type": "node-terminal"
+            }
+        ]
+    },
+    "settings": {
+        "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+        "editor.formatOnSave": true,
+        "editor.rulers": [100],
+        "editor.wordWrapColumn": 100,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.guides.bracketPairs": "active",
+        "editor.matchBrackets": "always",
+        "editor.wordBasedSuggestions": false,
+
+        "files.associations": {
+            "*.mdx": "markdown"
+        },
+
+        "eslint.validate": [
+            "javascript",
+            "javascriptreact",
+            "astro",
+            "typescript",
+            "typescriptreact"
+        ],
+
+        "prettier.documentSelectors": ["**/*.astro"],
+        "prettier.requireConfig": true,
+
+        "[astro]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+
+        "[css]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+
+        "[scss]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "deno.path": "./node_modules/.bin/deno",
+        "deno.importMap": "./back/imports.json",
+        "deno.enablePaths": ["./back"],
+        "deno.enable": true,
+        "deno.unstable": true,
+        "deno.codeLens.test": true,
+        "deno.testing.enable": false,
+        "deno.lint": true,
+        "deno.suggest.autoImports": true,
+        "deno.suggest.completeFunctionCalls": false,
+        "deno.suggest.imports.autoDiscover": true
+    }
+}

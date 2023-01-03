@@ -1,16 +1,7 @@
-[dev]
-    autoLaunch = false
-    command = "npm run start:front"
-    framework = "#custom"
-    targetPort = 3000
-
 [build]
+    # location for distribution files
+    publish = "front/dist"
+    # command to execute
     command = "npm run build:front"
-    plugins = ["dotenv-path"]
-
-[[plugins]]
-    package = "./netlify/plugins/dotenv-path"
-
-[[edge_functions]]
-    function = "user"
-    path = "/{{PATHNAME_API}}/user"
+    # NOTE: keep this in sync with the one declared on package.json
+    environment = { NODE_VERSION = "14.19.3", NPM_VERSION = "9.2.0" }

@@ -1,45 +1,59 @@
 {
-    "name": "www.etor.dev",
-    "version": "0.0.1",
+    "name": "@etor.dev/root",
     "private": true,
+    "version": "0.0.1",
     "type": "module",
+    "engines": {
+        "node": ">=14.19.0",
+        "npm": ">=9.2.0"
+    },
+    "os": [
+        "darwin",
+        "linux",
+        "windows"
+    ],
     "lint-staged": {
         "*.{ts,tsx,astro}": [
             "cross-env NODE_ENV=production eslint --fix",
             "prettier --write"
         ]
     },
+    "config": {
+        "deno_version": "1.29.0",
+        "aws_name": "root",
+        "aws_repo": "861968717496.dkr.ecr.us-west-2.amazonaws.com/etor.dev"
+    },
     "scripts": {
         "prepare": "husky install",
-        "start": "netlify dev",
-        "start:front": "astro dev --host",
-        "build": "netlify build",
-        "build:front": "astro build"
-    },
-    "dependencies": {
-        "@astrojs/sitemap": "^1.0.0"
+        "postinstall": "node .scripts/prepare-back.js",
+        "start": "lerna exec --parallel -- npm start",
+        "start:back": "lerna exec --parallel --scope=@etor.dev/back-* -- npm start",
+        "start:front": "lerna exec --scope=@etor.dev/front -- npm start",
+        "build": "TODO",
+        "build:root": "docker build -t ${npm_package_config_aws_repo}:${npm_package_config_aws_name}-v${npm_package_version} .",
+        "build:front": "lerna exec --scope=@etor.dev/front -- npm run build",
+        "build:back": "lerna exec --scope=@etor.dev/back-* -- npm run build",
+        "deploy": "npm run deploy:root && npm run deploy:back && npm run deploy:front",
+        "deploy:root": "npm run build:root && docker push ${npm_package_config_aws_repo}:${npm_package_config_aws_name}-v${npm_package_version}",
+        "deploy:front": "netlify deploy --build",
+        "deploy:back": "lerna exec --scope=@etor.dev/back-* -- npm run deploy"
     },
     "devDependencies": {
-        "@astrojs/mdx": "^0.13.0",
-        "@astrojs/svelte": "^1.0.2",
-        "@types/node": "^18.11.17",
         "@typescript-eslint/eslint-plugin": "^5.47.0",
         "@typescript-eslint/parser": "^5.47.0",
-        "astro": "^1.7.2",
-        "astro-compress": "1.1.24",
-        "autoprefixer": "^10.4.13",
-        "cross-env": "^7.0.3",
-        "cssnano": "^5.1.14",
-        "dotenv": "^16.0.3",
         "eslint": "^8.30.0",
         "eslint-plugin-astro": "^0.21.1",
         "eslint-plugin-jsx-a11y": "^6.6.1",
+        "extract-zip": "^2.0.1",
         "husky": "^8.0.2",
+        "lerna": "^6.3.0",
         "lint-staged": "^13.1.0",
         "netlify-cli": "^12.5.0",
         "prettier": "^2.8.1",
-        "prettier-plugin-astro": "^0.7.0",
-        "sass": "^1.57.1",
-        "svelte": "^3.55.0"
-    }
+        "prettier-plugin-astro": "^0.7.0"
+    },
+    "workspaces": [
+        "front",
+        "back/*"
+    ]
 }
