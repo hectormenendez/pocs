@@ -1,5 +1,5 @@
 FROM 861968717496.dkr.ecr.us-west-2.amazonaws.com/etor.dev:root-v0.0.1
 
-WORKDIR /app
+WORKDIR /app/back/core
 
-CMD npx lerna exec --scope=@etor.dev/back-core -- npm start
+CMD /usr/local/bin/npm start

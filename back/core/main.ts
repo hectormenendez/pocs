@@ -55,4 +55,4 @@ app.addEventListener("listen", ({ hostname, port, secure }) => {
     );
 });
 
-await app.listen({ port: 8000 });
+await app.listen({ port: 8000, hostname: "0.0.0.0" });
