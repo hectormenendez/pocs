@@ -1,5 +1,5 @@
-FROM 861968717496.dkr.ecr.us-west-2.amazonaws.com/etor.dev:root-v0.0.1
+FROM 861968717496.dkr.ecr.us-west-2.amazonaws.com/etor.dev:root-latest
 
 WORKDIR /app/back/core
 
-CMD /usr/local/bin/npm start
+CMD npm start
