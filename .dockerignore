@@ -1,8 +1,9 @@
 .husky/
-node_modules/
 Dockerfile
 **/*.db
 **/*.log
+node_modules/
+!node_modules/.bin/deno
 
 
 

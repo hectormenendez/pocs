@@ -4,4 +4,6 @@ ADD . /app
 
 WORKDIR /app
 
-RUN git clean -dfx && npm i
+# Make Deno available globally as a fallback
+RUN mv node_modules/.bin/deno /usr/local/bin/
+
