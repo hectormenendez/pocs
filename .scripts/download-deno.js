@@ -24,6 +24,10 @@ if (!CONF_DENO_VERSION) {
 }
 
 (async () => {
+    if ($FS.existsSync(fileDenoBin)) {
+        console.log("Deno binary already exists.");
+        return;
+    }
     try {
         await handleDownload(getURL(), fileDenoZip);
         log(`Extracting: ${PATH_BIN}`);
