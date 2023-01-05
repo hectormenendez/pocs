@@ -24,6 +24,7 @@
         "push": "docker push ${npm_package_config_aws_repo}:${npm_package_config_aws_name}-v${npm_package_version}",
         "deploy": "npm run build && npm run push"
     },
-    "dependencies": {},
-    "devDependencies": {}
+    "devDependencies": {
+        "npm-run-all": "^4.1.5"
+    }
 }
