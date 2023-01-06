@@ -1,17 +1,28 @@
 import { Application, Router, hasFlash, FlashServer } from "x/oak/mod.ts";
 import { Database } from "x/aloedb/mod.ts";
 
+import * as LibResponseHeaderVersion from "./lib/response-header-version.ts";
+import * as LibResponseHeaderTime from "./lib/response-header-time.ts";
+import * as LibLogger from "./lib/logger.ts";
+
 type User = {
     nameFirst: string;
     nameLast: string;
     email: string;
 };
 
-const db = new Database<User>("users.db");
+const db = new Database<User>("data/users.json");
+
+const options = !hasFlash() ? undefined : { serverConstructor: FlashServer };
+const app = new Application(options);
+
+app.use(LibLogger.Handler);
+app.use(LibResponseHeaderTime.Handler);
+app.use(LibResponseHeaderVersion.Handler);
 
 const router = new Router();
 
-router.get("/users", async (ctx) => {
+router.get("/", async (ctx) => {
     const users = await db.findMany();
     ctx.response.body = users;
 });
@@ -45,9 +56,8 @@ app.use(async (ctx, next) => {
     await next();
 });
 
-app.use((ctx) => {
-    ctx.response.body = "Hello World!";
-});
+app.use(router.allowedMethods());
+app.use(router.routes());
 
 app.addEventListener("listen", ({ hostname, port, secure }) => {
     console.log(
