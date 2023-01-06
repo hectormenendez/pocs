@@ -27,33 +27,17 @@ router.get("/", async (ctx) => {
     ctx.response.body = users;
 });
 
-const options = !hasFlash() ? undefined : { serverConstructor: FlashServer };
-const app = new Application(options);
-
-// Logger
-app.use(async (ctx, next) => {
-    await next();
-    const rt = [
-        ctx.response.headers.get("X-Response-Time"),
-        ctx.response.headers.get("X-API-Version"),
-    ].join(" ");
-    console.log(`${ctx.request.method} ${ctx.request.url} - ${rt}`);
-});
-
-// Timing
-app.use(async (ctx, next) => {
-    const start = Date.now();
-    await next();
-    const ms = Date.now() - start;
-    ctx.response.headers.set("X-Response-Time", `${ms}ms`);
-});
-
-app.use(async (ctx, next) => {
-    const env = Deno.env.toObject();
-    // NOTE: these two ony will be set if run win npm
-    const version: string = env["npm_package_version"];
-    ctx.response.headers.set("X-API-Version", version);
-    await next();
+router.get("/message", (ctx) => {
+    if (!ctx.isUpgradable) {
+        ctx.response.status = 501;
+        return;
+    }
+    const ws = ctx.upgrade();
+    ws.addEventListener("open", () => console.log("open"));
+    ws.addEventListener("close", () => console.log("close"));
+    ws.addEventListener("message", () => console.log("message"));
+    ws.addEventListener("error", () => console.log("error"));
+    ctx.response.status = 200;
 });
 
 app.use(router.allowedMethods());
