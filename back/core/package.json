@@ -15,13 +15,18 @@
     ],
     "config": {
         "aws_name": "core",
-        "deno_main": "./main.ts",
-        "deno_flags": "--unstable --allow-net --allow-read --allow-write --allow-env --import-map=../imports.json"
+        "deno_main_file": "./main.ts",
+        "deno_main_flag": "--unstable --allow-net --allow-read --allow-write --allow-env --import-map=../imports.json",
+        "deno_queue_file": "./queue.ts",
+        "deno_queue_flag": "--import-map=../imports.json"
     },
     "scripts": {
-        "start": "deno run $npm_package_config_deno_flags $npm_package_config_deno_main",
+        "start": "run-p start:main",
+        "start:main": "deno run $npm_package_config_deno_main_flag $npm_package_config_deno_main_file",
+        "start:queue": "deno run $npm_package_config_deno_queue_flag $npm_package_config_deno_queue_file",
         "build": "docker build -t ${npm_package_config_aws_repo}:${npm_package_config_aws_name}-v${npm_package_version} .",
         "push": "docker push ${npm_package_config_aws_repo}:${npm_package_config_aws_name}-v${npm_package_version}",
+        "postpush": "docker push  ${npm_package_config_aws_repo}:${npm_package_config_aws_name}-latest",
         "deploy": "npm run build && npm run push"
     },
     "devDependencies": {
