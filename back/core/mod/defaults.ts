@@ -1,10 +1,10 @@
 import { type WalkOptions } from "std/fs/walk.ts";
 
-import { type Router, type RouterOptions, type State, hasFlash, FlashServer } from "x/oak/mod.ts";
+import { type Router, type RouterOptions, hasFlash, FlashServer } from "x/oak/mod.ts";
 import { type ApplicationOptions } from "x/oak/application.ts";
 import type { ServerRequest } from "x/oak/types.d.ts";
 
-import { HandlerRoute } from "./handler.ts";
+import { BuilderRoute } from "./route-builder.ts";
 
 export const HTTP_SEP = "/";
 
@@ -117,15 +117,8 @@ export const DEFAULTS_CREATE_SERVICE = {
         state: undefined,
     } as Partial<ApplicationOptions<unknown, ServerRequest>>,
 
-    builder<S extends State>(router: Router<S>, endpoint: Endpoint) {
-        const method = ROUTE_METHOD[endpoint.method as keyof typeof ROUTE_METHOD];
-        // TODO: Typings are not being resolved correctly, even though the instantation was valid
-        /* eslint-disable @typescript-eslint/ban-ts-comment */
-        // deno-lint-ignore ban-ts-comment
-        // @ts-ignore
-        router[method](endpoint.route, HandlerRoute.bind(endpoint.callback));
-        /* eslint-enable @typescript-eslint/ban-ts-comment */
-    },
+    /** The logic needed to build each route on the router. */
+    builder: BuilderRoute,
 } as const;
 
 /** @see DEFAULTS_CREATE_SERVICE */
