@@ -1,8 +1,10 @@
 {
     "imports": {
+        "back/": "./",
         "std/": "https://deno.land/std@0.170.0/",
         "x/oak/": "https://deno.land/x/oak@v11.1.0/",
-        "x/aloedb/": "https://deno.land/x/aloedb@0.9.0/"
+        "x/aloedb/": "https://deno.land/x/aloedb@0.9.0/",
+        "x/cors/": "https://deno.land/x/cors@v1.2.2/"
     },
     "scopes": {}
 }
