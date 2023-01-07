@@ -3,7 +3,7 @@ import { walk } from "std/fs/walk.ts";
 
 import { Router, type State } from "x/oak/mod.ts";
 
-import { Halt, Capitalize, Echo } from "./utils.ts";
+import { Halt, Capitalize } from "./utils.ts";
 import { DEFAULTS_CREATE_SERVICE, type DefaultsCreateService, type Endpoint } from "./defaults.ts";
 
 // import { type RouterMiddleware } from "x/oak/router.ts";
@@ -15,6 +15,7 @@ export type OptCreateService = {
 
 export async function CreateService<S extends State>(opt: OptCreateService) {
     const { meta, ...rest } = opt;
+    const defaults = { ...DEFAULTS_CREATE_SERVICE, ...(rest.defaults || {}) };
     const {
         charPlural,
         pathEndpoints,
@@ -23,10 +24,8 @@ export async function CreateService<S extends State>(opt: OptCreateService) {
         propsRequired,
         propsAvailable,
         builder,
-    } = {
-        ...DEFAULTS_CREATE_SERVICE,
-        ...(rest.defaults || {}),
-    };
+        handler,
+    } = defaults;
 
     if (pathEndpoints.charAt(pathEndpoints.length - 1) !== charPlural) {
         Halt(
@@ -57,6 +56,8 @@ export async function CreateService<S extends State>(opt: OptCreateService) {
         const message = err instanceof Error ? err.message : "UNKNOWN";
         Halt(`Invalid endpoints path provided: ${message}`);
     }
+
+    // Create router
     const router = new Router<S>(optionsRouter);
 
     for await (const item of walk(PATH_ENDPOINTS, optionsWalk)) {
@@ -102,7 +103,6 @@ export async function CreateService<S extends State>(opt: OptCreateService) {
             const prop = endpoint[key as keyof Endpoint];
             if (!checker(prop)) Halt(`Invalid ${nameFn}.${key} value: "${prop}"`);
         }
-        builder<S>(router, endpoint);
+        builder<S>({ handler, router, endpoint });
     }
-    Echo(router);
 }
