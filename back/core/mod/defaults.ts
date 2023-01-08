@@ -4,8 +4,8 @@ import { type Router, type RouterOptions, hasFlash, FlashServer } from "x/oak/mo
 import { type ApplicationOptions } from "x/oak/application.ts";
 import type { ServerRequest } from "x/oak/types.d.ts";
 
-import { HandlerRoute } from "./route-handler.ts";
-import { BuilderRoute } from "./route-builder.ts";
+import { HandlerRoute } from "./handler/route.ts";
+import { CreatorRoute } from "./creator/route.ts";
 
 export const HTTP_SEP = "/";
 
@@ -122,7 +122,7 @@ export const DEFAULTS_CREATE_SERVICE = {
     handler: HandlerRoute,
 
     /** The logic needed to build each route on the router. */
-    builder: BuilderRoute,
+    builder: CreatorRoute,
 } as const;
 
 /** @see DEFAULTS_CREATE_SERVICE */
