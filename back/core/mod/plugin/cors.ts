@@ -1,10 +1,10 @@
 import { oakCors } from "x/cors/mod.ts";
 
-export const UUID = "cors";
+export const PRIORITY = 9;
 
 export const DEPENDENCIES = [];
 
-export const Handler = oakCors({
+export const Plugin = oakCors({
     origin() {
         // TODO: re-enable CORS using URLs from config.
         return true;
