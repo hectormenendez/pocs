@@ -1,1 +1,1 @@
-export { type OptCreateService, CreateService } from "./mod/creator.ts";
+export * from "./mod/creator/service.ts";
