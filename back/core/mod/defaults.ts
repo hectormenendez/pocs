@@ -1,3 +1,4 @@
+import * as $PATH from "std/path/mod.ts";
 import { type WalkOptions } from "std/fs/walk.ts";
 
 import { type Router, type RouterOptions, hasFlash, FlashServer } from "x/oak/mod.ts";
@@ -31,6 +32,8 @@ export type Endpoint = {
 /** All the defaults used when creating a Service, you can use the `defaults` prop to override them. */
 export const DEFAULTS_CREATE_SERVICE = {
     charPlural: "s",
+    /** The extension name for files to be importing dynamically */
+    ext: $PATH.extname(import.meta.url),
     /** The name to look for endpoints (relative to project root) */
     pathEndpoints: "endpoints" as string,
 
