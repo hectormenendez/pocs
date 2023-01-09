@@ -8,7 +8,17 @@ export function Capitalize(str: string): string {
 }
 
 export function Halt(...messages: unknown[]): never {
+    const env = [Deno.env.get("DENO_ENV"), Deno.env.get("NODE_ENV")]
+        .filter(Boolean)
+        .reduce<string | null>((acc, cur) => {
+            if (acc || typeof cur !== "string") return acc;
+            return cur;
+        }, null);
     console.error(...messages);
+    if (!env || (env && env.toLowerCase() !== "production")) {
+        const stack = (new Error().stack || "").split("\n").slice(2).join("\n");
+        console.error(`STACK:\n${stack}`);
+    }
     Deno.exit(1);
 }
 
