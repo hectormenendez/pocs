@@ -122,10 +122,10 @@ export const DEFAULTS_CREATE_SERVICE = {
     } as Partial<ApplicationOptions<unknown, ServerRequest>>,
 
     /** The default route handler for all endpoints */
-    handler: HandlerRoute,
+    routeHandler: HandlerRoute,
 
     /** The logic needed to build each route on the router. */
-    builder: CreatorRoute,
+    routeBuilder: CreatorRoute,
 } as const;
 
 /** @see DEFAULTS_CREATE_SERVICE */

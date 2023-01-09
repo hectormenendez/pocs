@@ -18,8 +18,8 @@ export async function PluginService<S extends State>(opt: OptCheckerService) {
         optionsRouter,
         propsAvailable,
         propsRequired,
-        handler,
-        builder,
+        routeHandler,
+        routeBuilder,
     } = opt;
     // Create router
     const router = new Router<S>(optionsRouter);
@@ -67,6 +67,6 @@ export async function PluginService<S extends State>(opt: OptCheckerService) {
             const prop = endpoint[key as keyof Endpoint];
             if (!checker(prop)) Halt(`Invalid ${nameFn}.${key} value: "${prop}"`);
         }
-        builder<S>({ handler, router, endpoint });
+        routeBuilder<S>({ handler: routeHandler, router, endpoint });
     }
 }
