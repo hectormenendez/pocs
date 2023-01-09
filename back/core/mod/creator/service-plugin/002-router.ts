@@ -43,7 +43,7 @@ export async function PluginService<S extends State>(opt: OptCheckerService) {
 
         // Determine the name of the main configuration object
         const nameFn = [
-            Capitalize(pathEndpoints.slice(0, -1)),
+            Capitalize($PATH.basename(pathEndpoints).slice(0, -1)),
             Capitalize(uuid),
             Capitalize(basename),
         ].join("");
