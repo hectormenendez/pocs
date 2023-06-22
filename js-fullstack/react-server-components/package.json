@@ -1,0 +1,16 @@
+{
+    "name": "react-server-components",
+    "version": "0.0.1",
+    "license": "ISC",
+    "type": "module",
+    "main": "server.js",
+    "scripts": {
+        "start": "nodemon $npm_package_main"
+    },
+    "dependencies": {
+        "escape-html": "^1.0.3"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.22"
+    }
+}
