@@ -8,7 +8,7 @@ export function Footer({ author }) {
     return (
         <footer>
             <hr />
-            <p><i>(c) {author}, {new Date().getFullYear()}</i></p>
+            <p><small><i>(c) {author}, {new Date().getFullYear()}</i></small></p>
         </footer>
     );
 }
