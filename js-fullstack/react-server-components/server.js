@@ -3,11 +3,12 @@ import * as $HTTP from "http";
 import * as $FS from "fs/promises";
 
 // package.json modules
-import React from "react"; // needed for the JSX to work 
+import React from "react";
 import EscapeHTML from "escape-html";
 
 // local modules
 import { JSX2HTML } from "./utils/jsx2html.js"
+import { Page } from "./components/Page.js";
 
 try {
     const server = $HTTP.createServer(ServerCreate);
@@ -22,26 +23,7 @@ try {
 async function ServerCreate(_request, response) {
     response.setHeader("Content-Type", "text/html");
     const { html: article } = await ArticleFetch();
-
-    const html = JSX2HTML(
-        <html>
-            <head>
-                <title>My Blog</title>
-            </head>
-            <body>
-                <nav>
-                    <a href="/">Home</a>
-                    <hr />
-                </nav>
-                <article>{article}</article>
-                <footer>
-                    <hr />
-                    <p><i>(c) Hector Menendez, {new Date().getFullYear()}</i></p>
-                </footer>
-            </body>
-        </html>
-    );
-
+    const html = JSX2HTML(<Page article={article} author="Hector Menendez" />);
     response.end(html);
 }
 
@@ -51,7 +33,3 @@ async function ArticleFetch() {
     const raw = await $FS.readFile("./server.txt", "utf-8");
     return { raw, html: EscapeHTML(raw) };
 }
-
-
-
-   

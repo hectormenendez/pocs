@@ -8,6 +8,11 @@ export function JSX2HTML(jsx) {
     if (Array.isArray(jsx)) return jsx.map(JSX2HTML).join("");
     // objects with $$typeof are react elements.
     if (typeof jsx === "object" && jsx.$$typeof === Symbol.for("react.element")) {
+        if (typeof jsx.type === "string") {
+        }
+        // a component! be recursive.
+        if (typeof jsx.type === "function") return JSX2HTML(jsx.type(jsx.props));
+        // assume a string otherwise
         let html = `<${jsx.type}`;
         for (const propName in jsx.props) {
             if (!jsx.props.hasOwnProperty(propName) || propName === "children") continue;
@@ -16,5 +21,6 @@ export function JSX2HTML(jsx) {
         html += `> ${JSX2HTML(jsx.props.children)}</${jsx.type}>`;
         return html;
     }
+
     throw new Error("Not implemented.");
 }
