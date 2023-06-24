@@ -24,3 +24,11 @@ export async function ArticlesFetch() {
 
     return articles;
 }
+
+/**
+ * @param {string} slug
+ */
+export async function ArticleGet(slug) {
+    const articles = await ArticlesFetch();
+    return articles.find((article) => article.slug === slug);
+}
