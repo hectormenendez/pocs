@@ -5,6 +5,10 @@ import { Halt } from "./utils/io.js";
 
 const { npm_package_json } = process.env;
 
+export const URL_SEP = "/";
+
+export const URL_SEGMENT_BLOG = /** @type {const} */(`${URL_SEP}blog`);
+
 /** All properties are obtained from the environment. */
 export const ENV = /** @type {const} */ ({
     /** The port number where the server will listen to */
