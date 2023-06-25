@@ -1,14 +1,4 @@
-import * as $HTTP from "http";
-
 import { ENV } from "./config.js";
-import { ServerCreate, ServerListen } from "./handlers/server.js";
+import { Server } from "./handlers/server.js";
 
-
-try {
-    const server = $HTTP.createServer(ServerCreate);
-    server.on("listening", ServerListen);
-    await server.listen(ENV.PORT);
-}  catch (err) {
-    console.error(err);
-}
-
+await Server.listen(ENV.PORT);

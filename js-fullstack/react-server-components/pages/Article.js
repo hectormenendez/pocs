@@ -1,7 +1,9 @@
 import React from "react";
 
-import { URL_SEGMENT_BLOG } from "../config.js";
+import { URL_SEGMENT } from "../config.js";
 import { ArticleGet } from "../handlers/article.js";
+import { SERVER_EVENT_NAME, ServerEmit } from "../handlers/server.js";
+import { Layout } from "../components/Layout.js";
 
 
 /**
@@ -9,20 +11,26 @@ import { ArticleGet } from "../handlers/article.js";
  * @param {string} props.slug
  */
 export async function Article({ slug }) {
-    const href = `${URL_SEGMENT_BLOG}/${slug}`;
     const article = await ArticleGet(slug);
-    // this should never happen because of the router. this is just a type resolver.
-    if (!article) return null;
+
+    if (!article) {
+        ServerEmit(SERVER_EVENT_NAME.RENDER_STATUS, { status: 404 });
+        return;
+    }
+
+    const href = `${URL_SEGMENT.ARTICLES}/${slug}`;
     const { content } = article;
 
     return (
-        <article>
-            <header>
-                <h2>
-                    <a href={href}>{slug}</a>
-                </h2>
-            </header>
-            <section>{content}</section>
-        </article>
+        <Layout children={
+            <article>
+                <header>
+                    <h2>
+                        <a href={href}>{slug}</a>
+                    </h2>
+                </header>
+                <section>{content}</section>
+            </article>
+        } />
     );
 }
