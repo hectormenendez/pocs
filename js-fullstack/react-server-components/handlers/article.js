@@ -1,7 +1,7 @@
 /** @typedef {{ slug: string; path: string; content: string }} Article */
 
-import * as $FS from "fs/promises";
-import * as $PATH from "path";
+import * as $FS from "node:fs/promises";
+import * as $PATH from "node:path";
 
 import { PATH } from "../config.js";
 

@@ -8,6 +8,7 @@ export function Layout({ children }) {
         <html>
             <head>
                 <title>My Blog</title>
+                <script src="/assets/client.js" type="module"></script>
             </head>
             <body>
                 <Header />

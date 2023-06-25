@@ -1,80 +1,159 @@
-/** @typedef {import("http").IncomingMessage} ServerRequest */
+import $FS from "node:fs/promises";
+import $PATH from "node:path";
+import $STREAM from "node:stream/promises";
+import $ZLIB from "node:zlib";
+import $HTTP from "node:http";
+import { createReadStream } from "node:fs";
 
-/** @typedef {import("http").ServerResponse} ServerResponse */
+import MimeTypes from "mime-types";
 
-import $HTTP from "http";
-
-import React from "react";
-
-import { URL_SEP, URL_SEGMENT_BLOG, ENV } from "../config.js";
+import { URL_SEP, URL_SEGMENT, ENV, PATH, MSG } from "../config.js";
 import { JSX2HTML } from "../utils/jsx2html.js";
+import { Router } from "../components/Router.js";
 
-import { Home } from "../pages/Home.js";
-import { Article } from "../pages/Article.js";
+/** @typedef {import("node:http").IncomingMessage & { url: URL  }} ServerRequest */
 
-import { ArticlesFetch } from "./article.js";
+/** @typedef {import("node:http").ServerResponse} ServerResponse */
+
+/** @typedef {{ id:string; request:ServerRequest, response:ServerResponse }} ServerEventContext */
+
+/** @typedef {typeof SERVER_EVENT_NAME[keyof typeof SERVER_EVENT_NAME]} ServerEventName */
+
+export const Server = $HTTP.createServer();
+Server.on("listening", handleListen);
+Server.on("request", handleRequest);
+
+
+function handleListen() {
+    console.log(`Listening on port: ${ENV.PORT}`);
+}
+
+export const SERVER_EVENT_PREFIX = "CUSTOM:";
+
+export const SERVER_EVENT_NAME = /** @type {const} */({
+    REDIRECT: "redirect",
+    RENDER_STATUS: "renderStatus",
+});
+
+export const SERVER_EVENT = /** @type {const} */({
+
+    /**
+     * Redirects the current request to a new location.
+     * @this {ServerEventContext}
+     * @param {{ location?:string; status?: number }} args
+     */
+    [SERVER_EVENT_NAME.REDIRECT]({ location = URL_SEP, status = 302 }) {
+        const { response } = this;
+        response.writeHead(status, { Location: location });
+        response.end();
+    },
+
+    /**
+     * Renders a simple page containing the status code.
+     * @this {ServerEventContext}
+     * @param {{ status: number }} args
+     */
+    [SERVER_EVENT_NAME.RENDER_STATUS]({ status }) {
+        const { response } = this;
+        response.writeHead(status, { "Content-Type": "text/html" });
+        // TODO: This should  use <Layout />;
+        response.end(`<h1>${status}</h1>`);
+
+    }
+});
+
+/**
+ * @template {ServerEventName} N
+ * @template {Parameters<typeof SERVER_EVENT[N]>[0]} A
+ * @param {N} event
+ * @param {...A} args
+ */
+export function ServerEmit(event, ...args) {
+    if (!Server.listening) throw new Error(MSG.SERVER_NOT_LISTENING);
+    if (!SERVER_EVENT[event]) return;
+    Server.emit(`${SERVER_EVENT_PREFIX}${event}`, ...args);
+}
 
 /**
  * @param {ServerRequest} request
  * @param {ServerResponse} response
  */
-export async function ServerCreate(request, response) {
+async function handleRequest(request, response) {
     try {
+        // register all custom events
+        Object.entries(SERVER_EVENT).forEach(([id, handler]) => {
+            Server.on(`${SERVER_EVENT_PREFIX}${id}`, handler.bind({ request, response }));
+        });
+
+        // Configure all custom properties on request and response
         const url = new URL(request.url || "", `http://${request.headers.host}`);
-        const { pathname: path } = url;
-        // let the server know the type of content we're serving.
-        response.setHeader("Content-Type", "text/html");
-        // fetch all the articles to build the navigation
-        const articles = await ArticlesFetch();
-        // an invalid path was provided
-        if (!path || !path.startsWith(URL_SEP)) return ServerRedirect(response);
-        // root
-        if (path === URL_SEP) {
-            response.end(await JSX2HTML(<Home articles={articles} />));
+        Object.defineProperty(request, "url", { value: url });
+
+        const { pathname } = url;
+
+        // only accept get calls
+        if (request.method !== "GET") {
+            ServerEmit(SERVER_EVENT_NAME.RENDER_STATUS, { status: 405 });
             return;
         }
-        // blog
-        if (path.startsWith(URL_SEGMENT_BLOG)) {
-            const segments = path.replace(URL_SEGMENT_BLOG, "").split(URL_SEP).slice(1);
-            // root gets redirected back Home
-            if (!segments.length) return ServerRedirect(response);
-            // extract the next url segment
-            const section = segments.shift()
-            if (!section) return ServerRenderStatus(response, $HTTP.STATUS_CODES.NOT_FOUND)
-            // determine if the current section has an equivalent article
-            const article = articles.find(({ slug }) => slug === section);
-            // no article? no content.
-            if (!article) return ServerRenderStatus(response, $HTTP.STATUS_CODES.NOT_FOUND);
-            // the article is available, render it.
-            response.end(await JSX2HTML(<Article slug={article.slug} />));
+
+        // static server
+        if (pathname.startsWith(URL_SEGMENT.ASSETS)) {
+            handleStaticRequest(request, response);
             return;
         }
-        // other ?
-        ServerRenderStatus(response, $HTTP.STATUS_CODES[501]);
+        // let the router handle the request.
+        // when the response comes falsy, do nothing, it means the router will handle its own logic.
+        const routerResponse = await Router({ url });
+        if (!routerResponse) {
+            response.end();
+            return;
+        }
+        const output = await JSX2HTML(routerResponse);
+        response.writeHead(200, { "Content-Type": "text/html" });
+        response.end(output);
     } catch (err) {
         console.error(err);
-        ServerRenderStatus(response, $HTTP.STATUS_CODES.INTERNAL_SERVER_ERROR)
+        ServerEmit(SERVER_EVENT_NAME.RENDER_STATUS, { status: 500 });
     }
+
 }
 
 /**
+ * @param {ServerRequest} request
  * @param {ServerResponse} response
- * @param {string} Location
  */
-export function ServerRedirect(response, Location=URL_SEP) {
-    response.writeHead(302, { Location })
-    response.end();
-}
-
-/**
- * @param {ServerResponse} response
- * @param {string | undefined} status
- */
-export function ServerRenderStatus(response, status = "200") {
-    response.statusCode = Number(status);
-    response.end(`<h1>{status}</h1>`);
-}
-
-export function ServerListen() {
-    console.log(`Listening on port: ${ENV.PORT}`);
+async function handleStaticRequest(request, response) {
+    const { pathname } = request.url;
+    const segments = pathname.replace(URL_SEGMENT.ASSETS, "").split(URL_SEP).slice(1);
+    // roots gets redirected back Home
+    if (!segments.length) {
+        ServerEmit(SERVER_EVENT_NAME.REDIRECT, { location: URL_SEP })
+        return;
+    }
+    // Determine if segment has a corresponding asset.
+    const segment = segments.shift();
+    if (!segment)  {
+        ServerEmit(SERVER_EVENT_NAME.RENDER_STATUS, { status: 404 });
+        return;
+    }
+    try {
+        const path = $PATH.join(PATH.ASSETS, segment);
+        const stat = await $FS.stat(path);
+        if (!stat.isFile()) throw null;
+        const mime = String(MimeTypes.lookup(segment) ?? "text/plain");
+        response.writeHead(200, {
+            "Content-Type": mime,
+            "Content-Encoding": "gzip",
+        });
+        // stream the file to the response.
+        await $STREAM.pipeline(
+            createReadStream(path),
+            $ZLIB.createGzip(),
+            response
+        );
+    } catch (err) {
+        console.error(err);
+        ServerEmit(SERVER_EVENT_NAME.RENDER_STATUS, { status: 500 });
+    }
 }
