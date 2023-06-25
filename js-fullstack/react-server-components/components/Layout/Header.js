@@ -7,6 +7,8 @@ export function Header() {
                 <a href="/">Home</a>
             </nav>
             <hr />
+            <input />
+            <hr />
         </header>
     );
 }

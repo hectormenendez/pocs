@@ -6,7 +6,7 @@ import React from "react";
 
 import { ArticlesFetch } from "../handlers/article.js";
 import { URL_SEGMENT } from "../config.js";
-import { Layout } from "../components/Layout.js";
+import { Layout } from "../components/Layout/index.js";
 
 export async function Home() {
     const articles = await ArticlesFetch();

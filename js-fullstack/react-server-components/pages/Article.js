@@ -3,7 +3,7 @@ import React from "react";
 import { URL_SEGMENT } from "../config.js";
 import { ArticleGet } from "../handlers/article.js";
 import { SERVER_EVENT_NAME, ServerEmit } from "../handlers/server.js";
-import { Layout } from "../components/Layout.js";
+import { Layout } from "../components/Layout/index.js";
 
 
 /**
