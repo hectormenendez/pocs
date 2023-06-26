@@ -40,11 +40,15 @@ function handleLinkNavigation(ev) {
 async function Navigate(href) {
     if (STATE.LOCATION === undefined) STATE.LOCATION = window.location.pathname;
     if (STATE.LOCATION !== href) return;
-    const response = await fetch(href);
+
+    const response = await fetch(`${href}?jsx`);
 
     // TODO: handle this better.
     if (response.status !== 200) return alert("Error loading page");
+
     const html = await response.text();
+    console.log(html)
+    return;
 
     const bodyIni = html.match(/<[ ]*body[^>]*>/i);
     if (!bodyIni) return alert("Error: Could not find the start of <body>");

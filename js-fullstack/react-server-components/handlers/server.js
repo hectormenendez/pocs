@@ -8,8 +8,9 @@ import { createReadStream } from "node:fs";
 import MimeTypes from "mime-types";
 
 import { URL_SEP, URL_SEGMENT, ENV, PATH, MSG } from "../config.js";
-import { JSX2HTML } from "../utils/jsx2html.js";
 import { Router } from "../components/Router.js";
+
+import { JSX2HTML, JSXParse } from "./jsx.js";
 
 /** @typedef {import("node:http").IncomingMessage & { url: URL  }} ServerRequest */
 
@@ -89,6 +90,9 @@ async function handleRequest(request, response) {
         const url = new URL(request.url || "", `http://${request.headers.host}`);
         Object.defineProperty(request, "url", { value: url });
 
+        const isClientRequestingJSX = url.searchParams.has("jsx")
+        url.searchParams.delete("jsx"); // keep url clean
+
         const { pathname } = url;
 
         // only accept get calls
@@ -102,6 +106,8 @@ async function handleRequest(request, response) {
             handleStaticRequest(request, response);
             return;
         }
+
+
         // let the router handle the request.
         // when the response comes falsy, do nothing, it means the router will handle its own logic.
         const routerResponse = await Router({ url });
@@ -109,6 +115,16 @@ async function handleRequest(request, response) {
             response.end();
             return;
         }
+
+        // is this a call from the client requesting JSX?
+        if (isClientRequestingJSX) {
+            const output = await JSXParse(routerResponse);
+            response.writeHead(200, { "Content-Type": "application/json" });
+            response.end(JSON.stringify(output, null, 2));
+            return;
+        }
+
+        // this is a normal html response.
         const output = await JSX2HTML(routerResponse);
         response.writeHead(200, { "Content-Type": "text/html" });
         response.end(output);
