@@ -2,7 +2,6 @@ import React from "react";
 
 import { URL_SEGMENT } from "../config.js";
 import { ArticleGet } from "../handlers/article.js";
-import { SERVER_EVENT_NAME, ServerEmit } from "../handlers/server.js";
 import { Layout } from "../components/Layout/index.js";
 
 
@@ -13,10 +12,7 @@ import { Layout } from "../components/Layout/index.js";
 export async function Article({ slug }) {
     const article = await ArticleGet(slug);
 
-    if (!article) {
-        ServerEmit(SERVER_EVENT_NAME.RENDER_STATUS, { status: 404 });
-        return;
-    }
+    if (!article) return;
 
     const href = `${URL_SEGMENT.ARTICLES}/${slug}`;
     const { content } = article;

@@ -1,34 +1,50 @@
-import React from 'react';
-
-import { SERVER_EVENT_NAME, ServerEmit } from "../handlers/server.js";
+import { SERVER_EVENT_NAME } from "../handlers/server/events.js";
 import { URL_SEP } from "../config.js";
+import { JSX2HTML, JSXParse } from "../handlers/jsx.js";
+import { ServerConnections } from "../handlers/server/index.js";
 import { Home } from "../pages/Home.js";
 import { Article } from "../pages/Article.js";
 
 /**
  * @param {Object} props
- * @param {URL} props.url
+ * @param {string} props.id - The request id.
  */
-export async function Router({ url }) {
-    const { pathname } = url;
+export async function Router({ id }) {
 
-    if (["/", "/index.html"].includes(pathname)) {
-        return <Home />;
-    }
+    const connection = ServerConnections.get(id);
+    if (!connection) throw new Error("Connection not found.");
 
-    if (["/articles", "/articles/", "/articles/index.html"].includes(pathname)) {
-        ServerEmit(SERVER_EVENT_NAME.REDIRECT, { location: "/" });
-        return;
-    }
+    const { response, request } = connection;
 
-    // if the path is an aricle let's determine if exists.
-    if (pathname.startsWith("/articles/")) {
-        const slug = pathname.split(URL_SEP).pop();
-        if (!slug) {
-            ServerEmit(SERVER_EVENT_NAME.RENDER_STATUS, { status: 500 });
-            return;
+    const { url } = request;
+
+    // determine if a jsx component is being requested
+    const isClientRequestingJSX = url.searchParams.has("jsx")
+    url.searchParams.delete("jsx"); // keep url clean
+
+    const jsx = await (async () => {
+        if (["/", "/index.html"].includes(url.pathname)) {
+            return <Home />;
         }
-        return <Article slug={slug} />;
-    }
 
+        if (["/articles", "/articles/", "/articles/index.html"].includes(url.pathname)) {
+            response.event(SERVER_EVENT_NAME.REDIRECT, { location: "/" });
+            return undefined;
+        }
+
+        // if the path is an aricle let's determine if exists.
+        if (url.pathname.startsWith("/articles/")) {
+            return <Article slug={url.pathname.split(URL_SEP).pop() || "" } />
+        }
+    })();
+
+    if (!jsx) return response.event(SERVER_EVENT_NAME.RENDER_STATUS, { status: 404 });
+
+    if (isClientRequestingJSX) {
+        response.writeHead(200, { "Content-Type": "application/json" });
+        response.end(JSON.stringify(await JSXParse(jsx)));
+    } else {
+        response.writeHead(200, { "Content-Type": "text/html" });
+        response.end(await JSX2HTML(jsx))
+    }
 }

@@ -14,7 +14,6 @@ import EscapeHTML from "escape-html";
 
 /** @typedef {JSXPrimitive | JSXPrimitive[] | JSXObject | JSXObject[]} JSX */
 
-/** @param {JSX} jsx  */
 export async function JSX2HTML(jsx) {
     // string and numbers just get escaped.
     if (typeof jsx === "string" || typeof jsx === "number") return EscapeHTML(String(jsx));
@@ -44,7 +43,6 @@ export async function JSX2HTML(jsx) {
     return html;
 }
 
-/** @param {JSX} jsx */
 export async function JSXParse(jsx) {
     // don't need to do anything special for primitives.
     if (isJSXPrimitive(jsx)) return;
