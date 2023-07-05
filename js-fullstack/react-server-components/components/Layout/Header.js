@@ -1,4 +1,4 @@
-import React from "react"; // needed for the JSX to work
+import React from "react";
 
 export function Header() {
     return (
