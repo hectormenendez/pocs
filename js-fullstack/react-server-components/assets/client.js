@@ -1,7 +1,11 @@
+import { hydrateRoot } from "react-dom/client"; // loaded using index.importmap
+
 const STATE = {
     /** The current location. @type {string | undefined} */
     LOCATION: undefined,
 };
+
+const ROOT = hydrateRoot(document, handleHydration);
 
 window.addEventListener("DOMContentLoaded", handleDOMReady);
 
@@ -12,6 +16,11 @@ function handleDOMReady(ev) {
     document
         .querySelectorAll("a")
         .forEach((el) => el.addEventListener("click", handleLinkNavigation, true));
+}
+
+function handleHydration() {
+    console.log("Hydration!");
+    return null;
 }
 
 /** @param {PopStateEvent} ev  */
@@ -46,20 +55,18 @@ async function Navigate(href) {
     // TODO: handle this better.
     if (response.status !== 200) return alert("Error loading page");
 
-    const html = await response.text();
-    console.log(html)
-    return;
+    const text = await response.text();
 
-    const bodyIni = html.match(/<[ ]*body[^>]*>/i);
+    const bodyIni = text.match(/<[ ]*body[^>]*>/i);
     if (!bodyIni) return alert("Error: Could not find the start of <body>");
 
-    const bodyEnd = html.match(/<\/[ ]*body[^>]*>/i);
+    const bodyEnd = text.match(/<\/[ ]*body[^>]*>/i);
     if (!bodyEnd) return alert("Error: Could not find the end of <body>");
 
     const indexIni = Number(bodyIni.index) + bodyIni[0].length;
     const indexEnd = Number(bodyEnd.index) - bodyEnd[0].length - 2;
 
-    const body =  html.slice(indexIni, indexEnd)
+    const body =  text.slice(indexIni, indexEnd)
     const elBody = document.querySelector("body");
     if (!elBody) return alert("Error: Could not find <body> element");
 

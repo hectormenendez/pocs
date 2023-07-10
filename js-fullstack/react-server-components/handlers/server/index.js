@@ -1,6 +1,6 @@
 import $HTTP from "node:http";
 
-import {v4 as UUIDGet } from "uuid";
+import { v4 } from "uuid";
 import { URL_SEGMENT, ENV } from "../../config.js";
 
 import { Log } from "../../utils/io.js";
@@ -53,7 +53,7 @@ SERVER_EVENT_EMITTER.addListener("test", (...args) => {
  * @param {ServerResponse} response
  */
 async function ServerHandleRequest(request, response) {
-    const id = UUIDGet();
+    const id = v4();
     const url = new URL(request.url || "", `http://${request.headers.host}`);
     const log = /** @type {const} */({ type: "REQUEST", subject: id });
     const context = `${request.method} ${getURLPath(url)}`;

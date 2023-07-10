@@ -8,7 +8,15 @@ export function Layout({ children }) {
         <html>
             <head>
                 <title>My Blog</title>
-                <script src="/assets/client.js" type="module"></script>
+                <script type="importmap">
+                    {{
+                        "imports": {
+                            "react": "https://esm.sh/react@canary",
+                            "react-dom/client": "https://esm.sh/react-dom@canary/client"
+                        }
+                    }}
+                </script>
+                <script type="module" src="/assets/client.js"></script>
             </head>
             <body>
                 <Header />

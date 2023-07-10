@@ -27,7 +27,11 @@ export async function JSX2HTML(jsx) {
     // An object is the only remaining option.
     if (typeof jsx !== "object") throw new Error(`Not implemented. [${typeof jsx}]`);
     // but only if it's JSX
-    if (!isJSXObject(jsx)) throw new Error("An object cannot be rendered.");
+    if (!isJSXObject(jsx)) {
+        // NOTE: this was done to allow importmap to work on <Layout />
+        // throw new Error("An object cannot be rendered.");
+        return JSON.stringify(jsx);
+    }
     // a component! be recursive.
     if (typeof jsx.type === "function") {
         return JSX2HTML(await jsx.type(jsx.props));
