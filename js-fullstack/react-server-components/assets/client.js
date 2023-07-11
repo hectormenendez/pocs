@@ -1,32 +1,54 @@
 import { hydrateRoot } from "react-dom/client"; // loaded using index.importmap
 
 const STATE = {
-    /** The current location. @type {string | undefined} */
-    LOCATION: undefined,
+    /** The current location. @type {string} */
+    HREF: new URL(window.location.href).pathname,
 };
 
-const ROOT = hydrateRoot(document, handleHydration);
 
 window.addEventListener("DOMContentLoaded", handleDOMReady);
+window.addEventListener("load", handleLoad);
+
+
+// -------------------------------------------------------------------------------------------------
+
+async function handleLoad() {
+    // download the jsx version of this website.
+    // const jsx = await getJSX(STATE.HREF);
+
+    /** The original handler for the React Root element */
+    hydrateRoot(document, {
+        "$$typeof": Symbol("react.element"),
+        type: "div",
+        key: null,
+        ref: null,
+        props: { children: "hola" },
+        _owner: null,
+        _store: {}
+    });
+}
 
 /** @param {Event} ev */
-function handleDOMReady(ev) {
+async function handleDOMReady(ev) {
     // When the user press back/forward on the browser, tap into that.
-    window.addEventListener("popstate", (ev) => handlePopState);
+    window.addEventListener("popstate", handlePopState);
     document
         .querySelectorAll("a")
         .forEach((el) => el.addEventListener("click", handleLinkNavigation, true));
 }
+
 
 function handleHydration() {
     console.log("Hydration!");
     return null;
 }
 
+
 /** @param {PopStateEvent} ev  */
 function handlePopState(ev) {
     Navigate(window.location.pathname);
 }
+
 
 /** @param {MouseEvent} ev  */
 function handleLinkNavigation(ev) {
@@ -45,30 +67,32 @@ function handleLinkNavigation(ev) {
     Navigate(href);
 }
 
-/** @param {string} href  */
-async function Navigate(href) {
-    if (STATE.LOCATION === undefined) STATE.LOCATION = window.location.pathname;
-    if (STATE.LOCATION !== href) return;
-
+async function getJSX(href) {
     const response = await fetch(`${href}?jsx`);
-
     // TODO: handle this better.
     if (response.status !== 200) return alert("Error loading page");
-
     const text = await response.text();
+    try {
+        return JSON.parse(text, handleJSXDeserialization);
+    } catch (err) {
+        console.error(err);
+        return;
+    }
+}
 
-    const bodyIni = text.match(/<[ ]*body[^>]*>/i);
-    if (!bodyIni) return alert("Error: Could not find the start of <body>");
 
-    const bodyEnd = text.match(/<\/[ ]*body[^>]*>/i);
-    if (!bodyEnd) return alert("Error: Could not find the end of <body>");
+/** @param {string} href  */
+async function Navigate(href) {
+    const currentHref = STATE.HREF;
+    if (currentHref === href) return;
+    STATE.HREF = new URL(window.location.href).pathname;
+    const jsx = await getJSX(href);
+    console.log(jsx);
+}
 
-    const indexIni = Number(bodyIni.index) + bodyIni[0].length;
-    const indexEnd = Number(bodyEnd.index) - bodyEnd[0].length - 2;
 
-    const body =  text.slice(indexIni, indexEnd)
-    const elBody = document.querySelector("body");
-    if (!elBody) return alert("Error: Could not find <body> element");
-
-    elBody.innerHTML = body;
+function handleJSXDeserialization(key, value) {
+    if (value === "$RE") return Symbol.for("react.element");
+    if (typeof value === "string" && value.startsWith("$$")) return value.slice(1);
+    return value;
 }

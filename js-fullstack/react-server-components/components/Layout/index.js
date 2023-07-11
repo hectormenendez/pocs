@@ -11,8 +11,8 @@ export function Layout({ children }) {
                 <script type="importmap">
                     {{
                         "imports": {
-                            "react": "https://esm.sh/react@canary",
-                            "react-dom/client": "https://esm.sh/react-dom@canary/client"
+                            "react": "https://esm.sh/react@canary?dev",
+                            "react-dom/client": "https://esm.sh/react-dom@canary/client?dev"
                         }
                     }}
                 </script>
