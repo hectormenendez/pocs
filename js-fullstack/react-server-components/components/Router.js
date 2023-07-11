@@ -18,6 +18,10 @@ export async function Router({ id }) {
 
     const { url } = request;
 
+    // determine if a jsx component is being requested
+    const isClientRequestingJSX = url.searchParams.has("jsx")
+    url.searchParams.delete("jsx"); // keep url clean
+
     const jsx = await (async () => {
         if (["/", "/index.html"].includes(url.pathname)) {
             return <Home />;
@@ -36,6 +40,23 @@ export async function Router({ id }) {
 
     if (!jsx) return response.event(SERVER_EVENT_NAME.RENDER_STATUS, { status: 404 });
 
-    response.writeHead(200, { "Content-Type": "text/html" });
-    response.end(await JSX2HTML(jsx))
+    if (isClientRequestingJSX) {
+        response.writeHead(200, { "Content-Type": "application/json" });
+        response.end(JSON.stringify(await JSXParse(jsx), handleJSXSerialization));
+    } else {
+        response.writeHead(200, { "Content-Type": "text/html" });
+        response.end(await JSX2HTML(jsx))
+    }
+}
+
+/**
+ * Called on each entry of the object
+ */
+function handleJSXSerialization(key, value) {
+    // symbols aren't serializable, let's send a proxy.
+    if (value === Symbol.for("react.element")) return "$RE";
+    // TODO: find out why this is necessary?
+    if (typeof value === "string" && value.startsWith("$")) return `$${value}`;
+    // every other case is handled normally
+    return value;
 }
