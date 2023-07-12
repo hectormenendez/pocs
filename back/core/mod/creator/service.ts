@@ -1,7 +1,6 @@
 import * as $PATH from "std/path/mod.ts";
-import * as $FS from "std/fs/walk.ts";
 
-import { type State } from "x/oak/mod.ts";
+import { Application, type State } from "x/oak/mod.ts";
 
 import { DEFAULTS_CREATE_SERVICE, type DefaultsCreateService } from "back/core/mod/defaults.ts";
 import { ImportWalked } from "back/core/mod/utils.ts";
@@ -16,7 +15,7 @@ export type OptCheckerService = Required<DefaultsCreateService> & {
 };
 
 export type RecordCheckerService = {
-    PluginService: (opt: OptCheckerService) => void;
+    PluginService: <S extends State>(opt: OptCheckerService) => void;
 };
 
 export type OptCreateService = {
@@ -32,9 +31,13 @@ export async function CreatorService<S extends State>(opt: OptCreateService) {
     const pathService = $PATH.dirname($PATH.fromFileUrl(meta.url));
     const uuid = String($PATH.basename(pathService)).toLowerCase();
 
+    // instantiate the app
+    const server = new Application(defaults.optionsServer);
+
     const optsChecker: OptCheckerService = { ...defaults, pathCore, pathService, uuid };
     const pathPlugins = $PATH.join(pathCore, "mod/creator/service-plugin");
 
+    // run all creator-service plugins
     const walkedPluginService = await ImportWalked<RecordCheckerService>(pathPlugins, defaults);
-    for await (const { PluginService } of walkedPluginService) PluginService(optsChecker);
+    for await (const { PluginService } of walkedPluginService) PluginService<S>(optsChecker);
 }
