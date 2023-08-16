@@ -1,0 +1,8 @@
+*.checkpoint
+*.log
+*.DS_*
+
+__pycache__
+.vscode
+
+/.venv
