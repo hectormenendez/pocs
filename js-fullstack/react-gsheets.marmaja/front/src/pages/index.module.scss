@@ -1,0 +1,47 @@
+.Login {
+    display: flex;
+    align-itrems: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.Container {
+    height: 100vh;
+
+    & .Sider {
+        & .Header {
+            margin: 1.5rem 0 1.5rem 1rem;
+            padding: 0;
+            color: white;
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+    }
+
+    & .Layout {
+        & .Header {
+            position: fixed;
+            display: flex;
+            width: 100%;
+            padding: 0 1em;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+        }
+
+        & .Content {
+            margin: 6em 1em 1em 1em;
+            padding: 1em;
+            background: white;
+
+            & .Breadcrumb {
+                margin-left: -1em;
+                margin-top: -3.2em;
+                margin-bottom: 1.8em;
+            }
+        }
+
+        & .Footer {
+            text-align: center;
+        }
+    }
+}

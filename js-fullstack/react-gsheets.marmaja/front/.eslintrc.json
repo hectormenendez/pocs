@@ -1,0 +1,13 @@
+{
+    "extends": [
+        "@gik/react"
+    ],
+    "settings":{
+        "import/resolver": {
+            "babel-plugin-root-import": {
+                "rootPathPrefix": "~",
+                "rootPathSuffix": "src"
+            }
+        }
+    }
+}
