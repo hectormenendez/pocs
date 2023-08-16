@@ -1,0 +1,16 @@
+{
+    "expo": {
+        "name": "Gomodoro",
+        "icon": "./resources/ios/icon.png",
+        "version": "0.0.6",
+        "slug": "gomodoro",
+        "privacy": "unlisted",
+        "sdkVersion": "26.0.0",
+        "ios": {
+            "bundleIdentifier": "com.hectormenendez.gomodoro"
+        },
+        "android": {
+            "package": "com.hectormenendez.gomodoro"
+        }
+    }
+}
