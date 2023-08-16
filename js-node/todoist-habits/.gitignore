@@ -1,0 +1,21 @@
+# Logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variables file
+.env*
+
+# Temporary files
+# TODO: Delete this
+.old

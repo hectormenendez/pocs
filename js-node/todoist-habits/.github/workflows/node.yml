@@ -1,0 +1,27 @@
+name: node
+
+on:
+  schedule:
+    - cron: '00 06 * * *'
+  workflow_dispatch:
+
+jobs:
+  # name
+  execute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Node Setup
+        uses: actions/setup-node@master
+        with:
+          node-version: 14
+          architecture: x64
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Execute
+        run: npm start
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
