@@ -1,0 +1,16 @@
+@mixin base-normal($size: null) {
+    font-family: var(--font-family-base);
+    font-style: normal;
+    letter-spacing: -0.02em;
+    line-height: 1.2em;
+    font-weight: 300;
+
+    @if ($size != null) {
+        font-size: var($size);
+    }
+}
+
+@mixin base-bold($size: null) {
+    @include base-normal($size);
+    font-weight: 400;
+}

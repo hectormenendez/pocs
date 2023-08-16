@@ -1,0 +1,7 @@
+{
+    "files.exclude": {
+        "front": true,
+        "back": true
+    },
+    "deno.enable": false
+}

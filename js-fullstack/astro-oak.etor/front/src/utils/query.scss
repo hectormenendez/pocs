@@ -1,0 +1,35 @@
+$break-xx: 324px;
+$break-xs: 432px;
+$break-sm: 576px;
+$break-md: 768px;
+$break-lg: 1024px;
+
+@mixin xx {
+    @media screen and (min-width: $break-xx) {
+        @content;
+    }
+}
+
+@mixin xs {
+    @media screen and (min-width: $break-xs) {
+        @content;
+    }
+}
+
+@mixin sm {
+    @media screen and (min-width: $break-sm) {
+        @content;
+    }
+}
+
+@mixin md {
+    @media screen and (min-width: $break-md) {
+        @content;
+    }
+}
+
+@mixin lg {
+    @media screen and (min-width: $break-lg) {
+        @content;
+    }
+}

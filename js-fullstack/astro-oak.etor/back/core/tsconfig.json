@@ -1,0 +1,8 @@
+{
+    "extends": "../tsconfig-deno.json",
+    "include": [".", "./globals.d.ts"],
+    "exclude": ["node_modules"],
+    "compilerOptions": {
+        "baseUrl": "."
+    }
+}
