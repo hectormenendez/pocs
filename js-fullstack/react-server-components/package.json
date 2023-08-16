@@ -1,0 +1,26 @@
+{
+    "name": "react-server-components",
+    "version": "0.0.1",
+    "license": "ISC",
+    "type": "module",
+    "engines": {
+        "node": ">=20.3.1"
+    },
+    "engineStrict": true,
+    "scripts": {
+        "start": "nodemon -- -r dotenv/config  --experimental-loader ./utils/node-loader-jsx.js ./main.js"
+    },
+    "dependencies": {
+        "escape-html": "^1.0.3",
+        "mime-types": "^2.1.35",
+        "react": "18.3.0-next-3706edb81-20230308",
+        "uuid": "^9.0.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.22.5",
+        "@babel/plugin-transform-react-jsx": "^7.22.5",
+        "@types/node": "^20.3.1",
+        "dotenv": "^16.3.1",
+        "nodemon": "^2.0.22"
+    }
+}
