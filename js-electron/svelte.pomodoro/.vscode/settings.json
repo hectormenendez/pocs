@@ -1,0 +1,7 @@
+{
+    "files.exclude": {
+        "@www": true,
+        "@app": true,
+        "@static": true
+    },
+}

@@ -1,0 +1,6 @@
+{
+    "files.exclude": {
+        ".vscode": true
+    },
+    "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "svelte"]
+}

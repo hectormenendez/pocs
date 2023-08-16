@@ -1,0 +1,23 @@
+{
+    "folders": [
+        {
+            "name": "@app",
+            "path": "./@app",
+        },
+        {
+            "name": "@www",
+            "path": "./@www",
+        },
+        {
+            "name": "@static",
+            "path": "./@static",
+        },
+        {
+            "name": "root",
+            "path": "./",
+        }
+    ],
+    "settings": {
+        "files.exclude": {}
+    }
+}
